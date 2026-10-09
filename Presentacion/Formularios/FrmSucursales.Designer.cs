@@ -22,8 +22,10 @@
             this.colCodigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colNombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDireccion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colMunicipio = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDepartamento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colTelefono = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colEncargado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colHorario = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colEstado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlPie = new System.Windows.Forms.Panel();
             this.lblTotalRegistros = new System.Windows.Forms.Label();
@@ -37,16 +39,20 @@
             this.tlpCampos = new System.Windows.Forms.TableLayoutPanel();
             this.lblCodigo = new System.Windows.Forms.Label();
             this.txtCodigo = new System.Windows.Forms.TextBox();
-            this.lblEstado = new System.Windows.Forms.Label();
-            this.cmbEstado = new System.Windows.Forms.ComboBox();
             this.lblNombre = new System.Windows.Forms.Label();
             this.txtNombre = new System.Windows.Forms.TextBox();
-            this.lblTelefono = new System.Windows.Forms.Label();
-            this.txtTelefono = new System.Windows.Forms.TextBox();
+            this.lblEstado = new System.Windows.Forms.Label();
+            this.cmbEstado = new System.Windows.Forms.ComboBox();
             this.lblDireccion = new System.Windows.Forms.Label();
             this.txtDireccion = new System.Windows.Forms.TextBox();
-            this.lblEncargado = new System.Windows.Forms.Label();
-            this.txtEncargado = new System.Windows.Forms.TextBox();
+            this.lblMunicipio = new System.Windows.Forms.Label();
+            this.txtMunicipio = new System.Windows.Forms.TextBox();
+            this.lblDepartamento = new System.Windows.Forms.Label();
+            this.txtDepartamento = new System.Windows.Forms.TextBox();
+            this.lblTelefono = new System.Windows.Forms.Label();
+            this.txtTelefono = new System.Windows.Forms.TextBox();
+            this.lblHorario = new System.Windows.Forms.Label();
+            this.dtpHorario = new System.Windows.Forms.DateTimePicker();
             this.lblDatos = new System.Windows.Forms.Label();
             this.pnlSeparador = new System.Windows.Forms.Panel();
             this.pnlAcciones = new Presentacion.RoundedPanel();
@@ -112,8 +118,10 @@
             this.colCodigo,
             this.colNombre,
             this.colDireccion,
+            this.colMunicipio,
+            this.colDepartamento,
             this.colTelefono,
-            this.colEncargado,
+            this.colHorario,
             this.colEstado});
             this.dgvSucursales.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvSucursales.Name = "dgvSucursales";
@@ -123,16 +131,16 @@
             // colCodigo
             // 
             this.colCodigo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colCodigo.DataPropertyName = "Codigo";
+            this.colCodigo.DataPropertyName = "CodigoSucursal";
             this.colCodigo.HeaderText = "Código";
             this.colCodigo.Name = "colCodigo";
-            this.colCodigo.Width = 90;
+            this.colCodigo.Width = 70;
             // 
             // colNombre
             // 
             this.colNombre.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colNombre.DataPropertyName = "Nombre";
-            this.colNombre.FillWeight = 25F;
+            this.colNombre.DataPropertyName = "NombreSucursal";
+            this.colNombre.FillWeight = 20F;
             this.colNombre.HeaderText = "Nombre";
             this.colNombre.Name = "colNombre";
             // 
@@ -140,9 +148,25 @@
             // 
             this.colDireccion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colDireccion.DataPropertyName = "Direccion";
-            this.colDireccion.FillWeight = 35F;
+            this.colDireccion.FillWeight = 28F;
             this.colDireccion.HeaderText = "Dirección";
             this.colDireccion.Name = "colDireccion";
+            // 
+            // colMunicipio
+            // 
+            this.colMunicipio.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colMunicipio.DataPropertyName = "Municipio";
+            this.colMunicipio.FillWeight = 16F;
+            this.colMunicipio.HeaderText = "Municipio";
+            this.colMunicipio.Name = "colMunicipio";
+            // 
+            // colDepartamento
+            // 
+            this.colDepartamento.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colDepartamento.DataPropertyName = "Departamento";
+            this.colDepartamento.FillWeight = 16F;
+            this.colDepartamento.HeaderText = "Departamento";
+            this.colDepartamento.Name = "colDepartamento";
             // 
             // colTelefono
             // 
@@ -150,15 +174,15 @@
             this.colTelefono.DataPropertyName = "Telefono";
             this.colTelefono.HeaderText = "Teléfono";
             this.colTelefono.Name = "colTelefono";
-            this.colTelefono.Width = 100;
+            this.colTelefono.Width = 90;
             // 
-            // colEncargado
+            // colHorario
             // 
-            this.colEncargado.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colEncargado.DataPropertyName = "Encargado";
-            this.colEncargado.FillWeight = 25F;
-            this.colEncargado.HeaderText = "Encargado";
-            this.colEncargado.Name = "colEncargado";
+            this.colHorario.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colHorario.DataPropertyName = "HorarioDeAtencion";
+            this.colHorario.HeaderText = "Horario";
+            this.colHorario.Name = "colHorario";
+            this.colHorario.Width = 90;
             // 
             // colEstado
             // 
@@ -166,7 +190,7 @@
             this.colEstado.DataPropertyName = "Estado";
             this.colEstado.HeaderText = "Estado";
             this.colEstado.Name = "colEstado";
-            this.colEstado.Width = 90;
+            this.colEstado.Width = 80;
             // 
             // pnlPie
             // 
@@ -251,24 +275,29 @@
             this.pnlFormulario.Padding = new System.Windows.Forms.Padding(15, 10, 15, 6);
             this.pnlFormulario.Size = new System.Drawing.Size(720, 215);
             // 
-            // tlpCampos
+            // tlpCampos  (3 columnas x 3 filas de campo)
             // 
             this.tlpCampos.Controls.Add(this.lblCodigo, 0, 0);
             this.tlpCampos.Controls.Add(this.txtCodigo, 0, 1);
-            this.tlpCampos.Controls.Add(this.lblEstado, 1, 0);
-            this.tlpCampos.Controls.Add(this.cmbEstado, 1, 1);
-            this.tlpCampos.Controls.Add(this.lblNombre, 0, 2);
-            this.tlpCampos.Controls.Add(this.txtNombre, 0, 3);
-            this.tlpCampos.Controls.Add(this.lblTelefono, 1, 2);
-            this.tlpCampos.Controls.Add(this.txtTelefono, 1, 3);
-            this.tlpCampos.Controls.Add(this.lblDireccion, 0, 4);
-            this.tlpCampos.Controls.Add(this.txtDireccion, 0, 5);
-            this.tlpCampos.Controls.Add(this.lblEncargado, 1, 4);
-            this.tlpCampos.Controls.Add(this.txtEncargado, 1, 5);
+            this.tlpCampos.Controls.Add(this.lblNombre, 1, 0);
+            this.tlpCampos.Controls.Add(this.txtNombre, 1, 1);
+            this.tlpCampos.Controls.Add(this.lblEstado, 2, 0);
+            this.tlpCampos.Controls.Add(this.cmbEstado, 2, 1);
+            this.tlpCampos.Controls.Add(this.lblDireccion, 0, 2);
+            this.tlpCampos.Controls.Add(this.txtDireccion, 0, 3);
+            this.tlpCampos.Controls.Add(this.lblMunicipio, 1, 2);
+            this.tlpCampos.Controls.Add(this.txtMunicipio, 1, 3);
+            this.tlpCampos.Controls.Add(this.lblDepartamento, 2, 2);
+            this.tlpCampos.Controls.Add(this.txtDepartamento, 2, 3);
+            this.tlpCampos.Controls.Add(this.lblTelefono, 0, 4);
+            this.tlpCampos.Controls.Add(this.txtTelefono, 0, 5);
+            this.tlpCampos.Controls.Add(this.lblHorario, 1, 4);
+            this.tlpCampos.Controls.Add(this.dtpHorario, 1, 5);
             this.tlpCampos.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
-            this.tlpCampos.ColumnCount = 2;
-            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpCampos.ColumnCount = 3;
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tlpCampos.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpCampos.Name = "tlpCampos";
             this.tlpCampos.RowCount = 6;
@@ -303,6 +332,29 @@
             this.txtCodigo.ReadOnly = true;
             this.txtCodigo.Size = new System.Drawing.Size(200, 23);
             // 
+            // lblNombre
+            // 
+            this.lblNombre.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblNombre.AutoSize = false;
+            this.lblNombre.BackColor = System.Drawing.Color.Transparent;
+            this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblNombre.Margin = new System.Windows.Forms.Padding(0);
+            this.lblNombre.Name = "lblNombre";
+            this.lblNombre.Size = new System.Drawing.Size(100, 20);
+            this.lblNombre.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblNombre.Text = "Nombre:";
+            // 
+            // txtNombre
+            // 
+            this.txtNombre.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNombre.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtNombre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtNombre.ForeColor = System.Drawing.Color.White;
+            this.txtNombre.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtNombre.MaxLength = 45;
+            this.txtNombre.Name = "txtNombre";
+            this.txtNombre.Size = new System.Drawing.Size(200, 23);
+            // 
             // lblEstado
             // 
             this.lblEstado.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -329,28 +381,74 @@
             this.cmbEstado.Name = "cmbEstado";
             this.cmbEstado.Size = new System.Drawing.Size(200, 23);
             // 
-            // lblNombre
+            // lblDireccion
             // 
-            this.lblNombre.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblNombre.AutoSize = false;
-            this.lblNombre.BackColor = System.Drawing.Color.Transparent;
-            this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
-            this.lblNombre.Margin = new System.Windows.Forms.Padding(0);
-            this.lblNombre.Name = "lblNombre";
-            this.lblNombre.Size = new System.Drawing.Size(100, 20);
-            this.lblNombre.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.lblNombre.Text = "Nombre:";
+            this.lblDireccion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDireccion.AutoSize = false;
+            this.lblDireccion.BackColor = System.Drawing.Color.Transparent;
+            this.lblDireccion.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblDireccion.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDireccion.Name = "lblDireccion";
+            this.lblDireccion.Size = new System.Drawing.Size(100, 20);
+            this.lblDireccion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblDireccion.Text = "Dirección:";
             // 
-            // txtNombre
+            // txtDireccion
             // 
-            this.txtNombre.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtNombre.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
-            this.txtNombre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtNombre.ForeColor = System.Drawing.Color.White;
-            this.txtNombre.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtNombre.MaxLength = 80;
-            this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(200, 23);
+            this.txtDireccion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDireccion.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtDireccion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDireccion.ForeColor = System.Drawing.Color.White;
+            this.txtDireccion.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtDireccion.MaxLength = 150;
+            this.txtDireccion.Name = "txtDireccion";
+            this.txtDireccion.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblMunicipio
+            // 
+            this.lblMunicipio.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMunicipio.AutoSize = false;
+            this.lblMunicipio.BackColor = System.Drawing.Color.Transparent;
+            this.lblMunicipio.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblMunicipio.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMunicipio.Name = "lblMunicipio";
+            this.lblMunicipio.Size = new System.Drawing.Size(100, 20);
+            this.lblMunicipio.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblMunicipio.Text = "Municipio:";
+            // 
+            // txtMunicipio
+            // 
+            this.txtMunicipio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMunicipio.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtMunicipio.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtMunicipio.ForeColor = System.Drawing.Color.White;
+            this.txtMunicipio.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtMunicipio.MaxLength = 100;
+            this.txtMunicipio.Name = "txtMunicipio";
+            this.txtMunicipio.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblDepartamento
+            // 
+            this.lblDepartamento.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDepartamento.AutoSize = false;
+            this.lblDepartamento.BackColor = System.Drawing.Color.Transparent;
+            this.lblDepartamento.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblDepartamento.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDepartamento.Name = "lblDepartamento";
+            this.lblDepartamento.Size = new System.Drawing.Size(100, 20);
+            this.lblDepartamento.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblDepartamento.Text = "Departamento:";
+            // 
+            // txtDepartamento
+            // 
+            this.txtDepartamento.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDepartamento.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtDepartamento.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDepartamento.ForeColor = System.Drawing.Color.White;
+            this.txtDepartamento.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtDepartamento.MaxLength = 100;
+            this.txtDepartamento.Name = "txtDepartamento";
+            this.txtDepartamento.Size = new System.Drawing.Size(200, 23);
             // 
             // lblTelefono
             // 
@@ -371,55 +469,32 @@
             this.txtTelefono.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtTelefono.ForeColor = System.Drawing.Color.White;
             this.txtTelefono.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtTelefono.MaxLength = 20;
+            this.txtTelefono.MaxLength = 8;
             this.txtTelefono.Name = "txtTelefono";
             this.txtTelefono.Size = new System.Drawing.Size(200, 23);
             // 
-            // lblDireccion
+            // lblHorario
             // 
-            this.lblDireccion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDireccion.AutoSize = false;
-            this.lblDireccion.BackColor = System.Drawing.Color.Transparent;
-            this.lblDireccion.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
-            this.lblDireccion.Margin = new System.Windows.Forms.Padding(0);
-            this.lblDireccion.Name = "lblDireccion";
-            this.lblDireccion.Size = new System.Drawing.Size(100, 20);
-            this.lblDireccion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.lblDireccion.Text = "Dirección:";
+            this.lblHorario.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblHorario.AutoSize = false;
+            this.lblHorario.BackColor = System.Drawing.Color.Transparent;
+            this.lblHorario.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblHorario.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHorario.Name = "lblHorario";
+            this.lblHorario.Size = new System.Drawing.Size(100, 20);
+            this.lblHorario.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblHorario.Text = "Horario de atención:";
             // 
-            // txtDireccion
+            // dtpHorario
             // 
-            this.txtDireccion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDireccion.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
-            this.txtDireccion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDireccion.ForeColor = System.Drawing.Color.White;
-            this.txtDireccion.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtDireccion.MaxLength = 120;
-            this.txtDireccion.Name = "txtDireccion";
-            this.txtDireccion.Size = new System.Drawing.Size(200, 23);
-            // 
-            // lblEncargado
-            // 
-            this.lblEncargado.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEncargado.AutoSize = false;
-            this.lblEncargado.BackColor = System.Drawing.Color.Transparent;
-            this.lblEncargado.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
-            this.lblEncargado.Margin = new System.Windows.Forms.Padding(0);
-            this.lblEncargado.Name = "lblEncargado";
-            this.lblEncargado.Size = new System.Drawing.Size(100, 20);
-            this.lblEncargado.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.lblEncargado.Text = "Encargado:";
-            // 
-            // txtEncargado
-            // 
-            this.txtEncargado.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtEncargado.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
-            this.txtEncargado.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtEncargado.ForeColor = System.Drawing.Color.White;
-            this.txtEncargado.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtEncargado.MaxLength = 80;
-            this.txtEncargado.Name = "txtEncargado";
-            this.txtEncargado.Size = new System.Drawing.Size(200, 23);
+            this.dtpHorario.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtpHorario.CalendarMonthBackground = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.dtpHorario.CustomFormat = "hh:mm tt";
+            this.dtpHorario.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpHorario.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.dtpHorario.Name = "dtpHorario";
+            this.dtpHorario.ShowUpDown = true;
+            this.dtpHorario.Size = new System.Drawing.Size(200, 23);
             // 
             // lblDatos
             // 
@@ -681,8 +756,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCodigo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNombre;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDireccion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colMunicipio;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDepartamento;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTelefono;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colEncargado;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colHorario;
         private System.Windows.Forms.DataGridViewTextBoxColumn colEstado;
         private System.Windows.Forms.Panel pnlPie;
         private System.Windows.Forms.Label lblTotalRegistros;
@@ -696,16 +773,20 @@
         private System.Windows.Forms.TableLayoutPanel tlpCampos;
         private System.Windows.Forms.Label lblCodigo;
         private System.Windows.Forms.TextBox txtCodigo;
-        private System.Windows.Forms.Label lblEstado;
-        private System.Windows.Forms.ComboBox cmbEstado;
         private System.Windows.Forms.Label lblNombre;
         private System.Windows.Forms.TextBox txtNombre;
-        private System.Windows.Forms.Label lblTelefono;
-        private System.Windows.Forms.TextBox txtTelefono;
+        private System.Windows.Forms.Label lblEstado;
+        private System.Windows.Forms.ComboBox cmbEstado;
         private System.Windows.Forms.Label lblDireccion;
         private System.Windows.Forms.TextBox txtDireccion;
-        private System.Windows.Forms.Label lblEncargado;
-        private System.Windows.Forms.TextBox txtEncargado;
+        private System.Windows.Forms.Label lblMunicipio;
+        private System.Windows.Forms.TextBox txtMunicipio;
+        private System.Windows.Forms.Label lblDepartamento;
+        private System.Windows.Forms.TextBox txtDepartamento;
+        private System.Windows.Forms.Label lblTelefono;
+        private System.Windows.Forms.TextBox txtTelefono;
+        private System.Windows.Forms.Label lblHorario;
+        private System.Windows.Forms.DateTimePicker dtpHorario;
         private System.Windows.Forms.Label lblDatos;
         private System.Windows.Forms.Panel pnlSeparador;
         private Presentacion.RoundedPanel pnlAcciones;
