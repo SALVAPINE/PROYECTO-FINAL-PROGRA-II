@@ -71,6 +71,7 @@
             this.lblTitulo = new System.Windows.Forms.Label();
             this.btnTabGestionar = new Presentacion.BotonIcono();
             this.btnTabConsultar = new Presentacion.BotonIcono();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.pnlLista.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).BeginInit();
             this.pnlPie.SuspendLayout();
@@ -286,6 +287,7 @@
             this.tlpCampos.ColumnCount = 2;
             this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpCampos.Controls.Add(this.radioButton1, 1, 7);
             this.tlpCampos.Controls.Add(this.textBox2, 0, 7);
             this.tlpCampos.Controls.Add(this.textBox1, 1, 1);
             this.tlpCampos.Controls.Add(this.label3, 1, 6);
@@ -849,6 +851,18 @@
             this.btnTabConsultar.UseVisualStyleBackColor = false;
             this.btnTabConsultar.Click += new System.EventHandler(this.btnTabConsultar_Click);
             // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.radioButton1.Location = new System.Drawing.Point(387, 185);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(65, 18);
+            this.radioButton1.TabIndex = 19;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Activo";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
             // FrmClientes
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -937,5 +951,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
     }
 }
