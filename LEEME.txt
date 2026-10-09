@@ -1,0 +1,44 @@
+﻿SISTEMA PUBLICIDAD  (Publicidad Creativa - CAPAZ)
+Windows Forms · C# · .NET Framework 4.8 · Arquitectura por capas
+
+CÓMO ABRIRLO
+1. Abra SistemaPublicidad.sln con Visual Studio 2026.
+2. Si hace falta, establezca "Presentacion" como proyecto de inicio y presione F5.
+
+CAPAS (4 proyectos)
+  Presentacion   Formularios y diseño (lo que se ve). Cada formulario tiene .cs, .Designer.cs y .resx.
+  Negocio        Reglas y validaciones. Llama a la capa de datos. DashboardNegocio calcula los datos del Inicio.
+  Datos          Acceso a datos. SIN conexión ni base de datos: los métodos están vacíos (con TODO).
+  Entidad        Clases del dominio: Usuario, Cliente, Cotizacion y los DTO del dashboard.
+Referencias: Presentacion -> Negocio -> Datos -> Entidad (Presentacion también usa Entidad).
+
+FORMULARIOS (Presentacion\Formularios)
+  FrmMain           Ventana principal: menú lateral y barra superior. Muestra los demás formularios dentro del panel.
+  FrmInicio         Dashboard: 4 tarjetas de resumen y 4 gráficos (Chart de System.Windows.Forms.DataVisualization).
+  Un formulario por módulo, todos con pestañas Gestionar / Consultar, tabla vacía y botones sin lógica:
+    FrmUsuarios        Usuarios
+    FrmClientes        Clientes
+    FrmCotizaciones    Cotizaciones
+    FrmTipoServicio    Tipo de Servicio
+    FrmMateriales      Materiales
+    FrmDisenos         Diseños
+    FrmDisenadores     Diseñadores
+    FrmOrdenesTrabajo  Órdenes de Trabajo
+    FrmFacturaciones   Facturaciones
+    FrmSucursales      Sucursales
+    FrmProveedores     Proveedores
+    FrmDetalleFactura  Detalle de Factura
+    FrmInventarios     Inventarios
+    FrmCompras         Compras
+    FrmDetalleCompra   Detalle de Compra
+
+DASHBOARD
+FrmInicio.ActualizarDashboard() pide los datos a DashboardNegocio, que usa los métodos Listar() de la capa Datos.
+Cuando implemente Listar() en UsuarioDatos, ClienteDatos y CotizacionDatos, el dashboard se llena solo
+cada vez que se abre Inicio.
+
+PENDIENTE (a cargo suyo)
+  - Conexión y consultas en el proyecto Datos.
+  - Cargar las tablas (DataGridView) y programar los botones: en cada formulario hay métodos vacíos con TODO.
+
+ICONOS: fuente "Segoe MDL2 Assets" (incluida en Windows 10 y 11).

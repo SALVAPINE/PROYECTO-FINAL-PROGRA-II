@@ -1,0 +1,730 @@
+﻿namespace Presentacion
+{
+    partial class FrmMateriales
+    {
+        private System.ComponentModel.IContainer components = null;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Código generado por el Diseñador de Windows Forms
+
+        private void InitializeComponent()
+        {
+            this.pnlLista = new Presentacion.RoundedPanel();
+            this.dgvMateriales = new System.Windows.Forms.DataGridView();
+            this.colCodigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDescripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colUnidadMedida = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPrecioUnitario = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colEstado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pnlPie = new System.Windows.Forms.Panel();
+            this.lblTotalRegistros = new System.Windows.Forms.Label();
+            this.pnlBusqueda = new System.Windows.Forms.Panel();
+            this.csBuscar = new Presentacion.CampoBusqueda();
+            this.pnlSeparadorBusqueda = new System.Windows.Forms.Panel();
+            this.btnBuscar = new Presentacion.BotonIcono();
+            this.pnlSeccion = new System.Windows.Forms.Panel();
+            this.pnlGestionar = new System.Windows.Forms.Panel();
+            this.pnlFormulario = new Presentacion.RoundedPanel();
+            this.tlpCampos = new System.Windows.Forms.TableLayoutPanel();
+            this.lblCodigo = new System.Windows.Forms.Label();
+            this.txtCodigo = new System.Windows.Forms.TextBox();
+            this.lblEstado = new System.Windows.Forms.Label();
+            this.cmbEstado = new System.Windows.Forms.ComboBox();
+            this.lblNombre = new System.Windows.Forms.Label();
+            this.txtNombre = new System.Windows.Forms.TextBox();
+            this.lblUnidadMedida = new System.Windows.Forms.Label();
+            this.txtUnidadMedida = new System.Windows.Forms.TextBox();
+            this.lblDescripcion = new System.Windows.Forms.Label();
+            this.txtDescripcion = new System.Windows.Forms.TextBox();
+            this.lblPrecioUnitario = new System.Windows.Forms.Label();
+            this.txtPrecioUnitario = new System.Windows.Forms.TextBox();
+            this.lblDatos = new System.Windows.Forms.Label();
+            this.pnlSeparador = new System.Windows.Forms.Panel();
+            this.pnlAcciones = new Presentacion.RoundedPanel();
+            this.tlpAcciones = new System.Windows.Forms.TableLayoutPanel();
+            this.btnNuevo = new Presentacion.BotonIcono();
+            this.btnGuardar = new Presentacion.BotonIcono();
+            this.btnEditar = new Presentacion.BotonIcono();
+            this.btnEliminar = new Presentacion.BotonIcono();
+            this.btnCancelar = new Presentacion.BotonIcono();
+            this.btnLimpiar = new Presentacion.BotonIcono();
+            this.pnlConsultar = new Presentacion.RoundedPanel();
+            this.tlpFiltros = new System.Windows.Forms.TableLayoutPanel();
+            this.lblFiltroEstado = new System.Windows.Forms.Label();
+            this.cmbFiltroEstado = new System.Windows.Forms.ComboBox();
+            this.btnQuitarFiltros = new Presentacion.BotonIcono();
+            this.lblFiltros = new System.Windows.Forms.Label();
+            this.pnlCabecera = new System.Windows.Forms.Panel();
+            this.lblTitulo = new System.Windows.Forms.Label();
+            this.btnTabGestionar = new Presentacion.BotonIcono();
+            this.btnTabConsultar = new Presentacion.BotonIcono();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMateriales)).BeginInit();
+            this.SuspendLayout();
+            this.pnlLista.SuspendLayout();
+            this.pnlPie.SuspendLayout();
+            this.pnlBusqueda.SuspendLayout();
+            this.pnlSeccion.SuspendLayout();
+            this.pnlGestionar.SuspendLayout();
+            this.pnlFormulario.SuspendLayout();
+            this.tlpCampos.SuspendLayout();
+            this.pnlAcciones.SuspendLayout();
+            this.tlpAcciones.SuspendLayout();
+            this.pnlConsultar.SuspendLayout();
+            this.tlpFiltros.SuspendLayout();
+            this.pnlCabecera.SuspendLayout();
+            // 
+            // FrmMateriales
+            // 
+            this.Controls.Add(this.pnlLista);
+            this.Controls.Add(this.pnlSeccion);
+            this.Controls.Add(this.pnlCabecera);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+            this.BackColor = System.Drawing.Color.FromArgb(14, 18, 52);
+            this.ClientSize = new System.Drawing.Size(920, 600);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "FrmMateriales";
+            this.Padding = new System.Windows.Forms.Padding(20, 8, 20, 16);
+            this.Text = "Materiales";
+            // 
+            // pnlLista
+            // 
+            this.pnlLista.Controls.Add(this.dgvMateriales);
+            this.pnlLista.Controls.Add(this.pnlPie);
+            this.pnlLista.Controls.Add(this.pnlBusqueda);
+            this.pnlLista.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlLista.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
+            this.pnlLista.Name = "pnlLista";
+            this.pnlLista.Padding = new System.Windows.Forms.Padding(12, 12, 12, 6);
+            this.pnlLista.Size = new System.Drawing.Size(200, 100);
+            // 
+            // dgvMateriales
+            // 
+            this.dgvMateriales.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colCodigo,
+            this.colNombre,
+            this.colDescripcion,
+            this.colUnidadMedida,
+            this.colPrecioUnitario,
+            this.colEstado});
+            this.dgvMateriales.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvMateriales.Name = "dgvMateriales";
+            this.dgvMateriales.Size = new System.Drawing.Size(850, 150);
+            this.dgvMateriales.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvMateriales_CellFormatting);
+            // 
+            // colCodigo
+            // 
+            this.colCodigo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colCodigo.DataPropertyName = "Codigo";
+            this.colCodigo.HeaderText = "Código";
+            this.colCodigo.Name = "colCodigo";
+            this.colCodigo.Width = 90;
+            // 
+            // colNombre
+            // 
+            this.colNombre.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colNombre.DataPropertyName = "Nombre";
+            this.colNombre.FillWeight = 30F;
+            this.colNombre.HeaderText = "Nombre";
+            this.colNombre.Name = "colNombre";
+            // 
+            // colDescripcion
+            // 
+            this.colDescripcion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colDescripcion.DataPropertyName = "Descripcion";
+            this.colDescripcion.FillWeight = 35F;
+            this.colDescripcion.HeaderText = "Descripción";
+            this.colDescripcion.Name = "colDescripcion";
+            // 
+            // colUnidadMedida
+            // 
+            this.colUnidadMedida.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colUnidadMedida.DataPropertyName = "UnidadMedida";
+            this.colUnidadMedida.HeaderText = "Unidad";
+            this.colUnidadMedida.Name = "colUnidadMedida";
+            this.colUnidadMedida.Width = 90;
+            // 
+            // colPrecioUnitario
+            // 
+            this.colPrecioUnitario.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colPrecioUnitario.DataPropertyName = "PrecioUnitario";
+            this.colPrecioUnitario.HeaderText = "Precio unitario";
+            this.colPrecioUnitario.Name = "colPrecioUnitario";
+            this.colPrecioUnitario.Width = 110;
+            // 
+            // colEstado
+            // 
+            this.colEstado.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colEstado.DataPropertyName = "Estado";
+            this.colEstado.HeaderText = "Estado";
+            this.colEstado.Name = "colEstado";
+            this.colEstado.Width = 90;
+            // 
+            // pnlPie
+            // 
+            this.pnlPie.Controls.Add(this.lblTotalRegistros);
+            this.pnlPie.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlPie.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
+            this.pnlPie.Name = "pnlPie";
+            this.pnlPie.Size = new System.Drawing.Size(200, 26);
+            // 
+            // lblTotalRegistros
+            // 
+            this.lblTotalRegistros.AutoSize = true;
+            this.lblTotalRegistros.BackColor = System.Drawing.Color.Transparent;
+            this.lblTotalRegistros.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblTotalRegistros.Location = new System.Drawing.Point(0, 6);
+            this.lblTotalRegistros.Name = "lblTotalRegistros";
+            this.lblTotalRegistros.Text = "Total de registros: 0";
+            // 
+            // pnlBusqueda
+            // 
+            this.pnlBusqueda.Controls.Add(this.csBuscar);
+            this.pnlBusqueda.Controls.Add(this.pnlSeparadorBusqueda);
+            this.pnlBusqueda.Controls.Add(this.btnBuscar);
+            this.pnlBusqueda.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlBusqueda.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
+            this.pnlBusqueda.Name = "pnlBusqueda";
+            this.pnlBusqueda.Padding = new System.Windows.Forms.Padding(0, 0, 0, 12);
+            this.pnlBusqueda.Size = new System.Drawing.Size(200, 46);
+            // 
+            // csBuscar
+            // 
+            this.csBuscar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.csBuscar.Name = "csBuscar";
+            this.csBuscar.Placeholder = "Buscar por nombre o código...";
+            this.csBuscar.Size = new System.Drawing.Size(600, 34);
+            // 
+            // pnlSeparadorBusqueda
+            // 
+            this.pnlSeparadorBusqueda.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnlSeparadorBusqueda.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
+            this.pnlSeparadorBusqueda.Name = "pnlSeparadorBusqueda";
+            this.pnlSeparadorBusqueda.Size = new System.Drawing.Size(10, 34);
+            // 
+            // btnBuscar
+            // 
+            this.btnBuscar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnBuscar.BackColor = System.Drawing.Color.FromArgb(37, 50, 128);
+            this.btnBuscar.ColorBorde = System.Drawing.Color.FromArgb(70, 90, 190);
+            this.btnBuscar.Glyph = "\uE721";
+            this.btnBuscar.Name = "btnBuscar";
+            this.btnBuscar.Size = new System.Drawing.Size(156, 34);
+            this.btnBuscar.Text = "Buscar";
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
+            // 
+            // pnlSeccion
+            // 
+            this.pnlSeccion.Controls.Add(this.pnlGestionar);
+            this.pnlSeccion.Controls.Add(this.pnlConsultar);
+            this.pnlSeccion.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSeccion.BackColor = System.Drawing.Color.FromArgb(14, 18, 52);
+            this.pnlSeccion.Name = "pnlSeccion";
+            this.pnlSeccion.Padding = new System.Windows.Forms.Padding(0, 0, 0, 10);
+            this.pnlSeccion.Size = new System.Drawing.Size(880, 225);
+            // 
+            // pnlGestionar
+            // 
+            this.pnlGestionar.Controls.Add(this.pnlFormulario);
+            this.pnlGestionar.Controls.Add(this.pnlSeparador);
+            this.pnlGestionar.Controls.Add(this.pnlAcciones);
+            this.pnlGestionar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlGestionar.BackColor = System.Drawing.Color.FromArgb(14, 18, 52);
+            this.pnlGestionar.Name = "pnlGestionar";
+            this.pnlGestionar.Size = new System.Drawing.Size(880, 215);
+            // 
+            // pnlFormulario
+            // 
+            this.pnlFormulario.Controls.Add(this.tlpCampos);
+            this.pnlFormulario.Controls.Add(this.lblDatos);
+            this.pnlFormulario.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlFormulario.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
+            this.pnlFormulario.Name = "pnlFormulario";
+            this.pnlFormulario.Padding = new System.Windows.Forms.Padding(15, 10, 15, 6);
+            this.pnlFormulario.Size = new System.Drawing.Size(720, 215);
+            // 
+            // tlpCampos
+            // 
+            this.tlpCampos.Controls.Add(this.lblCodigo, 0, 0);
+            this.tlpCampos.Controls.Add(this.txtCodigo, 0, 1);
+            this.tlpCampos.Controls.Add(this.lblEstado, 1, 0);
+            this.tlpCampos.Controls.Add(this.cmbEstado, 1, 1);
+            this.tlpCampos.Controls.Add(this.lblNombre, 0, 2);
+            this.tlpCampos.Controls.Add(this.txtNombre, 0, 3);
+            this.tlpCampos.Controls.Add(this.lblUnidadMedida, 1, 2);
+            this.tlpCampos.Controls.Add(this.txtUnidadMedida, 1, 3);
+            this.tlpCampos.Controls.Add(this.lblDescripcion, 0, 4);
+            this.tlpCampos.Controls.Add(this.txtDescripcion, 0, 5);
+            this.tlpCampos.Controls.Add(this.lblPrecioUnitario, 1, 4);
+            this.tlpCampos.Controls.Add(this.txtPrecioUnitario, 1, 5);
+            this.tlpCampos.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
+            this.tlpCampos.ColumnCount = 2;
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpCampos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpCampos.Name = "tlpCampos";
+            this.tlpCampos.RowCount = 6;
+            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpCampos.Size = new System.Drawing.Size(200, 100);
+            // 
+            // lblCodigo
+            // 
+            this.lblCodigo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCodigo.AutoSize = false;
+            this.lblCodigo.BackColor = System.Drawing.Color.Transparent;
+            this.lblCodigo.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblCodigo.Margin = new System.Windows.Forms.Padding(0);
+            this.lblCodigo.Name = "lblCodigo";
+            this.lblCodigo.Size = new System.Drawing.Size(100, 20);
+            this.lblCodigo.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblCodigo.Text = "Código:";
+            // 
+            // txtCodigo
+            // 
+            this.txtCodigo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCodigo.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtCodigo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCodigo.ForeColor = System.Drawing.Color.White;
+            this.txtCodigo.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtCodigo.Name = "txtCodigo";
+            this.txtCodigo.ReadOnly = true;
+            this.txtCodigo.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblEstado
+            // 
+            this.lblEstado.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblEstado.AutoSize = false;
+            this.lblEstado.BackColor = System.Drawing.Color.Transparent;
+            this.lblEstado.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblEstado.Margin = new System.Windows.Forms.Padding(0);
+            this.lblEstado.Name = "lblEstado";
+            this.lblEstado.Size = new System.Drawing.Size(100, 20);
+            this.lblEstado.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblEstado.Text = "Estado:";
+            // 
+            // cmbEstado
+            // 
+            this.cmbEstado.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbEstado.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.cmbEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEstado.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEstado.ForeColor = System.Drawing.Color.White;
+            this.cmbEstado.Items.AddRange(new object[] {
+            "Activo",
+            "Inactivo"});
+            this.cmbEstado.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.cmbEstado.Name = "cmbEstado";
+            this.cmbEstado.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblNombre
+            // 
+            this.lblNombre.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblNombre.AutoSize = false;
+            this.lblNombre.BackColor = System.Drawing.Color.Transparent;
+            this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblNombre.Margin = new System.Windows.Forms.Padding(0);
+            this.lblNombre.Name = "lblNombre";
+            this.lblNombre.Size = new System.Drawing.Size(100, 20);
+            this.lblNombre.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblNombre.Text = "Nombre:";
+            // 
+            // txtNombre
+            // 
+            this.txtNombre.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNombre.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtNombre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtNombre.ForeColor = System.Drawing.Color.White;
+            this.txtNombre.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtNombre.MaxLength = 80;
+            this.txtNombre.Name = "txtNombre";
+            this.txtNombre.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblUnidadMedida
+            // 
+            this.lblUnidadMedida.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblUnidadMedida.AutoSize = false;
+            this.lblUnidadMedida.BackColor = System.Drawing.Color.Transparent;
+            this.lblUnidadMedida.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblUnidadMedida.Margin = new System.Windows.Forms.Padding(0);
+            this.lblUnidadMedida.Name = "lblUnidadMedida";
+            this.lblUnidadMedida.Size = new System.Drawing.Size(100, 20);
+            this.lblUnidadMedida.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblUnidadMedida.Text = "Unidad de medida:";
+            // 
+            // txtUnidadMedida
+            // 
+            this.txtUnidadMedida.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUnidadMedida.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtUnidadMedida.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtUnidadMedida.ForeColor = System.Drawing.Color.White;
+            this.txtUnidadMedida.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtUnidadMedida.MaxLength = 30;
+            this.txtUnidadMedida.Name = "txtUnidadMedida";
+            this.txtUnidadMedida.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblDescripcion
+            // 
+            this.lblDescripcion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDescripcion.AutoSize = false;
+            this.lblDescripcion.BackColor = System.Drawing.Color.Transparent;
+            this.lblDescripcion.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblDescripcion.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDescripcion.Name = "lblDescripcion";
+            this.lblDescripcion.Size = new System.Drawing.Size(100, 20);
+            this.lblDescripcion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblDescripcion.Text = "Descripción:";
+            // 
+            // txtDescripcion
+            // 
+            this.txtDescripcion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDescripcion.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtDescripcion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDescripcion.ForeColor = System.Drawing.Color.White;
+            this.txtDescripcion.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtDescripcion.MaxLength = 150;
+            this.txtDescripcion.Name = "txtDescripcion";
+            this.txtDescripcion.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblPrecioUnitario
+            // 
+            this.lblPrecioUnitario.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblPrecioUnitario.AutoSize = false;
+            this.lblPrecioUnitario.BackColor = System.Drawing.Color.Transparent;
+            this.lblPrecioUnitario.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblPrecioUnitario.Margin = new System.Windows.Forms.Padding(0);
+            this.lblPrecioUnitario.Name = "lblPrecioUnitario";
+            this.lblPrecioUnitario.Size = new System.Drawing.Size(100, 20);
+            this.lblPrecioUnitario.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblPrecioUnitario.Text = "Precio unitario:";
+            // 
+            // txtPrecioUnitario
+            // 
+            this.txtPrecioUnitario.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPrecioUnitario.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtPrecioUnitario.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtPrecioUnitario.ForeColor = System.Drawing.Color.White;
+            this.txtPrecioUnitario.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtPrecioUnitario.MaxLength = 15;
+            this.txtPrecioUnitario.Name = "txtPrecioUnitario";
+            this.txtPrecioUnitario.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblDatos
+            // 
+            this.lblDatos.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblDatos.AutoSize = false;
+            this.lblDatos.BackColor = System.Drawing.Color.Transparent;
+            this.lblDatos.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            this.lblDatos.ForeColor = System.Drawing.Color.FromArgb(200, 208, 240);
+            this.lblDatos.Name = "lblDatos";
+            this.lblDatos.Size = new System.Drawing.Size(100, 26);
+            this.lblDatos.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDatos.Text = "Datos del Material";
+            // 
+            // pnlSeparador
+            // 
+            this.pnlSeparador.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnlSeparador.BackColor = System.Drawing.Color.FromArgb(14, 18, 52);
+            this.pnlSeparador.Name = "pnlSeparador";
+            this.pnlSeparador.Size = new System.Drawing.Size(10, 215);
+            // 
+            // pnlAcciones
+            // 
+            this.pnlAcciones.Controls.Add(this.tlpAcciones);
+            this.pnlAcciones.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnlAcciones.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
+            this.pnlAcciones.Name = "pnlAcciones";
+            this.pnlAcciones.Padding = new System.Windows.Forms.Padding(12, 8, 12, 8);
+            this.pnlAcciones.Size = new System.Drawing.Size(160, 215);
+            // 
+            // tlpAcciones
+            // 
+            this.tlpAcciones.Controls.Add(this.btnNuevo, 0, 0);
+            this.tlpAcciones.Controls.Add(this.btnGuardar, 0, 1);
+            this.tlpAcciones.Controls.Add(this.btnEditar, 0, 2);
+            this.tlpAcciones.Controls.Add(this.btnEliminar, 0, 3);
+            this.tlpAcciones.Controls.Add(this.btnCancelar, 0, 4);
+            this.tlpAcciones.Controls.Add(this.btnLimpiar, 0, 5);
+            this.tlpAcciones.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
+            this.tlpAcciones.ColumnCount = 1;
+            this.tlpAcciones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpAcciones.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpAcciones.Name = "tlpAcciones";
+            this.tlpAcciones.RowCount = 6;
+            this.tlpAcciones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tlpAcciones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tlpAcciones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tlpAcciones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tlpAcciones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tlpAcciones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tlpAcciones.Size = new System.Drawing.Size(200, 100);
+            // 
+            // btnNuevo
+            // 
+            this.btnNuevo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnNuevo.BackColor = System.Drawing.Color.FromArgb(14, 130, 170);
+            this.btnNuevo.ColorBorde = System.Drawing.Color.FromArgb(40, 180, 220);
+            this.btnNuevo.ColorHover = System.Drawing.Color.FromArgb(20, 160, 205);
+            this.btnNuevo.Glyph = "\uE710";
+            this.btnNuevo.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.btnNuevo.Name = "btnNuevo";
+            this.btnNuevo.Size = new System.Drawing.Size(126, 28);
+            this.btnNuevo.Text = "Nuevo";
+            this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
+            // 
+            // btnGuardar
+            // 
+            this.btnGuardar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnGuardar.ColorBorde = System.Drawing.Color.FromArgb(70, 90, 190);
+            this.btnGuardar.Glyph = "\uE74E";
+            this.btnGuardar.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.btnGuardar.Name = "btnGuardar";
+            this.btnGuardar.Size = new System.Drawing.Size(126, 28);
+            this.btnGuardar.Text = "Guardar";
+            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
+            // 
+            // btnEditar
+            // 
+            this.btnEditar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnEditar.ColorBorde = System.Drawing.Color.FromArgb(70, 90, 190);
+            this.btnEditar.Glyph = "\uE70F";
+            this.btnEditar.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.btnEditar.Name = "btnEditar";
+            this.btnEditar.Size = new System.Drawing.Size(126, 28);
+            this.btnEditar.Text = "Editar";
+            this.btnEditar.Click += new System.EventHandler(this.btnEditar_Click);
+            // 
+            // btnEliminar
+            // 
+            this.btnEliminar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnEliminar.ColorBorde = System.Drawing.Color.FromArgb(70, 90, 190);
+            this.btnEliminar.Glyph = "\uE74D";
+            this.btnEliminar.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.Size = new System.Drawing.Size(126, 28);
+            this.btnEliminar.Text = "Eliminar";
+            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
+            // 
+            // btnCancelar
+            // 
+            this.btnCancelar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCancelar.ColorBorde = System.Drawing.Color.FromArgb(70, 90, 190);
+            this.btnCancelar.Glyph = "\uE711";
+            this.btnCancelar.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.btnCancelar.Name = "btnCancelar";
+            this.btnCancelar.Size = new System.Drawing.Size(126, 28);
+            this.btnCancelar.Text = "Cancelar";
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnLimpiar.ColorBorde = System.Drawing.Color.FromArgb(70, 90, 190);
+            this.btnLimpiar.Glyph = "\uE75C";
+            this.btnLimpiar.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(126, 28);
+            this.btnLimpiar.Text = "Limpiar";
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            // 
+            // pnlConsultar
+            // 
+            this.pnlConsultar.Controls.Add(this.tlpFiltros);
+            this.pnlConsultar.Controls.Add(this.lblFiltros);
+            this.pnlConsultar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlConsultar.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
+            this.pnlConsultar.Name = "pnlConsultar";
+            this.pnlConsultar.Padding = new System.Windows.Forms.Padding(15, 10, 15, 6);
+            this.pnlConsultar.Size = new System.Drawing.Size(880, 215);
+            this.pnlConsultar.Visible = false;
+            // 
+            // tlpFiltros
+            // 
+            this.tlpFiltros.Controls.Add(this.lblFiltroEstado, 0, 0);
+            this.tlpFiltros.Controls.Add(this.cmbFiltroEstado, 0, 1);
+            this.tlpFiltros.Controls.Add(this.btnQuitarFiltros, 0, 2);
+            this.tlpFiltros.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
+            this.tlpFiltros.ColumnCount = 2;
+            this.tlpFiltros.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFiltros.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFiltros.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpFiltros.Name = "tlpFiltros";
+            this.tlpFiltros.RowCount = 3;
+            this.tlpFiltros.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tlpFiltros.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpFiltros.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44F));
+            this.tlpFiltros.Size = new System.Drawing.Size(200, 100);
+            // 
+            // lblFiltroEstado
+            // 
+            this.lblFiltroEstado.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFiltroEstado.AutoSize = false;
+            this.lblFiltroEstado.BackColor = System.Drawing.Color.Transparent;
+            this.lblFiltroEstado.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblFiltroEstado.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFiltroEstado.Name = "lblFiltroEstado";
+            this.lblFiltroEstado.Size = new System.Drawing.Size(100, 20);
+            this.lblFiltroEstado.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblFiltroEstado.Text = "Estado:";
+            // 
+            // cmbFiltroEstado
+            // 
+            this.cmbFiltroEstado.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbFiltroEstado.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.cmbFiltroEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFiltroEstado.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbFiltroEstado.ForeColor = System.Drawing.Color.White;
+            this.cmbFiltroEstado.Items.AddRange(new object[] {
+            "Todos",
+            "Activo",
+            "Inactivo"});
+            this.cmbFiltroEstado.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.cmbFiltroEstado.Name = "cmbFiltroEstado";
+            this.cmbFiltroEstado.Size = new System.Drawing.Size(200, 23);
+            // 
+            // btnQuitarFiltros
+            // 
+            this.btnQuitarFiltros.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btnQuitarFiltros.ColorBorde = System.Drawing.Color.FromArgb(70, 90, 190);
+            this.btnQuitarFiltros.Glyph = "\uE894";
+            this.btnQuitarFiltros.Name = "btnQuitarFiltros";
+            this.btnQuitarFiltros.Size = new System.Drawing.Size(150, 30);
+            this.btnQuitarFiltros.Text = "Quitar filtros";
+            this.btnQuitarFiltros.Click += new System.EventHandler(this.btnQuitarFiltros_Click);
+            // 
+            // lblFiltros
+            // 
+            this.lblFiltros.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblFiltros.AutoSize = false;
+            this.lblFiltros.BackColor = System.Drawing.Color.Transparent;
+            this.lblFiltros.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            this.lblFiltros.ForeColor = System.Drawing.Color.FromArgb(200, 208, 240);
+            this.lblFiltros.Name = "lblFiltros";
+            this.lblFiltros.Size = new System.Drawing.Size(100, 26);
+            this.lblFiltros.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFiltros.Text = "Filtros de consulta";
+            // 
+            // pnlCabecera
+            // 
+            this.pnlCabecera.Controls.Add(this.lblTitulo);
+            this.pnlCabecera.Controls.Add(this.btnTabGestionar);
+            this.pnlCabecera.Controls.Add(this.btnTabConsultar);
+            this.pnlCabecera.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlCabecera.BackColor = System.Drawing.Color.FromArgb(14, 18, 52);
+            this.pnlCabecera.Name = "pnlCabecera";
+            this.pnlCabecera.Size = new System.Drawing.Size(880, 72);
+            // 
+            // lblTitulo
+            // 
+            this.lblTitulo.AutoSize = true;
+            this.lblTitulo.BackColor = System.Drawing.Color.Transparent;
+            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(255, 255, 255);
+            this.lblTitulo.Location = new System.Drawing.Point(0, 4);
+            this.lblTitulo.Name = "lblTitulo";
+            this.lblTitulo.Text = "Materiales";
+            // 
+            // btnTabGestionar
+            // 
+            this.btnTabGestionar.BackColor = System.Drawing.Color.FromArgb(22, 28, 76);
+            this.btnTabGestionar.ColorHover = System.Drawing.Color.FromArgb(34, 42, 110);
+            this.btnTabGestionar.Location = new System.Drawing.Point(0, 38);
+            this.btnTabGestionar.Name = "btnTabGestionar";
+            this.btnTabGestionar.Radio = 6;
+            this.btnTabGestionar.Size = new System.Drawing.Size(90, 30);
+            this.btnTabGestionar.Text = "Gestionar";
+            this.btnTabGestionar.Click += new System.EventHandler(this.btnTabGestionar_Click);
+            // 
+            // btnTabConsultar
+            // 
+            this.btnTabConsultar.BackColor = System.Drawing.Color.FromArgb(22, 28, 76);
+            this.btnTabConsultar.ColorHover = System.Drawing.Color.FromArgb(34, 42, 110);
+            this.btnTabConsultar.Location = new System.Drawing.Point(94, 38);
+            this.btnTabConsultar.Name = "btnTabConsultar";
+            this.btnTabConsultar.Radio = 6;
+            this.btnTabConsultar.Size = new System.Drawing.Size(90, 30);
+            this.btnTabConsultar.Text = "Consultar";
+            this.btnTabConsultar.Click += new System.EventHandler(this.btnTabConsultar_Click);
+            this.pnlCabecera.ResumeLayout(false);
+            this.tlpFiltros.ResumeLayout(false);
+            this.pnlConsultar.ResumeLayout(false);
+            this.tlpAcciones.ResumeLayout(false);
+            this.pnlAcciones.ResumeLayout(false);
+            this.tlpCampos.ResumeLayout(false);
+            this.pnlFormulario.ResumeLayout(false);
+            this.pnlGestionar.ResumeLayout(false);
+            this.pnlSeccion.ResumeLayout(false);
+            this.pnlBusqueda.ResumeLayout(false);
+            this.pnlPie.ResumeLayout(false);
+            this.pnlLista.ResumeLayout(false);
+            this.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMateriales)).EndInit();
+            this.PerformLayout();
+        }
+
+        #endregion
+
+        private Presentacion.RoundedPanel pnlLista;
+        private System.Windows.Forms.DataGridView dgvMateriales;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCodigo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNombre;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDescripcion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colUnidadMedida;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPrecioUnitario;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colEstado;
+        private System.Windows.Forms.Panel pnlPie;
+        private System.Windows.Forms.Label lblTotalRegistros;
+        private System.Windows.Forms.Panel pnlBusqueda;
+        private Presentacion.CampoBusqueda csBuscar;
+        private System.Windows.Forms.Panel pnlSeparadorBusqueda;
+        private Presentacion.BotonIcono btnBuscar;
+        private System.Windows.Forms.Panel pnlSeccion;
+        private System.Windows.Forms.Panel pnlGestionar;
+        private Presentacion.RoundedPanel pnlFormulario;
+        private System.Windows.Forms.TableLayoutPanel tlpCampos;
+        private System.Windows.Forms.Label lblCodigo;
+        private System.Windows.Forms.TextBox txtCodigo;
+        private System.Windows.Forms.Label lblEstado;
+        private System.Windows.Forms.ComboBox cmbEstado;
+        private System.Windows.Forms.Label lblNombre;
+        private System.Windows.Forms.TextBox txtNombre;
+        private System.Windows.Forms.Label lblUnidadMedida;
+        private System.Windows.Forms.TextBox txtUnidadMedida;
+        private System.Windows.Forms.Label lblDescripcion;
+        private System.Windows.Forms.TextBox txtDescripcion;
+        private System.Windows.Forms.Label lblPrecioUnitario;
+        private System.Windows.Forms.TextBox txtPrecioUnitario;
+        private System.Windows.Forms.Label lblDatos;
+        private System.Windows.Forms.Panel pnlSeparador;
+        private Presentacion.RoundedPanel pnlAcciones;
+        private System.Windows.Forms.TableLayoutPanel tlpAcciones;
+        private Presentacion.BotonIcono btnNuevo;
+        private Presentacion.BotonIcono btnGuardar;
+        private Presentacion.BotonIcono btnEditar;
+        private Presentacion.BotonIcono btnEliminar;
+        private Presentacion.BotonIcono btnCancelar;
+        private Presentacion.BotonIcono btnLimpiar;
+        private Presentacion.RoundedPanel pnlConsultar;
+        private System.Windows.Forms.TableLayoutPanel tlpFiltros;
+        private System.Windows.Forms.Label lblFiltroEstado;
+        private System.Windows.Forms.ComboBox cmbFiltroEstado;
+        private Presentacion.BotonIcono btnQuitarFiltros;
+        private System.Windows.Forms.Label lblFiltros;
+        private System.Windows.Forms.Panel pnlCabecera;
+        private System.Windows.Forms.Label lblTitulo;
+        private Presentacion.BotonIcono btnTabGestionar;
+        private Presentacion.BotonIcono btnTabConsultar;
+    }
+}
