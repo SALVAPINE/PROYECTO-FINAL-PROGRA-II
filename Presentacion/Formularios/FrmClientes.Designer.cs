@@ -50,7 +50,6 @@
             this.txtCorreo = new System.Windows.Forms.TextBox();
             this.lblDireccion = new System.Windows.Forms.Label();
             this.txtDireccion = new System.Windows.Forms.TextBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.lblDatos = new System.Windows.Forms.Label();
             this.pnlSeparador = new System.Windows.Forms.Panel();
@@ -302,7 +301,6 @@
             this.tlpCampos.Controls.Add(this.txtCorreo, 0, 5);
             this.tlpCampos.Controls.Add(this.lblDireccion, 1, 4);
             this.tlpCampos.Controls.Add(this.txtDireccion, 1, 5);
-            this.tlpCampos.Controls.Add(this.radioButton1, 1, 7);
             this.tlpCampos.Controls.Add(this.radioButton2, 1, 8);
             this.tlpCampos.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpCampos.Location = new System.Drawing.Point(15, 36);
@@ -515,18 +513,6 @@
             this.txtDireccion.Name = "txtDireccion";
             this.txtDireccion.Size = new System.Drawing.Size(368, 22);
             this.txtDireccion.TabIndex = 11;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.radioButton1.Location = new System.Drawing.Point(387, 185);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(65, 18);
-            this.radioButton1.TabIndex = 17;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Activo";
-            this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // radioButton2
             // 
@@ -950,7 +936,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
     }
 }
