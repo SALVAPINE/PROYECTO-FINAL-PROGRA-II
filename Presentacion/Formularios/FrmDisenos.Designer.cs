@@ -20,9 +20,12 @@
             this.pnlLista = new Presentacion.RoundedPanel();
             this.dgvDisenos = new System.Windows.Forms.DataGridView();
             this.colCodigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTipoServicio = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDisenador = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTipo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colRango = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDescripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colFecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colEstado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlPie = new System.Windows.Forms.Panel();
@@ -37,16 +40,24 @@
             this.tlpCampos = new System.Windows.Forms.TableLayoutPanel();
             this.lblCodigo = new System.Windows.Forms.Label();
             this.txtCodigo = new System.Windows.Forms.TextBox();
-            this.lblEstado = new System.Windows.Forms.Label();
-            this.cmbEstado = new System.Windows.Forms.ComboBox();
-            this.lblNombre = new System.Windows.Forms.Label();
-            this.txtNombre = new System.Windows.Forms.TextBox();
-            this.lblTipoServicio = new System.Windows.Forms.Label();
-            this.cmbTipoServicio = new System.Windows.Forms.ComboBox();
+            this.lblCliente = new System.Windows.Forms.Label();
+            this.cmbCliente = new System.Windows.Forms.ComboBox();
             this.lblDisenador = new System.Windows.Forms.Label();
             this.cmbDisenador = new System.Windows.Forms.ComboBox();
             this.lblFecha = new System.Windows.Forms.Label();
             this.dtpFecha = new System.Windows.Forms.DateTimePicker();
+            this.lblNombre = new System.Windows.Forms.Label();
+            this.txtNombre = new System.Windows.Forms.TextBox();
+            this.lblTipo = new System.Windows.Forms.Label();
+            this.txtTipo = new System.Windows.Forms.TextBox();
+            this.lblRango = new System.Windows.Forms.Label();
+            this.txtRango = new System.Windows.Forms.TextBox();
+            this.lblEstado = new System.Windows.Forms.Label();
+            this.flpEstado = new System.Windows.Forms.FlowLayoutPanel();
+            this.rbActivo = new System.Windows.Forms.RadioButton();
+            this.rbInactivo = new System.Windows.Forms.RadioButton();
+            this.lblDescripcion = new System.Windows.Forms.Label();
+            this.txtDescripcion = new System.Windows.Forms.TextBox();
             this.lblDatos = new System.Windows.Forms.Label();
             this.pnlSeparador = new System.Windows.Forms.Panel();
             this.pnlAcciones = new Presentacion.RoundedPanel();
@@ -76,6 +87,7 @@
             this.pnlGestionar.SuspendLayout();
             this.pnlFormulario.SuspendLayout();
             this.tlpCampos.SuspendLayout();
+            this.flpEstado.SuspendLayout();
             this.pnlAcciones.SuspendLayout();
             this.tlpAcciones.SuspendLayout();
             this.pnlConsultar.SuspendLayout();
@@ -110,9 +122,12 @@
             // 
             this.dgvDisenos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCodigo,
-            this.colNombre,
-            this.colTipoServicio,
+            this.colCliente,
             this.colDisenador,
+            this.colNombre,
+            this.colTipo,
+            this.colRango,
+            this.colDescripcion,
             this.colFecha,
             this.colEstado});
             this.dgvDisenos.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -123,42 +138,66 @@
             // colCodigo
             // 
             this.colCodigo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colCodigo.DataPropertyName = "Codigo";
+            this.colCodigo.DataPropertyName = "CodigoDiseño";
             this.colCodigo.HeaderText = "Código";
             this.colCodigo.Name = "colCodigo";
-            this.colCodigo.Width = 90;
+            this.colCodigo.Width = 70;
+            // 
+            // colCliente
+            // 
+            this.colCliente.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colCliente.DataPropertyName = "CodigoCliente";
+            this.colCliente.HeaderText = "Cliente";
+            this.colCliente.Name = "colCliente";
+            this.colCliente.Width = 75;
+            // 
+            // colDisenador
+            // 
+            this.colDisenador.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colDisenador.DataPropertyName = "CodigoDiseñador";
+            this.colDisenador.HeaderText = "Diseñador";
+            this.colDisenador.Name = "colDisenador";
+            this.colDisenador.Width = 85;
             // 
             // colNombre
             // 
             this.colNombre.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colNombre.DataPropertyName = "Nombre";
-            this.colNombre.FillWeight = 30F;
+            this.colNombre.DataPropertyName = "NombreDiseño";
+            this.colNombre.FillWeight = 22F;
             this.colNombre.HeaderText = "Nombre";
             this.colNombre.Name = "colNombre";
             // 
-            // colTipoServicio
+            // colTipo
             // 
-            this.colTipoServicio.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colTipoServicio.DataPropertyName = "TipoServicio";
-            this.colTipoServicio.FillWeight = 25F;
-            this.colTipoServicio.HeaderText = "Tipo de servicio";
-            this.colTipoServicio.Name = "colTipoServicio";
+            this.colTipo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colTipo.DataPropertyName = "TipoDiseño";
+            this.colTipo.FillWeight = 16F;
+            this.colTipo.HeaderText = "Tipo";
+            this.colTipo.Name = "colTipo";
             // 
-            // colDisenador
+            // colRango
             // 
-            this.colDisenador.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colDisenador.DataPropertyName = "Disenador";
-            this.colDisenador.FillWeight = 25F;
-            this.colDisenador.HeaderText = "Diseñador";
-            this.colDisenador.Name = "colDisenador";
+            this.colRango.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colRango.DataPropertyName = "RangoDiseño";
+            this.colRango.FillWeight = 14F;
+            this.colRango.HeaderText = "Rango";
+            this.colRango.Name = "colRango";
+            // 
+            // colDescripcion
+            // 
+            this.colDescripcion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colDescripcion.DataPropertyName = "Descripcion";
+            this.colDescripcion.FillWeight = 28F;
+            this.colDescripcion.HeaderText = "Descripción";
+            this.colDescripcion.Name = "colDescripcion";
             // 
             // colFecha
             // 
             this.colFecha.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colFecha.DataPropertyName = "Fecha";
-            this.colFecha.HeaderText = "Fecha";
+            this.colFecha.DataPropertyName = "FechaCreacion";
+            this.colFecha.HeaderText = "Fecha de creación";
             this.colFecha.Name = "colFecha";
-            this.colFecha.Width = 95;
+            this.colFecha.Width = 135;
             // 
             // colEstado
             // 
@@ -166,7 +205,7 @@
             this.colEstado.DataPropertyName = "Estado";
             this.colEstado.HeaderText = "Estado";
             this.colEstado.Name = "colEstado";
-            this.colEstado.Width = 100;
+            this.colEstado.Width = 80;
             // 
             // pnlPie
             // 
@@ -251,24 +290,32 @@
             this.pnlFormulario.Padding = new System.Windows.Forms.Padding(15, 10, 15, 6);
             this.pnlFormulario.Size = new System.Drawing.Size(720, 215);
             // 
-            // tlpCampos
+            // tlpCampos  (4 columnas x 3 filas de campo)
             // 
             this.tlpCampos.Controls.Add(this.lblCodigo, 0, 0);
             this.tlpCampos.Controls.Add(this.txtCodigo, 0, 1);
-            this.tlpCampos.Controls.Add(this.lblEstado, 1, 0);
-            this.tlpCampos.Controls.Add(this.cmbEstado, 1, 1);
+            this.tlpCampos.Controls.Add(this.lblCliente, 1, 0);
+            this.tlpCampos.Controls.Add(this.cmbCliente, 1, 1);
+            this.tlpCampos.Controls.Add(this.lblDisenador, 2, 0);
+            this.tlpCampos.Controls.Add(this.cmbDisenador, 2, 1);
+            this.tlpCampos.Controls.Add(this.lblFecha, 3, 0);
+            this.tlpCampos.Controls.Add(this.dtpFecha, 3, 1);
             this.tlpCampos.Controls.Add(this.lblNombre, 0, 2);
             this.tlpCampos.Controls.Add(this.txtNombre, 0, 3);
-            this.tlpCampos.Controls.Add(this.lblTipoServicio, 1, 2);
-            this.tlpCampos.Controls.Add(this.cmbTipoServicio, 1, 3);
-            this.tlpCampos.Controls.Add(this.lblDisenador, 0, 4);
-            this.tlpCampos.Controls.Add(this.cmbDisenador, 0, 5);
-            this.tlpCampos.Controls.Add(this.lblFecha, 1, 4);
-            this.tlpCampos.Controls.Add(this.dtpFecha, 1, 5);
+            this.tlpCampos.Controls.Add(this.lblTipo, 1, 2);
+            this.tlpCampos.Controls.Add(this.txtTipo, 1, 3);
+            this.tlpCampos.Controls.Add(this.lblRango, 2, 2);
+            this.tlpCampos.Controls.Add(this.txtRango, 2, 3);
+            this.tlpCampos.Controls.Add(this.lblEstado, 3, 2);
+            this.tlpCampos.Controls.Add(this.flpEstado, 3, 3);
+            this.tlpCampos.Controls.Add(this.lblDescripcion, 0, 4);
+            this.tlpCampos.Controls.Add(this.txtDescripcion, 0, 5);
             this.tlpCampos.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
-            this.tlpCampos.ColumnCount = 2;
-            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpCampos.ColumnCount = 4;
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tlpCampos.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpCampos.Name = "tlpCampos";
             this.tlpCampos.RowCount = 6;
@@ -279,6 +326,8 @@
             this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
             this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tlpCampos.Size = new System.Drawing.Size(200, 100);
+            this.tlpCampos.SetColumnSpan(this.lblDescripcion, 4);
+            this.tlpCampos.SetColumnSpan(this.txtDescripcion, 4);
             // 
             // lblCodigo
             // 
@@ -302,79 +351,30 @@
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.ReadOnly = true;
             this.txtCodigo.Size = new System.Drawing.Size(200, 23);
+            this.txtCodigo.TabStop = false;
             // 
-            // lblEstado
+            // lblCliente
             // 
-            this.lblEstado.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEstado.AutoSize = false;
-            this.lblEstado.BackColor = System.Drawing.Color.Transparent;
-            this.lblEstado.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
-            this.lblEstado.Margin = new System.Windows.Forms.Padding(0);
-            this.lblEstado.Name = "lblEstado";
-            this.lblEstado.Size = new System.Drawing.Size(100, 20);
-            this.lblEstado.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.lblEstado.Text = "Estado:";
+            this.lblCliente.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCliente.AutoSize = false;
+            this.lblCliente.BackColor = System.Drawing.Color.Transparent;
+            this.lblCliente.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblCliente.Margin = new System.Windows.Forms.Padding(0);
+            this.lblCliente.Name = "lblCliente";
+            this.lblCliente.Size = new System.Drawing.Size(100, 20);
+            this.lblCliente.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblCliente.Text = "Cliente:";
             // 
-            // cmbEstado
+            // cmbCliente
             // 
-            this.cmbEstado.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbEstado.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
-            this.cmbEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEstado.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbEstado.ForeColor = System.Drawing.Color.White;
-            this.cmbEstado.Items.AddRange(new object[] {
-            "En proceso",
-            "Aprobado",
-            "Entregado"});
-            this.cmbEstado.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.cmbEstado.Name = "cmbEstado";
-            this.cmbEstado.Size = new System.Drawing.Size(200, 23);
-            // 
-            // lblNombre
-            // 
-            this.lblNombre.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblNombre.AutoSize = false;
-            this.lblNombre.BackColor = System.Drawing.Color.Transparent;
-            this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
-            this.lblNombre.Margin = new System.Windows.Forms.Padding(0);
-            this.lblNombre.Name = "lblNombre";
-            this.lblNombre.Size = new System.Drawing.Size(100, 20);
-            this.lblNombre.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.lblNombre.Text = "Nombre:";
-            // 
-            // txtNombre
-            // 
-            this.txtNombre.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtNombre.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
-            this.txtNombre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtNombre.ForeColor = System.Drawing.Color.White;
-            this.txtNombre.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtNombre.MaxLength = 80;
-            this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(200, 23);
-            // 
-            // lblTipoServicio
-            // 
-            this.lblTipoServicio.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTipoServicio.AutoSize = false;
-            this.lblTipoServicio.BackColor = System.Drawing.Color.Transparent;
-            this.lblTipoServicio.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
-            this.lblTipoServicio.Margin = new System.Windows.Forms.Padding(0);
-            this.lblTipoServicio.Name = "lblTipoServicio";
-            this.lblTipoServicio.Size = new System.Drawing.Size(100, 20);
-            this.lblTipoServicio.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.lblTipoServicio.Text = "Tipo de servicio:";
-            // 
-            // cmbTipoServicio
-            // 
-            this.cmbTipoServicio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbTipoServicio.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
-            this.cmbTipoServicio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTipoServicio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbTipoServicio.ForeColor = System.Drawing.Color.White;
-            this.cmbTipoServicio.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.cmbTipoServicio.Name = "cmbTipoServicio";
-            this.cmbTipoServicio.Size = new System.Drawing.Size(200, 23);
+            this.cmbCliente.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbCliente.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.cmbCliente.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCliente.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbCliente.ForeColor = System.Drawing.Color.White;
+            this.cmbCliente.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.cmbCliente.Name = "cmbCliente";
+            this.cmbCliente.Size = new System.Drawing.Size(200, 23);
             // 
             // lblDisenador
             // 
@@ -409,15 +409,157 @@
             this.lblFecha.Name = "lblFecha";
             this.lblFecha.Size = new System.Drawing.Size(100, 20);
             this.lblFecha.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.lblFecha.Text = "Fecha:";
+            this.lblFecha.Text = "Fecha de creación:";
             // 
             // dtpFecha
             // 
             this.dtpFecha.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpFecha.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpFecha.CalendarMonthBackground = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.dtpFecha.CustomFormat = "dd/MM/yyyy hh:mm tt";
+            this.dtpFecha.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpFecha.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
             this.dtpFecha.Name = "dtpFecha";
             this.dtpFecha.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblNombre
+            // 
+            this.lblNombre.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblNombre.AutoSize = false;
+            this.lblNombre.BackColor = System.Drawing.Color.Transparent;
+            this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblNombre.Margin = new System.Windows.Forms.Padding(0);
+            this.lblNombre.Name = "lblNombre";
+            this.lblNombre.Size = new System.Drawing.Size(100, 20);
+            this.lblNombre.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblNombre.Text = "Nombre del diseño:";
+            // 
+            // txtNombre
+            // 
+            this.txtNombre.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNombre.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtNombre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtNombre.ForeColor = System.Drawing.Color.White;
+            this.txtNombre.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtNombre.MaxLength = 45;
+            this.txtNombre.Name = "txtNombre";
+            this.txtNombre.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblTipo
+            // 
+            this.lblTipo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTipo.AutoSize = false;
+            this.lblTipo.BackColor = System.Drawing.Color.Transparent;
+            this.lblTipo.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblTipo.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTipo.Name = "lblTipo";
+            this.lblTipo.Size = new System.Drawing.Size(100, 20);
+            this.lblTipo.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblTipo.Text = "Tipo de diseño:";
+            // 
+            // txtTipo
+            // 
+            this.txtTipo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTipo.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtTipo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTipo.ForeColor = System.Drawing.Color.White;
+            this.txtTipo.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtTipo.MaxLength = 45;
+            this.txtTipo.Name = "txtTipo";
+            this.txtTipo.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblRango
+            // 
+            this.lblRango.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblRango.AutoSize = false;
+            this.lblRango.BackColor = System.Drawing.Color.Transparent;
+            this.lblRango.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblRango.Margin = new System.Windows.Forms.Padding(0);
+            this.lblRango.Name = "lblRango";
+            this.lblRango.Size = new System.Drawing.Size(100, 20);
+            this.lblRango.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblRango.Text = "Rango del diseño:";
+            // 
+            // txtRango
+            // 
+            this.txtRango.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtRango.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtRango.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtRango.ForeColor = System.Drawing.Color.White;
+            this.txtRango.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtRango.MaxLength = 45;
+            this.txtRango.Name = "txtRango";
+            this.txtRango.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblEstado
+            // 
+            this.lblEstado.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblEstado.AutoSize = false;
+            this.lblEstado.BackColor = System.Drawing.Color.Transparent;
+            this.lblEstado.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblEstado.Margin = new System.Windows.Forms.Padding(0);
+            this.lblEstado.Name = "lblEstado";
+            this.lblEstado.Size = new System.Drawing.Size(100, 20);
+            this.lblEstado.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblEstado.Text = "Estado:";
+            // 
+            // flpEstado
+            // 
+            this.flpEstado.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.flpEstado.BackColor = System.Drawing.Color.Transparent;
+            this.flpEstado.Controls.Add(this.rbActivo);
+            this.flpEstado.Controls.Add(this.rbInactivo);
+            this.flpEstado.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.flpEstado.Name = "flpEstado";
+            this.flpEstado.Size = new System.Drawing.Size(200, 26);
+            this.flpEstado.WrapContents = false;
+            // 
+            // rbActivo
+            // 
+            this.rbActivo.AutoSize = true;
+            this.rbActivo.BackColor = System.Drawing.Color.Transparent;
+            this.rbActivo.Checked = true;
+            this.rbActivo.ForeColor = System.Drawing.Color.White;
+            this.rbActivo.Margin = new System.Windows.Forms.Padding(0, 4, 10, 0);
+            this.rbActivo.Name = "rbActivo";
+            this.rbActivo.Size = new System.Drawing.Size(70, 19);
+            this.rbActivo.TabStop = true;
+            this.rbActivo.Text = "Activo";
+            this.rbActivo.UseVisualStyleBackColor = false;
+            // 
+            // rbInactivo
+            // 
+            this.rbInactivo.AutoSize = true;
+            this.rbInactivo.BackColor = System.Drawing.Color.Transparent;
+            this.rbInactivo.ForeColor = System.Drawing.Color.White;
+            this.rbInactivo.Margin = new System.Windows.Forms.Padding(0, 4, 10, 0);
+            this.rbInactivo.Name = "rbInactivo";
+            this.rbInactivo.Size = new System.Drawing.Size(70, 19);
+            this.rbInactivo.TabStop = false;
+            this.rbInactivo.Text = "Inactivo";
+            this.rbInactivo.UseVisualStyleBackColor = false;
+            // 
+            // lblDescripcion
+            // 
+            this.lblDescripcion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDescripcion.AutoSize = false;
+            this.lblDescripcion.BackColor = System.Drawing.Color.Transparent;
+            this.lblDescripcion.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblDescripcion.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDescripcion.Name = "lblDescripcion";
+            this.lblDescripcion.Size = new System.Drawing.Size(100, 20);
+            this.lblDescripcion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblDescripcion.Text = "Descripción:";
+            // 
+            // txtDescripcion
+            // 
+            this.txtDescripcion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDescripcion.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtDescripcion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDescripcion.ForeColor = System.Drawing.Color.White;
+            this.txtDescripcion.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtDescripcion.MaxLength = 150;
+            this.txtDescripcion.Name = "txtDescripcion";
+            this.txtDescripcion.Size = new System.Drawing.Size(200, 23);
             // 
             // lblDatos
             // 
@@ -586,9 +728,8 @@
             this.cmbFiltroEstado.ForeColor = System.Drawing.Color.White;
             this.cmbFiltroEstado.Items.AddRange(new object[] {
             "Todos",
-            "En proceso",
-            "Aprobado",
-            "Entregado"});
+            "Activo",
+            "Inactivo"});
             this.cmbFiltroEstado.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
             this.cmbFiltroEstado.Name = "cmbFiltroEstado";
             this.cmbFiltroEstado.Size = new System.Drawing.Size(200, 23);
@@ -661,7 +802,10 @@
             this.pnlConsultar.ResumeLayout(false);
             this.tlpAcciones.ResumeLayout(false);
             this.pnlAcciones.ResumeLayout(false);
+            this.flpEstado.ResumeLayout(false);
+            this.flpEstado.PerformLayout();
             this.tlpCampos.ResumeLayout(false);
+            this.tlpCampos.PerformLayout();
             this.pnlFormulario.ResumeLayout(false);
             this.pnlGestionar.ResumeLayout(false);
             this.pnlSeccion.ResumeLayout(false);
@@ -678,9 +822,12 @@
         private Presentacion.RoundedPanel pnlLista;
         private System.Windows.Forms.DataGridView dgvDisenos;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCodigo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNombre;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colTipoServicio;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCliente;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDisenador;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNombre;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTipo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colRango;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDescripcion;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFecha;
         private System.Windows.Forms.DataGridViewTextBoxColumn colEstado;
         private System.Windows.Forms.Panel pnlPie;
@@ -695,16 +842,24 @@
         private System.Windows.Forms.TableLayoutPanel tlpCampos;
         private System.Windows.Forms.Label lblCodigo;
         private System.Windows.Forms.TextBox txtCodigo;
-        private System.Windows.Forms.Label lblEstado;
-        private System.Windows.Forms.ComboBox cmbEstado;
-        private System.Windows.Forms.Label lblNombre;
-        private System.Windows.Forms.TextBox txtNombre;
-        private System.Windows.Forms.Label lblTipoServicio;
-        private System.Windows.Forms.ComboBox cmbTipoServicio;
+        private System.Windows.Forms.Label lblCliente;
+        private System.Windows.Forms.ComboBox cmbCliente;
         private System.Windows.Forms.Label lblDisenador;
         private System.Windows.Forms.ComboBox cmbDisenador;
         private System.Windows.Forms.Label lblFecha;
         private System.Windows.Forms.DateTimePicker dtpFecha;
+        private System.Windows.Forms.Label lblNombre;
+        private System.Windows.Forms.TextBox txtNombre;
+        private System.Windows.Forms.Label lblTipo;
+        private System.Windows.Forms.TextBox txtTipo;
+        private System.Windows.Forms.Label lblRango;
+        private System.Windows.Forms.TextBox txtRango;
+        private System.Windows.Forms.Label lblEstado;
+        private System.Windows.Forms.FlowLayoutPanel flpEstado;
+        private System.Windows.Forms.RadioButton rbActivo;
+        private System.Windows.Forms.RadioButton rbInactivo;
+        private System.Windows.Forms.Label lblDescripcion;
+        private System.Windows.Forms.TextBox txtDescripcion;
         private System.Windows.Forms.Label lblDatos;
         private System.Windows.Forms.Panel pnlSeparador;
         private Presentacion.RoundedPanel pnlAcciones;

@@ -22,7 +22,9 @@
             this.colCodigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colNombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDescripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPrecioBase = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCosto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colRecargo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colEstado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlPie = new System.Windows.Forms.Panel();
             this.lblTotalRegistros = new System.Windows.Forms.Label();
@@ -36,12 +38,18 @@
             this.tlpCampos = new System.Windows.Forms.TableLayoutPanel();
             this.lblCodigo = new System.Windows.Forms.Label();
             this.txtCodigo = new System.Windows.Forms.TextBox();
-            this.lblEstado = new System.Windows.Forms.Label();
-            this.cmbEstado = new System.Windows.Forms.ComboBox();
             this.lblNombre = new System.Windows.Forms.Label();
             this.txtNombre = new System.Windows.Forms.TextBox();
-            this.lblPrecioBase = new System.Windows.Forms.Label();
-            this.txtPrecioBase = new System.Windows.Forms.TextBox();
+            this.lblCosto = new System.Windows.Forms.Label();
+            this.txtCosto = new System.Windows.Forms.TextBox();
+            this.lblRecargo = new System.Windows.Forms.Label();
+            this.txtRecargo = new System.Windows.Forms.TextBox();
+            this.lblTotal = new System.Windows.Forms.Label();
+            this.txtTotal = new System.Windows.Forms.TextBox();
+            this.lblEstado = new System.Windows.Forms.Label();
+            this.flpEstado = new System.Windows.Forms.FlowLayoutPanel();
+            this.rbActivo = new System.Windows.Forms.RadioButton();
+            this.rbInactivo = new System.Windows.Forms.RadioButton();
             this.lblDescripcion = new System.Windows.Forms.Label();
             this.txtDescripcion = new System.Windows.Forms.TextBox();
             this.lblDatos = new System.Windows.Forms.Label();
@@ -73,6 +81,7 @@
             this.pnlGestionar.SuspendLayout();
             this.pnlFormulario.SuspendLayout();
             this.tlpCampos.SuspendLayout();
+            this.flpEstado.SuspendLayout();
             this.pnlAcciones.SuspendLayout();
             this.tlpAcciones.SuspendLayout();
             this.pnlConsultar.SuspendLayout();
@@ -109,7 +118,9 @@
             this.colCodigo,
             this.colNombre,
             this.colDescripcion,
-            this.colPrecioBase,
+            this.colCosto,
+            this.colRecargo,
+            this.colTotal,
             this.colEstado});
             this.dgvTipoServicio.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvTipoServicio.Name = "dgvTipoServicio";
@@ -119,16 +130,16 @@
             // colCodigo
             // 
             this.colCodigo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colCodigo.DataPropertyName = "Codigo";
+            this.colCodigo.DataPropertyName = "CodigoTipoServicio";
             this.colCodigo.HeaderText = "Código";
             this.colCodigo.Name = "colCodigo";
-            this.colCodigo.Width = 90;
+            this.colCodigo.Width = 70;
             // 
             // colNombre
             // 
             this.colNombre.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colNombre.DataPropertyName = "Nombre";
-            this.colNombre.FillWeight = 30F;
+            this.colNombre.DataPropertyName = "NombreServicio";
+            this.colNombre.FillWeight = 25F;
             this.colNombre.HeaderText = "Nombre";
             this.colNombre.Name = "colNombre";
             // 
@@ -136,17 +147,33 @@
             // 
             this.colDescripcion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colDescripcion.DataPropertyName = "Descripcion";
-            this.colDescripcion.FillWeight = 45F;
+            this.colDescripcion.FillWeight = 35F;
             this.colDescripcion.HeaderText = "Descripción";
             this.colDescripcion.Name = "colDescripcion";
             // 
-            // colPrecioBase
+            // colCosto
             // 
-            this.colPrecioBase.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colPrecioBase.DataPropertyName = "PrecioBase";
-            this.colPrecioBase.HeaderText = "Precio base";
-            this.colPrecioBase.Name = "colPrecioBase";
-            this.colPrecioBase.Width = 110;
+            this.colCosto.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colCosto.DataPropertyName = "CostoServicio";
+            this.colCosto.HeaderText = "Costo";
+            this.colCosto.Name = "colCosto";
+            this.colCosto.Width = 90;
+            // 
+            // colRecargo
+            // 
+            this.colRecargo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colRecargo.DataPropertyName = "RecargoServicio";
+            this.colRecargo.HeaderText = "Recargo";
+            this.colRecargo.Name = "colRecargo";
+            this.colRecargo.Width = 90;
+            // 
+            // colTotal
+            // 
+            this.colTotal.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colTotal.DataPropertyName = "TotalServicio";
+            this.colTotal.HeaderText = "Total";
+            this.colTotal.Name = "colTotal";
+            this.colTotal.Width = 90;
             // 
             // colEstado
             // 
@@ -154,7 +181,7 @@
             this.colEstado.DataPropertyName = "Estado";
             this.colEstado.HeaderText = "Estado";
             this.colEstado.Name = "colEstado";
-            this.colEstado.Width = 90;
+            this.colEstado.Width = 80;
             // 
             // pnlPie
             // 
@@ -239,22 +266,27 @@
             this.pnlFormulario.Padding = new System.Windows.Forms.Padding(15, 10, 15, 6);
             this.pnlFormulario.Size = new System.Drawing.Size(720, 215);
             // 
-            // tlpCampos
+            // tlpCampos  (3 columnas x 3 filas de campo)
             // 
             this.tlpCampos.Controls.Add(this.lblCodigo, 0, 0);
             this.tlpCampos.Controls.Add(this.txtCodigo, 0, 1);
-            this.tlpCampos.Controls.Add(this.lblEstado, 1, 0);
-            this.tlpCampos.Controls.Add(this.cmbEstado, 1, 1);
-            this.tlpCampos.Controls.Add(this.lblNombre, 0, 2);
-            this.tlpCampos.Controls.Add(this.txtNombre, 0, 3);
-            this.tlpCampos.Controls.Add(this.lblPrecioBase, 1, 2);
-            this.tlpCampos.Controls.Add(this.txtPrecioBase, 1, 3);
+            this.tlpCampos.Controls.Add(this.lblNombre, 1, 0);
+            this.tlpCampos.Controls.Add(this.txtNombre, 1, 1);
+            this.tlpCampos.Controls.Add(this.lblCosto, 2, 0);
+            this.tlpCampos.Controls.Add(this.txtCosto, 2, 1);
+            this.tlpCampos.Controls.Add(this.lblRecargo, 0, 2);
+            this.tlpCampos.Controls.Add(this.txtRecargo, 0, 3);
+            this.tlpCampos.Controls.Add(this.lblTotal, 1, 2);
+            this.tlpCampos.Controls.Add(this.txtTotal, 1, 3);
+            this.tlpCampos.Controls.Add(this.lblEstado, 2, 2);
+            this.tlpCampos.Controls.Add(this.flpEstado, 2, 3);
             this.tlpCampos.Controls.Add(this.lblDescripcion, 0, 4);
             this.tlpCampos.Controls.Add(this.txtDescripcion, 0, 5);
             this.tlpCampos.BackColor = System.Drawing.Color.FromArgb(26, 32, 84);
-            this.tlpCampos.ColumnCount = 2;
-            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpCampos.ColumnCount = 3;
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tlpCampos.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpCampos.Name = "tlpCampos";
             this.tlpCampos.RowCount = 6;
@@ -265,6 +297,8 @@
             this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
             this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tlpCampos.Size = new System.Drawing.Size(200, 100);
+            this.tlpCampos.SetColumnSpan(this.lblDescripcion, 3);
+            this.tlpCampos.SetColumnSpan(this.txtDescripcion, 3);
             // 
             // lblCodigo
             // 
@@ -288,6 +322,103 @@
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.ReadOnly = true;
             this.txtCodigo.Size = new System.Drawing.Size(200, 23);
+            this.txtCodigo.TabStop = false;
+            // 
+            // lblNombre
+            // 
+            this.lblNombre.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblNombre.AutoSize = false;
+            this.lblNombre.BackColor = System.Drawing.Color.Transparent;
+            this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblNombre.Margin = new System.Windows.Forms.Padding(0);
+            this.lblNombre.Name = "lblNombre";
+            this.lblNombre.Size = new System.Drawing.Size(100, 20);
+            this.lblNombre.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblNombre.Text = "Nombre del servicio:";
+            // 
+            // txtNombre
+            // 
+            this.txtNombre.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNombre.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtNombre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtNombre.ForeColor = System.Drawing.Color.White;
+            this.txtNombre.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtNombre.MaxLength = 45;
+            this.txtNombre.Name = "txtNombre";
+            this.txtNombre.Size = new System.Drawing.Size(200, 23);
+            // 
+            // lblCosto
+            // 
+            this.lblCosto.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCosto.AutoSize = false;
+            this.lblCosto.BackColor = System.Drawing.Color.Transparent;
+            this.lblCosto.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblCosto.Margin = new System.Windows.Forms.Padding(0);
+            this.lblCosto.Name = "lblCosto";
+            this.lblCosto.Size = new System.Drawing.Size(100, 20);
+            this.lblCosto.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblCosto.Text = "Costo del servicio:";
+            // 
+            // txtCosto
+            // 
+            this.txtCosto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCosto.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtCosto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCosto.ForeColor = System.Drawing.Color.White;
+            this.txtCosto.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtCosto.MaxLength = 13;
+            this.txtCosto.Name = "txtCosto";
+            this.txtCosto.Size = new System.Drawing.Size(200, 23);
+            this.txtCosto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lblRecargo
+            // 
+            this.lblRecargo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblRecargo.AutoSize = false;
+            this.lblRecargo.BackColor = System.Drawing.Color.Transparent;
+            this.lblRecargo.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblRecargo.Margin = new System.Windows.Forms.Padding(0);
+            this.lblRecargo.Name = "lblRecargo";
+            this.lblRecargo.Size = new System.Drawing.Size(100, 20);
+            this.lblRecargo.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblRecargo.Text = "Recargo:";
+            // 
+            // txtRecargo
+            // 
+            this.txtRecargo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtRecargo.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtRecargo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtRecargo.ForeColor = System.Drawing.Color.White;
+            this.txtRecargo.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtRecargo.MaxLength = 13;
+            this.txtRecargo.Name = "txtRecargo";
+            this.txtRecargo.Size = new System.Drawing.Size(200, 23);
+            this.txtRecargo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lblTotal
+            // 
+            this.lblTotal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTotal.AutoSize = false;
+            this.lblTotal.BackColor = System.Drawing.Color.Transparent;
+            this.lblTotal.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
+            this.lblTotal.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTotal.Name = "lblTotal";
+            this.lblTotal.Size = new System.Drawing.Size(100, 20);
+            this.lblTotal.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblTotal.Text = "Total (costo + recargo):";
+            // 
+            // txtTotal
+            // 
+            this.txtTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTotal.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
+            this.txtTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTotal.ForeColor = System.Drawing.Color.White;
+            this.txtTotal.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtTotal.Name = "txtTotal";
+            this.txtTotal.ReadOnly = true;
+            this.txtTotal.Size = new System.Drawing.Size(200, 23);
+            this.txtTotal.TabStop = false;
+            this.txtTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblEstado
             // 
@@ -301,65 +432,41 @@
             this.lblEstado.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.lblEstado.Text = "Estado:";
             // 
-            // cmbEstado
+            // flpEstado
             // 
-            this.cmbEstado.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbEstado.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
-            this.cmbEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEstado.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbEstado.ForeColor = System.Drawing.Color.White;
-            this.cmbEstado.Items.AddRange(new object[] {
-            "Activo",
-            "Inactivo"});
-            this.cmbEstado.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.cmbEstado.Name = "cmbEstado";
-            this.cmbEstado.Size = new System.Drawing.Size(200, 23);
+            this.flpEstado.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.flpEstado.BackColor = System.Drawing.Color.Transparent;
+            this.flpEstado.Controls.Add(this.rbActivo);
+            this.flpEstado.Controls.Add(this.rbInactivo);
+            this.flpEstado.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.flpEstado.Name = "flpEstado";
+            this.flpEstado.Size = new System.Drawing.Size(200, 26);
+            this.flpEstado.WrapContents = false;
             // 
-            // lblNombre
+            // rbActivo
             // 
-            this.lblNombre.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblNombre.AutoSize = false;
-            this.lblNombre.BackColor = System.Drawing.Color.Transparent;
-            this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
-            this.lblNombre.Margin = new System.Windows.Forms.Padding(0);
-            this.lblNombre.Name = "lblNombre";
-            this.lblNombre.Size = new System.Drawing.Size(100, 20);
-            this.lblNombre.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.lblNombre.Text = "Nombre:";
+            this.rbActivo.AutoSize = true;
+            this.rbActivo.BackColor = System.Drawing.Color.Transparent;
+            this.rbActivo.Checked = true;
+            this.rbActivo.ForeColor = System.Drawing.Color.White;
+            this.rbActivo.Margin = new System.Windows.Forms.Padding(0, 4, 20, 0);
+            this.rbActivo.Name = "rbActivo";
+            this.rbActivo.Size = new System.Drawing.Size(70, 19);
+            this.rbActivo.TabStop = true;
+            this.rbActivo.Text = "Activo";
+            this.rbActivo.UseVisualStyleBackColor = false;
             // 
-            // txtNombre
+            // rbInactivo
             // 
-            this.txtNombre.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtNombre.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
-            this.txtNombre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtNombre.ForeColor = System.Drawing.Color.White;
-            this.txtNombre.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtNombre.MaxLength = 80;
-            this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(200, 23);
-            // 
-            // lblPrecioBase
-            // 
-            this.lblPrecioBase.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPrecioBase.AutoSize = false;
-            this.lblPrecioBase.BackColor = System.Drawing.Color.Transparent;
-            this.lblPrecioBase.ForeColor = System.Drawing.Color.FromArgb(160, 170, 220);
-            this.lblPrecioBase.Margin = new System.Windows.Forms.Padding(0);
-            this.lblPrecioBase.Name = "lblPrecioBase";
-            this.lblPrecioBase.Size = new System.Drawing.Size(100, 20);
-            this.lblPrecioBase.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.lblPrecioBase.Text = "Precio base:";
-            // 
-            // txtPrecioBase
-            // 
-            this.txtPrecioBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPrecioBase.BackColor = System.Drawing.Color.FromArgb(30, 37, 92);
-            this.txtPrecioBase.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtPrecioBase.ForeColor = System.Drawing.Color.White;
-            this.txtPrecioBase.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtPrecioBase.MaxLength = 15;
-            this.txtPrecioBase.Name = "txtPrecioBase";
-            this.txtPrecioBase.Size = new System.Drawing.Size(200, 23);
+            this.rbInactivo.AutoSize = true;
+            this.rbInactivo.BackColor = System.Drawing.Color.Transparent;
+            this.rbInactivo.ForeColor = System.Drawing.Color.White;
+            this.rbInactivo.Margin = new System.Windows.Forms.Padding(0, 4, 20, 0);
+            this.rbInactivo.Name = "rbInactivo";
+            this.rbInactivo.Size = new System.Drawing.Size(70, 19);
+            this.rbInactivo.TabStop = false;
+            this.rbInactivo.Text = "Inactivo";
+            this.rbInactivo.UseVisualStyleBackColor = false;
             // 
             // lblDescripcion
             // 
@@ -625,7 +732,10 @@
             this.pnlConsultar.ResumeLayout(false);
             this.tlpAcciones.ResumeLayout(false);
             this.pnlAcciones.ResumeLayout(false);
+            this.flpEstado.ResumeLayout(false);
+            this.flpEstado.PerformLayout();
             this.tlpCampos.ResumeLayout(false);
+            this.tlpCampos.PerformLayout();
             this.pnlFormulario.ResumeLayout(false);
             this.pnlGestionar.ResumeLayout(false);
             this.pnlSeccion.ResumeLayout(false);
@@ -644,7 +754,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCodigo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNombre;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDescripcion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPrecioBase;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCosto;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colRecargo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTotal;
         private System.Windows.Forms.DataGridViewTextBoxColumn colEstado;
         private System.Windows.Forms.Panel pnlPie;
         private System.Windows.Forms.Label lblTotalRegistros;
@@ -658,12 +770,18 @@
         private System.Windows.Forms.TableLayoutPanel tlpCampos;
         private System.Windows.Forms.Label lblCodigo;
         private System.Windows.Forms.TextBox txtCodigo;
-        private System.Windows.Forms.Label lblEstado;
-        private System.Windows.Forms.ComboBox cmbEstado;
         private System.Windows.Forms.Label lblNombre;
         private System.Windows.Forms.TextBox txtNombre;
-        private System.Windows.Forms.Label lblPrecioBase;
-        private System.Windows.Forms.TextBox txtPrecioBase;
+        private System.Windows.Forms.Label lblCosto;
+        private System.Windows.Forms.TextBox txtCosto;
+        private System.Windows.Forms.Label lblRecargo;
+        private System.Windows.Forms.TextBox txtRecargo;
+        private System.Windows.Forms.Label lblTotal;
+        private System.Windows.Forms.TextBox txtTotal;
+        private System.Windows.Forms.Label lblEstado;
+        private System.Windows.Forms.FlowLayoutPanel flpEstado;
+        private System.Windows.Forms.RadioButton rbActivo;
+        private System.Windows.Forms.RadioButton rbInactivo;
         private System.Windows.Forms.Label lblDescripcion;
         private System.Windows.Forms.TextBox txtDescripcion;
         private System.Windows.Forms.Label lblDatos;
