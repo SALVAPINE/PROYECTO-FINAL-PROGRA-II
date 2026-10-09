@@ -363,21 +363,21 @@
             this.textBox10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
             this.textBox10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox10.ForeColor = System.Drawing.Color.White;
-            this.textBox10.Location = new System.Drawing.Point(406, 81);
+            this.textBox10.Location = new System.Drawing.Point(405, 81);
             this.textBox10.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
             this.textBox10.MaxLength = 15;
             this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(389, 22);
+            this.textBox10.Size = new System.Drawing.Size(390, 22);
             this.textBox10.TabIndex = 30;
             // 
             // dateTimePicker1
             // 
             this.dateTimePicker1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTimePicker1.Location = new System.Drawing.Point(406, 27);
+            this.dateTimePicker1.Location = new System.Drawing.Point(405, 27);
             this.dateTimePicker1.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(389, 22);
+            this.dateTimePicker1.Size = new System.Drawing.Size(390, 22);
             this.dateTimePicker1.TabIndex = 29;
             // 
             // textBox8
@@ -391,7 +391,7 @@
             this.textBox8.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
             this.textBox8.MaxLength = 150;
             this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(390, 22);
+            this.textBox8.Size = new System.Drawing.Size(389, 22);
             this.textBox8.TabIndex = 27;
             // 
             // label8
@@ -399,10 +399,10 @@
             this.label8.BackColor = System.Drawing.Color.Transparent;
             this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.label8.Location = new System.Drawing.Point(406, 310);
+            this.label8.Location = new System.Drawing.Point(405, 310);
             this.label8.Margin = new System.Windows.Forms.Padding(0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(405, 18);
+            this.label8.Size = new System.Drawing.Size(406, 18);
             this.label8.TabIndex = 26;
             this.label8.Text = "Estado:";
             this.label8.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -415,7 +415,7 @@
             this.label7.Location = new System.Drawing.Point(0, 310);
             this.label7.Margin = new System.Windows.Forms.Padding(0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(406, 18);
+            this.label7.Size = new System.Drawing.Size(405, 18);
             this.label7.TabIndex = 25;
             this.label7.Text = "DireccionCotizador:";
             this.label7.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -430,7 +430,7 @@
             this.textBox6.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
             this.textBox6.MaxLength = 150;
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(390, 22);
+            this.textBox6.Size = new System.Drawing.Size(389, 22);
             this.textBox6.TabIndex = 23;
             // 
             // label6
@@ -438,10 +438,10 @@
             this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.label6.Location = new System.Drawing.Point(406, 258);
+            this.label6.Location = new System.Drawing.Point(405, 258);
             this.label6.Margin = new System.Windows.Forms.Padding(0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(405, 23);
+            this.label6.Size = new System.Drawing.Size(406, 23);
             this.label6.TabIndex = 22;
             this.label6.Text = "Total:";
             this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -454,7 +454,7 @@
             this.label5.Location = new System.Drawing.Point(0, 258);
             this.label5.Margin = new System.Windows.Forms.Padding(0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(406, 23);
+            this.label5.Size = new System.Drawing.Size(405, 23);
             this.label5.TabIndex = 21;
             this.label5.Text = "NIT:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -469,7 +469,7 @@
             this.textBox4.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
             this.textBox4.MaxLength = 150;
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(390, 22);
+            this.textBox4.Size = new System.Drawing.Size(389, 22);
             this.textBox4.TabIndex = 19;
             // 
             // label4
@@ -477,10 +477,10 @@
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.label4.Location = new System.Drawing.Point(406, 209);
+            this.label4.Location = new System.Drawing.Point(405, 209);
             this.label4.Margin = new System.Windows.Forms.Padding(0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(405, 22);
+            this.label4.Size = new System.Drawing.Size(406, 22);
             this.label4.TabIndex = 18;
             this.label4.Text = "Subtotal:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -493,7 +493,7 @@
             this.label3.Location = new System.Drawing.Point(0, 209);
             this.label3.Margin = new System.Windows.Forms.Padding(0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(406, 22);
+            this.label3.Size = new System.Drawing.Size(405, 22);
             this.label3.TabIndex = 17;
             this.label3.Text = "NombreCotizador:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -508,7 +508,7 @@
             this.textBox2.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
             this.textBox2.MaxLength = 150;
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(390, 22);
+            this.textBox2.Size = new System.Drawing.Size(389, 22);
             this.textBox2.TabIndex = 15;
             // 
             // label2
@@ -516,10 +516,10 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.label2.Location = new System.Drawing.Point(406, 162);
+            this.label2.Location = new System.Drawing.Point(405, 162);
             this.label2.Margin = new System.Windows.Forms.Padding(0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(405, 20);
+            this.label2.Size = new System.Drawing.Size(406, 20);
             this.label2.TabIndex = 14;
             this.label2.Text = "Precio:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -532,7 +532,7 @@
             this.label1.Location = new System.Drawing.Point(0, 162);
             this.label1.Margin = new System.Windows.Forms.Padding(0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(406, 20);
+            this.label1.Size = new System.Drawing.Size(405, 20);
             this.label1.TabIndex = 13;
             this.label1.Text = "CodigoCliente:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -547,7 +547,7 @@
             this.textBox1.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(390, 22);
+            this.textBox1.Size = new System.Drawing.Size(389, 22);
             this.textBox1.TabIndex = 12;
             // 
             // lblCodigo
@@ -558,7 +558,7 @@
             this.lblCodigo.Location = new System.Drawing.Point(0, 0);
             this.lblCodigo.Margin = new System.Windows.Forms.Padding(0);
             this.lblCodigo.Name = "lblCodigo";
-            this.lblCodigo.Size = new System.Drawing.Size(406, 22);
+            this.lblCodigo.Size = new System.Drawing.Size(405, 22);
             this.lblCodigo.TabIndex = 0;
             this.lblCodigo.Text = "CodigoCotizacion:";
             this.lblCodigo.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -573,7 +573,7 @@
             this.txtCodigo.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.ReadOnly = true;
-            this.txtCodigo.Size = new System.Drawing.Size(390, 22);
+            this.txtCodigo.Size = new System.Drawing.Size(389, 22);
             this.txtCodigo.TabIndex = 1;
             // 
             // lblEstado
@@ -581,10 +581,10 @@
             this.lblEstado.BackColor = System.Drawing.Color.Transparent;
             this.lblEstado.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblEstado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblEstado.Location = new System.Drawing.Point(406, 0);
+            this.lblEstado.Location = new System.Drawing.Point(405, 0);
             this.lblEstado.Margin = new System.Windows.Forms.Padding(0);
             this.lblEstado.Name = "lblEstado";
-            this.lblEstado.Size = new System.Drawing.Size(405, 22);
+            this.lblEstado.Size = new System.Drawing.Size(406, 22);
             this.lblEstado.TabIndex = 2;
             this.lblEstado.Text = "FechaEmision:";
             this.lblEstado.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -597,7 +597,7 @@
             this.lblCliente.Location = new System.Drawing.Point(0, 54);
             this.lblCliente.Margin = new System.Windows.Forms.Padding(0);
             this.lblCliente.Name = "lblCliente";
-            this.lblCliente.Size = new System.Drawing.Size(406, 22);
+            this.lblCliente.Size = new System.Drawing.Size(405, 22);
             this.lblCliente.TabIndex = 4;
             this.lblCliente.Text = "CodigoTipodeservicio:";
             this.lblCliente.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -607,10 +607,10 @@
             this.lblFecha.BackColor = System.Drawing.Color.Transparent;
             this.lblFecha.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblFecha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblFecha.Location = new System.Drawing.Point(406, 54);
+            this.lblFecha.Location = new System.Drawing.Point(405, 54);
             this.lblFecha.Margin = new System.Windows.Forms.Padding(0);
             this.lblFecha.Name = "lblFecha";
-            this.lblFecha.Size = new System.Drawing.Size(405, 22);
+            this.lblFecha.Size = new System.Drawing.Size(406, 22);
             this.lblFecha.TabIndex = 6;
             this.lblFecha.Text = "Descripcion:";
             this.lblFecha.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -623,7 +623,7 @@
             this.lblDescripcion.Location = new System.Drawing.Point(0, 108);
             this.lblDescripcion.Margin = new System.Windows.Forms.Padding(0);
             this.lblDescripcion.Name = "lblDescripcion";
-            this.lblDescripcion.Size = new System.Drawing.Size(406, 22);
+            this.lblDescripcion.Size = new System.Drawing.Size(405, 22);
             this.lblDescripcion.TabIndex = 8;
             this.lblDescripcion.Text = "CodigoSucursal:";
             this.lblDescripcion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -639,7 +639,7 @@
             this.txtDescripcion.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
             this.txtDescripcion.MaxLength = 150;
             this.txtDescripcion.Name = "txtDescripcion";
-            this.txtDescripcion.Size = new System.Drawing.Size(390, 22);
+            this.txtDescripcion.Size = new System.Drawing.Size(389, 22);
             this.txtDescripcion.TabIndex = 9;
             // 
             // lblMonto
@@ -647,17 +647,17 @@
             this.lblMonto.BackColor = System.Drawing.Color.Transparent;
             this.lblMonto.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblMonto.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblMonto.Location = new System.Drawing.Point(406, 108);
+            this.lblMonto.Location = new System.Drawing.Point(405, 108);
             this.lblMonto.Margin = new System.Windows.Forms.Padding(0);
             this.lblMonto.Name = "lblMonto";
-            this.lblMonto.Size = new System.Drawing.Size(405, 22);
+            this.lblMonto.Size = new System.Drawing.Size(406, 22);
             this.lblMonto.TabIndex = 10;
             this.lblMonto.Text = "Cantidad:";
             this.lblMonto.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(409, 133);
+            this.numericUpDown1.Location = new System.Drawing.Point(408, 133);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(120, 22);
             this.numericUpDown1.TabIndex = 31;
@@ -665,7 +665,7 @@
             // numericUpDown2
             // 
             this.numericUpDown2.DecimalPlaces = 2;
-            this.numericUpDown2.Location = new System.Drawing.Point(409, 185);
+            this.numericUpDown2.Location = new System.Drawing.Point(408, 185);
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(120, 22);
             this.numericUpDown2.TabIndex = 32;
@@ -673,7 +673,7 @@
             // numericUpDown3
             // 
             this.numericUpDown3.DecimalPlaces = 2;
-            this.numericUpDown3.Location = new System.Drawing.Point(409, 234);
+            this.numericUpDown3.Location = new System.Drawing.Point(408, 234);
             this.numericUpDown3.Name = "numericUpDown3";
             this.numericUpDown3.Size = new System.Drawing.Size(120, 22);
             this.numericUpDown3.TabIndex = 33;
@@ -681,7 +681,7 @@
             // numericUpDown4
             // 
             this.numericUpDown4.DecimalPlaces = 2;
-            this.numericUpDown4.Location = new System.Drawing.Point(409, 284);
+            this.numericUpDown4.Location = new System.Drawing.Point(408, 284);
             this.numericUpDown4.Name = "numericUpDown4";
             this.numericUpDown4.Size = new System.Drawing.Size(120, 22);
             this.numericUpDown4.TabIndex = 34;
@@ -690,7 +690,7 @@
             // 
             this.radioButton1.AutoSize = true;
             this.radioButton1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.radioButton1.Location = new System.Drawing.Point(409, 331);
+            this.radioButton1.Location = new System.Drawing.Point(408, 331);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(65, 17);
             this.radioButton1.TabIndex = 35;
@@ -702,7 +702,7 @@
             // 
             this.radioButton2.AutoSize = true;
             this.radioButton2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.radioButton2.Location = new System.Drawing.Point(409, 354);
+            this.radioButton2.Location = new System.Drawing.Point(408, 354);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(74, 20);
             this.radioButton2.TabIndex = 36;
