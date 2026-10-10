@@ -83,5 +83,10 @@ namespace Presentacion
                 e.CellStyle.SelectionForeColor = color;
             }
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

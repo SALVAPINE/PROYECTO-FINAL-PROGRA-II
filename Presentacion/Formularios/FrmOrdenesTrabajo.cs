@@ -81,5 +81,10 @@ namespace Presentacion
                 e.CellStyle.SelectionForeColor = color;
             }
         }
+
+        private void cmbCliente_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
