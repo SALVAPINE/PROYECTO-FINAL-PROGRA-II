@@ -29,14 +29,30 @@
             this.pnlGestionar = new System.Windows.Forms.Panel();
             this.pnlFormulario = new Presentacion.RoundedPanel();
             this.tlpCampos = new System.Windows.Forms.TableLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.rdbInactivo = new System.Windows.Forms.RadioButton();
+            this.rdbActivo = new System.Windows.Forms.RadioButton();
+            this.txtDescripcion = new System.Windows.Forms.TextBox();
+            this.dtpFechaFinalizacion = new System.Windows.Forms.DateTimePicker();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtTipoOrden = new System.Windows.Forms.TextBox();
+            this.txtNombreOrden = new System.Windows.Forms.TextBox();
+            this.cboxCodigoDiseñador = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.lblCodigo = new System.Windows.Forms.Label();
             this.txtCodigoOrdenTrabajo = new System.Windows.Forms.TextBox();
             this.lblEstado = new System.Windows.Forms.Label();
             this.lblCliente = new System.Windows.Forms.Label();
             this.lblTipoServicio = new System.Windows.Forms.Label();
             this.lblFechaEntrega = new System.Windows.Forms.Label();
-            this.dtpFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.lblDescripcion = new System.Windows.Forms.Label();
+            this.cboxCodigoSucursal = new System.Windows.Forms.ComboBox();
+            this.cboxCodigoTipoServicio = new System.Windows.Forms.ComboBox();
+            this.cboxCodigoCotizacion = new System.Windows.Forms.ComboBox();
+            this.dtpFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.lblDatos = new System.Windows.Forms.Label();
             this.pnlSeparador = new System.Windows.Forms.Panel();
             this.pnlAcciones = new Presentacion.RoundedPanel();
@@ -57,22 +73,6 @@
             this.lblTitulo = new System.Windows.Forms.Label();
             this.btnTabGestionar = new Presentacion.BotonIcono();
             this.btnTabConsultar = new Presentacion.BotonIcono();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.cboxCodigoSucursal = new System.Windows.Forms.ComboBox();
-            this.cboxCodigoTipoServicio = new System.Windows.Forms.ComboBox();
-            this.cboxCodigoCotizacion = new System.Windows.Forms.ComboBox();
-            this.cboxCodigoDiseñador = new System.Windows.Forms.ComboBox();
-            this.txtNombreOrden = new System.Windows.Forms.TextBox();
-            this.txtTipoOrden = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.dtpFechaFinalizacion = new System.Windows.Forms.DateTimePicker();
-            this.txtDescripcion = new System.Windows.Forms.TextBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.rdbInactivo = new System.Windows.Forms.RadioButton();
-            this.rdbActivo = new System.Windows.Forms.RadioButton();
             this.colCodigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCodigoSucursal = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.colCodigoTipoServicio = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -92,12 +92,12 @@
             this.pnlGestionar.SuspendLayout();
             this.pnlFormulario.SuspendLayout();
             this.tlpCampos.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.pnlAcciones.SuspendLayout();
             this.tlpAcciones.SuspendLayout();
             this.pnlConsultar.SuspendLayout();
             this.tlpFiltros.SuspendLayout();
             this.pnlCabecera.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlLista
@@ -290,6 +290,166 @@
             this.tlpCampos.Size = new System.Drawing.Size(1796, 219);
             this.tlpCampos.TabIndex = 0;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.rdbInactivo);
+            this.panel1.Controls.Add(this.rdbActivo);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(1199, 133);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(594, 26);
+            this.panel1.TabIndex = 29;
+            // 
+            // rdbInactivo
+            // 
+            this.rdbInactivo.AutoSize = true;
+            this.rdbInactivo.Location = new System.Drawing.Point(340, -3);
+            this.rdbInactivo.Name = "rdbInactivo";
+            this.rdbInactivo.Size = new System.Drawing.Size(117, 29);
+            this.rdbInactivo.TabIndex = 15;
+            this.rdbInactivo.TabStop = true;
+            this.rdbInactivo.Text = "Inactivo";
+            this.rdbInactivo.UseVisualStyleBackColor = true;
+            // 
+            // rdbActivo
+            // 
+            this.rdbActivo.AutoSize = true;
+            this.rdbActivo.Location = new System.Drawing.Point(2, -3);
+            this.rdbActivo.Name = "rdbActivo";
+            this.rdbActivo.Size = new System.Drawing.Size(102, 29);
+            this.rdbActivo.TabIndex = 14;
+            this.rdbActivo.TabStop = true;
+            this.rdbActivo.Text = "Activo";
+            this.rdbActivo.UseVisualStyleBackColor = true;
+            // 
+            // txtDescripcion
+            // 
+            this.txtDescripcion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDescripcion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtDescripcion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDescripcion.ForeColor = System.Drawing.Color.White;
+            this.txtDescripcion.Location = new System.Drawing.Point(1196, 79);
+            this.txtDescripcion.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtDescripcion.MaxLength = 150;
+            this.txtDescripcion.Multiline = true;
+            this.txtDescripcion.Name = "txtDescripcion";
+            this.txtDescripcion.Size = new System.Drawing.Size(584, 26);
+            this.txtDescripcion.TabIndex = 28;
+            // 
+            // dtpFechaFinalizacion
+            // 
+            this.dtpFechaFinalizacion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtpFechaFinalizacion.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpFechaFinalizacion.Location = new System.Drawing.Point(1196, 25);
+            this.dtpFechaFinalizacion.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.dtpFechaFinalizacion.Name = "dtpFechaFinalizacion";
+            this.dtpFechaFinalizacion.Size = new System.Drawing.Size(584, 31);
+            this.dtpFechaFinalizacion.TabIndex = 27;
+            // 
+            // label6
+            // 
+            this.label6.BackColor = System.Drawing.Color.Transparent;
+            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.label6.Location = new System.Drawing.Point(598, 162);
+            this.label6.Margin = new System.Windows.Forms.Padding(0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(598, 22);
+            this.label6.TabIndex = 26;
+            this.label6.Text = "Fecha de Inicio:";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // txtTipoOrden
+            // 
+            this.txtTipoOrden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTipoOrden.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtTipoOrden.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTipoOrden.ForeColor = System.Drawing.Color.White;
+            this.txtTipoOrden.Location = new System.Drawing.Point(598, 133);
+            this.txtTipoOrden.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtTipoOrden.MaxLength = 150;
+            this.txtTipoOrden.Name = "txtTipoOrden";
+            this.txtTipoOrden.Size = new System.Drawing.Size(582, 31);
+            this.txtTipoOrden.TabIndex = 25;
+            // 
+            // txtNombreOrden
+            // 
+            this.txtNombreOrden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNombreOrden.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtNombreOrden.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtNombreOrden.ForeColor = System.Drawing.Color.White;
+            this.txtNombreOrden.Location = new System.Drawing.Point(598, 79);
+            this.txtNombreOrden.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.txtNombreOrden.MaxLength = 150;
+            this.txtNombreOrden.Name = "txtNombreOrden";
+            this.txtNombreOrden.Size = new System.Drawing.Size(582, 31);
+            this.txtNombreOrden.TabIndex = 24;
+            // 
+            // cboxCodigoDiseñador
+            // 
+            this.cboxCodigoDiseñador.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboxCodigoDiseñador.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.cboxCodigoDiseñador.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxCodigoDiseñador.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboxCodigoDiseñador.ForeColor = System.Drawing.Color.White;
+            this.cboxCodigoDiseñador.Location = new System.Drawing.Point(598, 25);
+            this.cboxCodigoDiseñador.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.cboxCodigoDiseñador.Name = "cboxCodigoDiseñador";
+            this.cboxCodigoDiseñador.Size = new System.Drawing.Size(582, 33);
+            this.cboxCodigoDiseñador.TabIndex = 23;
+            // 
+            // label5
+            // 
+            this.label5.BackColor = System.Drawing.Color.Transparent;
+            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.label5.Location = new System.Drawing.Point(0, 162);
+            this.label5.Margin = new System.Windows.Forms.Padding(0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(598, 22);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "Código Cotización:";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // label4
+            // 
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.label4.Location = new System.Drawing.Point(1196, 108);
+            this.label4.Margin = new System.Windows.Forms.Padding(0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(600, 22);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "Estado:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // label3
+            // 
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.label3.Location = new System.Drawing.Point(1196, 54);
+            this.label3.Margin = new System.Windows.Forms.Padding(0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(600, 22);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "Descripción:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // label1
+            // 
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.label1.Location = new System.Drawing.Point(1196, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(600, 22);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "Fecha de Finalización:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
             // lblCodigo
             // 
             this.lblCodigo.BackColor = System.Drawing.Color.Transparent;
@@ -368,16 +528,6 @@
             this.lblFechaEntrega.Text = "Código Tipo Servicio:";
             this.lblFechaEntrega.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
-            // dtpFechaInicio
-            // 
-            this.dtpFechaInicio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpFechaInicio.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpFechaInicio.Location = new System.Drawing.Point(598, 187);
-            this.dtpFechaInicio.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.dtpFechaInicio.Name = "dtpFechaInicio";
-            this.dtpFechaInicio.Size = new System.Drawing.Size(582, 31);
-            this.dtpFechaInicio.TabIndex = 9;
-            // 
             // lblDescripcion
             // 
             this.lblDescripcion.BackColor = System.Drawing.Color.Transparent;
@@ -390,6 +540,55 @@
             this.lblDescripcion.TabIndex = 10;
             this.lblDescripcion.Text = "Tipo de orden:";
             this.lblDescripcion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // cboxCodigoSucursal
+            // 
+            this.cboxCodigoSucursal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboxCodigoSucursal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.cboxCodigoSucursal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxCodigoSucursal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboxCodigoSucursal.ForeColor = System.Drawing.Color.White;
+            this.cboxCodigoSucursal.Location = new System.Drawing.Point(0, 79);
+            this.cboxCodigoSucursal.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.cboxCodigoSucursal.Name = "cboxCodigoSucursal";
+            this.cboxCodigoSucursal.Size = new System.Drawing.Size(582, 33);
+            this.cboxCodigoSucursal.TabIndex = 20;
+            // 
+            // cboxCodigoTipoServicio
+            // 
+            this.cboxCodigoTipoServicio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboxCodigoTipoServicio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.cboxCodigoTipoServicio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxCodigoTipoServicio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboxCodigoTipoServicio.ForeColor = System.Drawing.Color.White;
+            this.cboxCodigoTipoServicio.Location = new System.Drawing.Point(0, 133);
+            this.cboxCodigoTipoServicio.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.cboxCodigoTipoServicio.Name = "cboxCodigoTipoServicio";
+            this.cboxCodigoTipoServicio.Size = new System.Drawing.Size(582, 33);
+            this.cboxCodigoTipoServicio.TabIndex = 21;
+            // 
+            // cboxCodigoCotizacion
+            // 
+            this.cboxCodigoCotizacion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboxCodigoCotizacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.cboxCodigoCotizacion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxCodigoCotizacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboxCodigoCotizacion.ForeColor = System.Drawing.Color.White;
+            this.cboxCodigoCotizacion.Location = new System.Drawing.Point(0, 187);
+            this.cboxCodigoCotizacion.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.cboxCodigoCotizacion.Name = "cboxCodigoCotizacion";
+            this.cboxCodigoCotizacion.Size = new System.Drawing.Size(582, 33);
+            this.cboxCodigoCotizacion.TabIndex = 22;
+            // 
+            // dtpFechaInicio
+            // 
+            this.dtpFechaInicio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtpFechaInicio.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpFechaInicio.Location = new System.Drawing.Point(598, 187);
+            this.dtpFechaInicio.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            this.dtpFechaInicio.Name = "dtpFechaInicio";
+            this.dtpFechaInicio.Size = new System.Drawing.Size(582, 31);
+            this.dtpFechaInicio.TabIndex = 9;
             // 
             // lblDatos
             // 
@@ -716,205 +915,6 @@
             this.btnTabConsultar.UseVisualStyleBackColor = false;
             this.btnTabConsultar.Click += new System.EventHandler(this.btnTabConsultar_Click);
             // 
-            // label1
-            // 
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.label1.Location = new System.Drawing.Point(1196, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(600, 22);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "Fecha de Finalización:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // label3
-            // 
-            this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.label3.Location = new System.Drawing.Point(1196, 54);
-            this.label3.Margin = new System.Windows.Forms.Padding(0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(600, 22);
-            this.label3.TabIndex = 16;
-            this.label3.Text = "Descripción:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // label4
-            // 
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.label4.Location = new System.Drawing.Point(1196, 108);
-            this.label4.Margin = new System.Windows.Forms.Padding(0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(600, 22);
-            this.label4.TabIndex = 17;
-            this.label4.Text = "Estado:";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // label5
-            // 
-            this.label5.BackColor = System.Drawing.Color.Transparent;
-            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.label5.Location = new System.Drawing.Point(0, 162);
-            this.label5.Margin = new System.Windows.Forms.Padding(0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(598, 22);
-            this.label5.TabIndex = 18;
-            this.label5.Text = "Código Cotización:";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // cboxCodigoSucursal
-            // 
-            this.cboxCodigoSucursal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboxCodigoSucursal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.cboxCodigoSucursal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboxCodigoSucursal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboxCodigoSucursal.ForeColor = System.Drawing.Color.White;
-            this.cboxCodigoSucursal.Location = new System.Drawing.Point(0, 79);
-            this.cboxCodigoSucursal.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.cboxCodigoSucursal.Name = "cboxCodigoSucursal";
-            this.cboxCodigoSucursal.Size = new System.Drawing.Size(582, 33);
-            this.cboxCodigoSucursal.TabIndex = 20;
-            // 
-            // cboxCodigoTipoServicio
-            // 
-            this.cboxCodigoTipoServicio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboxCodigoTipoServicio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.cboxCodigoTipoServicio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboxCodigoTipoServicio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboxCodigoTipoServicio.ForeColor = System.Drawing.Color.White;
-            this.cboxCodigoTipoServicio.Location = new System.Drawing.Point(0, 133);
-            this.cboxCodigoTipoServicio.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.cboxCodigoTipoServicio.Name = "cboxCodigoTipoServicio";
-            this.cboxCodigoTipoServicio.Size = new System.Drawing.Size(582, 33);
-            this.cboxCodigoTipoServicio.TabIndex = 21;
-            // 
-            // cboxCodigoCotizacion
-            // 
-            this.cboxCodigoCotizacion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboxCodigoCotizacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.cboxCodigoCotizacion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboxCodigoCotizacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboxCodigoCotizacion.ForeColor = System.Drawing.Color.White;
-            this.cboxCodigoCotizacion.Location = new System.Drawing.Point(0, 187);
-            this.cboxCodigoCotizacion.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.cboxCodigoCotizacion.Name = "cboxCodigoCotizacion";
-            this.cboxCodigoCotizacion.Size = new System.Drawing.Size(582, 33);
-            this.cboxCodigoCotizacion.TabIndex = 22;
-            // 
-            // cboxCodigoDiseñador
-            // 
-            this.cboxCodigoDiseñador.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboxCodigoDiseñador.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.cboxCodigoDiseñador.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboxCodigoDiseñador.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboxCodigoDiseñador.ForeColor = System.Drawing.Color.White;
-            this.cboxCodigoDiseñador.Location = new System.Drawing.Point(598, 25);
-            this.cboxCodigoDiseñador.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.cboxCodigoDiseñador.Name = "cboxCodigoDiseñador";
-            this.cboxCodigoDiseñador.Size = new System.Drawing.Size(582, 33);
-            this.cboxCodigoDiseñador.TabIndex = 23;
-            // 
-            // txtNombreOrden
-            // 
-            this.txtNombreOrden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtNombreOrden.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.txtNombreOrden.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtNombreOrden.ForeColor = System.Drawing.Color.White;
-            this.txtNombreOrden.Location = new System.Drawing.Point(598, 79);
-            this.txtNombreOrden.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtNombreOrden.MaxLength = 150;
-            this.txtNombreOrden.Name = "txtNombreOrden";
-            this.txtNombreOrden.Size = new System.Drawing.Size(582, 31);
-            this.txtNombreOrden.TabIndex = 24;
-            // 
-            // txtTipoOrden
-            // 
-            this.txtTipoOrden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTipoOrden.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.txtTipoOrden.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtTipoOrden.ForeColor = System.Drawing.Color.White;
-            this.txtTipoOrden.Location = new System.Drawing.Point(598, 133);
-            this.txtTipoOrden.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtTipoOrden.MaxLength = 150;
-            this.txtTipoOrden.Name = "txtTipoOrden";
-            this.txtTipoOrden.Size = new System.Drawing.Size(582, 31);
-            this.txtTipoOrden.TabIndex = 25;
-            // 
-            // label6
-            // 
-            this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.label6.Location = new System.Drawing.Point(598, 162);
-            this.label6.Margin = new System.Windows.Forms.Padding(0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(598, 22);
-            this.label6.TabIndex = 26;
-            this.label6.Text = "Fecha de Inicio:";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // dtpFechaFinalizacion
-            // 
-            this.dtpFechaFinalizacion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpFechaFinalizacion.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpFechaFinalizacion.Location = new System.Drawing.Point(1196, 25);
-            this.dtpFechaFinalizacion.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.dtpFechaFinalizacion.Name = "dtpFechaFinalizacion";
-            this.dtpFechaFinalizacion.Size = new System.Drawing.Size(584, 31);
-            this.dtpFechaFinalizacion.TabIndex = 27;
-            // 
-            // txtDescripcion
-            // 
-            this.txtDescripcion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDescripcion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.txtDescripcion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDescripcion.ForeColor = System.Drawing.Color.White;
-            this.txtDescripcion.Location = new System.Drawing.Point(1196, 79);
-            this.txtDescripcion.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtDescripcion.MaxLength = 150;
-            this.txtDescripcion.Multiline = true;
-            this.txtDescripcion.Name = "txtDescripcion";
-            this.txtDescripcion.Size = new System.Drawing.Size(584, 26);
-            this.txtDescripcion.TabIndex = 28;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.rdbInactivo);
-            this.panel1.Controls.Add(this.rdbActivo);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(1199, 133);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(594, 26);
-            this.panel1.TabIndex = 29;
-            // 
-            // rdbInactivo
-            // 
-            this.rdbInactivo.AutoSize = true;
-            this.rdbInactivo.Location = new System.Drawing.Point(358, 0);
-            this.rdbInactivo.Name = "rdbInactivo";
-            this.rdbInactivo.Size = new System.Drawing.Size(117, 29);
-            this.rdbInactivo.TabIndex = 15;
-            this.rdbInactivo.TabStop = true;
-            this.rdbInactivo.Text = "Inactivo";
-            this.rdbInactivo.UseVisualStyleBackColor = true;
-            // 
-            // rdbActivo
-            // 
-            this.rdbActivo.AutoSize = true;
-            this.rdbActivo.Location = new System.Drawing.Point(0, -3);
-            this.rdbActivo.Name = "rdbActivo";
-            this.rdbActivo.Size = new System.Drawing.Size(102, 29);
-            this.rdbActivo.TabIndex = 14;
-            this.rdbActivo.TabStop = true;
-            this.rdbActivo.Text = "Activo";
-            this.rdbActivo.UseVisualStyleBackColor = true;
-            // 
             // colCodigo
             // 
             this.colCodigo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
@@ -1004,10 +1004,11 @@
             // colEstado
             // 
             this.colEstado.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colEstado.DataPropertyName = "rdbActivo";
+            this.colEstado.DataPropertyName = "Estado";
             this.colEstado.HeaderText = "Estado";
             this.colEstado.MinimumWidth = 10;
             this.colEstado.Name = "colEstado";
+            this.colEstado.Width = 200;
             // 
             // FrmOrdenesTrabajo
             // 
@@ -1031,14 +1032,14 @@
             this.pnlFormulario.ResumeLayout(false);
             this.tlpCampos.ResumeLayout(false);
             this.tlpCampos.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.pnlAcciones.ResumeLayout(false);
             this.tlpAcciones.ResumeLayout(false);
             this.pnlConsultar.ResumeLayout(false);
             this.tlpFiltros.ResumeLayout(false);
             this.pnlCabecera.ResumeLayout(false);
             this.pnlCabecera.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }

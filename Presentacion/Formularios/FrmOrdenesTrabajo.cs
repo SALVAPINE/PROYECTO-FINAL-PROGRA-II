@@ -9,7 +9,8 @@ namespace Presentacion
         {
             InitializeComponent();
             Tema.EstilizarGrid(dgvOrdenesTrabajo);
-            colFechaEntrega.DefaultCellStyle.Format = "dd/MM/yyyy";
+            colFechaInicio.DefaultCellStyle.Format = "dd/MM/yyyy";
+            colFechaFinalizacion.DefaultCellStyle.Format = "dd/MM/yyyy";
             MostrarTab(true);
         }
 
