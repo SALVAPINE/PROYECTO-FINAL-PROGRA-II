@@ -1,217 +1,99 @@
 ﻿using System;
-using System.Globalization;
 using System.Windows.Forms;
+using Entidad;
+using Negocio;
 
 namespace Presentacion
 {
     public partial class FrmMateriales : Form
     {
+        private readonly MaterialNegocio negocio = new MaterialNegocio();
+
         public FrmMateriales()
         {
             InitializeComponent();
             Tema.EstilizarGrid(dgvMateriales);
 
-            colCosto.DefaultCellStyle.Format = "C2";
-            colCosto.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            ToolTip ayuda = new ToolTip();
+            ayuda.SetToolTip(btnEditar, "Editar el registro seleccionado");
+            ayuda.SetToolTip(btnEliminar, "Eliminar el registro seleccionado");
 
-            MostrarTab(true);
-
-            cmbFiltroEstado.SelectedIndex = 0;
-            rbActivo.Checked = true;
-
-            // Costo: solo números y un separador decimal
-            txtCosto.KeyPress += SoloDecimal_KeyPress;
-
-            CargarOrdenesTrabajo();
+            MostrarTab(0);
         }
 
-        // ---------- Pestañas Gestionar / Consultar ----------
-        private void MostrarTab(bool gestionar)
+        // ---------- Pestañas: 0 = Consultar, 1 = Gestionar, 2 = Resumen ----------
+        // Cada página (tpConsultar, tpGestionar, tpResumen) se edita en el diseñador haciendo clic en su pestaña.
+        private void MostrarTab(int tab)
         {
-            pnlGestionar.Visible = gestionar;
-            pnlConsultar.Visible = !gestionar;
-            btnTabGestionar.Seleccionado = gestionar;
-            btnTabConsultar.Seleccionado = !gestionar;
+            tabModulo.SelectedIndex = tab;
+            btnTabConsultar.Seleccionado = (tab == 0);
+            btnTabGestionar.Seleccionado = (tab == 1);
+            btnTabResumen.Seleccionado = (tab == 2);
+
+            if (tab != 1)
+                ActualizarResumen();
         }
 
-        private void btnTabGestionar_Click(object sender, EventArgs e) { MostrarTab(true); }
-        private void btnTabConsultar_Click(object sender, EventArgs e) { MostrarTab(false); }
+        private void btnTabConsultar_Click(object sender, EventArgs e) { MostrarTab(0); }
+        private void btnTabGestionar_Click(object sender, EventArgs e) { MostrarTab(1); }
+        private void btnTabResumen_Click(object sender, EventArgs e) { MostrarTab(2); }
 
-        // ---------- Utilidades del formulario ----------
-
-        // La orden de trabajo es una llave foránea (Tbl_OrdenesDeTrabajo):
-        // se elige de una lista, no se escribe a mano.
-        private void CargarOrdenesTrabajo()
+        /// <summary>Llena los valores de las tarjetas y los gráficos con el resumen que calcula la capa de negocio.</summary>
+        private void ActualizarResumen()
         {
-            // TODO: obtener las órdenes desde la capa de negocio, por ejemplo:
-            //   cmbOrdenTrabajo.DataSource    = ordenNegocio.Listar();   // DataTable o List<OrdenTrabajo>
-            //   cmbOrdenTrabajo.DisplayMember = "CodigoOrdenTrabajo";    // o un texto descriptivo
-            //   cmbOrdenTrabajo.ValueMember   = "CodigoOrdenTrabajo";
-            //   cmbOrdenTrabajo.SelectedIndex = -1;
-        }
-
-        private void SoloDecimal_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            var tb = (TextBox)sender;
-            string sep = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-
-            if (char.IsControl(e.KeyChar) || char.IsDigit(e.KeyChar)) return;
-            if (e.KeyChar.ToString() == sep && !tb.Text.Contains(sep)) return;
-
-            e.Handled = true;
-        }
-
-        private void LimpiarCampos()
-        {
-            txtCodigo.Clear();
-            cmbOrdenTrabajo.SelectedIndex = -1;
-            txtNombre.Clear();
-            txtTipo.Clear();
-            txtCategoria.Clear();
-            txtUnidad.Clear();
-            txtCosto.Clear();
-            rbActivo.Checked = true;
-            txtNombre.Focus();
-        }
-
-        private bool Validar()
-        {
-            if (cmbOrdenTrabajo.SelectedValue == null)
+            ResumenModulo r;
+            try
             {
-                MessageBox.Show("Seleccione la orden de trabajo.", "Validación",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cmbOrdenTrabajo.Focus();
-                return false;
+                r = negocio.ObtenerResumen();
             }
-
-            if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
-                string.IsNullOrWhiteSpace(txtTipo.Text) ||
-                string.IsNullOrWhiteSpace(txtCategoria.Text) ||
-                string.IsNullOrWhiteSpace(txtUnidad.Text))
+            catch (Exception ex)
             {
-                MessageBox.Show("Complete todos los campos obligatorios.", "Validación",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
+                Tema.Aviso("No se pudo cargar el resumen: " + ex.Message);
+                return;
             }
-
-            decimal costo;
-            if (!decimal.TryParse(txtCosto.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out costo) || costo < 0)
-            {
-                MessageBox.Show("Ingrese un costo válido.", "Validación",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtCosto.Focus();
-                return false;
-            }
-            return true;
+            Resumenes.Aplicar(r, statTotal, statEstado1, statEstado2, statExtra, graEstado, graCategoria);
         }
 
-        // Valores listos para enviar a la capa de negocio / entidad
-        private int CodigoActual { get { return string.IsNullOrWhiteSpace(txtCodigo.Text) ? 0 : int.Parse(txtCodigo.Text); } }
-        private int OrdenTrabajoActual { get { return Convert.ToInt32(cmbOrdenTrabajo.SelectedValue); } }
-        private string NombreActual { get { return txtNombre.Text.Trim(); } }
-        private string TipoActual { get { return txtTipo.Text.Trim(); } }
-        private string CategoriaActual { get { return txtCategoria.Text.Trim(); } }
-        private string UnidadActual { get { return txtUnidad.Text.Trim(); } }
-        private decimal CostoActual { get { return decimal.Parse(txtCosto.Text, NumberStyles.Number, CultureInfo.CurrentCulture); } }
-        private bool EstadoActual { get { return rbActivo.Checked; } }   // SQL BIT (Activo = 1)
-
-        // ---------- Botones ----------
+        // ---------- Botones (pendientes de implementar) ----------
+        // Use la capa de negocio (MaterialNegocio) desde estos métodos.
 
         private void btnNuevo_Click(object sender, EventArgs e)
         {
-            LimpiarCampos();
-        }
-
-        private void btnGuardar_Click(object sender, EventArgs e)
-        {
-            if (!Validar()) return;
-
-            // TODO: llamar a MaterialNegocio
-            //   CodigoActual == 0  -> insertar
-            //   CodigoActual  > 0  -> actualizar
-            // usando: OrdenTrabajoActual, NombreActual, TipoActual, CategoriaActual,
-            //         UnidadActual, CostoActual, EstadoActual
+            MostrarTab(1);
+            // TODO: preparar un registro nuevo
         }
 
         private void btnEditar_Click(object sender, EventArgs e)
         {
-            if (dgvMateriales.CurrentRow == null)
-            {
-                MessageBox.Show("Seleccione un material de la tabla.", "Editar",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            var fila = dgvMateriales.CurrentRow;
-            txtCodigo.Text = Convert.ToString(fila.Cells[colCodigo.Index].Value);
-            cmbOrdenTrabajo.SelectedValue = Convert.ToInt32(fila.Cells[colOrdenTrabajo.Index].Value);
-            txtNombre.Text = Convert.ToString(fila.Cells[colNombre.Index].Value);
-            txtTipo.Text = Convert.ToString(fila.Cells[colTipo.Index].Value);
-            txtCategoria.Text = Convert.ToString(fila.Cells[colCategoria.Index].Value);
-            txtUnidad.Text = Convert.ToString(fila.Cells[colUnidad.Index].Value);
-            txtCosto.Text = Convert.ToDecimal(fila.Cells[colCosto.Index].Value).ToString("0.00", CultureInfo.CurrentCulture);
-
-            bool inactivo = Convert.ToString(fila.Cells[colEstado.Index].Value) == "Inactivo";
-            rbInactivo.Checked = inactivo;
-            rbActivo.Checked = !inactivo;
-
-            MostrarTab(true);
+            MostrarTab(1);
+            // TODO: cargar el registro seleccionado de la tabla
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            if (CodigoActual == 0)
-            {
-                MessageBox.Show("Seleccione un material y pulse Editar antes de eliminar.", "Eliminar",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+            // TODO
+        }
 
-            if (MessageBox.Show("¿Desea eliminar este material?", "Confirmar",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-                return;
-
-            // TODO: MaterialNegocio.Eliminar(CodigoActual);
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            // TODO
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            LimpiarCampos();
+            MostrarTab(0);
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
-            LimpiarCampos();
+            // TODO
         }
 
-        private void btnBuscar_Click(object sender, EventArgs e)
+        private void csBuscar_EnterPresionado(object sender, EventArgs e)
         {
-            // TODO: filtrar por nombre o código con MaterialNegocio y llenar la tabla
+            // TODO: buscar con el texto de csBuscar y los filtros
         }
 
-        private void btnQuitarFiltros_Click(object sender, EventArgs e)
-        {
-            cmbFiltroEstado.SelectedIndex = 0;
-            // TODO: recargar todos los registros
-        }
-
-        // ---------- Tabla ----------
-        // Para llenar la tabla (Estado BIT -> texto):
-        //   dgvMateriales.Rows.Add(
-        //       m.CodigoMaterial, m.CodigoOrdenTrabajo, m.NombreMaterial, m.TipoDeMaterial,
-        //       m.CategoriaMaterial, m.UnidadMedida, m.CostoMaterial,
-        //       m.Estado ? "Activo" : "Inactivo");
-        //   lblTotalRegistros.Text = "Total de registros: " + dgvMateriales.Rows.Count;
-
-        private void dgvMateriales_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            // Colorea la columna Estado (verde / ámbar / rojo).
-            if (e.ColumnIndex >= 0 && dgvMateriales.Columns[e.ColumnIndex] == colEstado && e.Value != null)
-            {
-                var color = Tema.ColorEstado(e.Value.ToString());
-                e.CellStyle.ForeColor = color;
-                e.CellStyle.SelectionForeColor = color;
-            }
-        }
+        // La tabla (dgvMateriales) no tiene columnas definidas: se generan solas al asignar el DataSource con los datos de la base de datos.
     }
 }

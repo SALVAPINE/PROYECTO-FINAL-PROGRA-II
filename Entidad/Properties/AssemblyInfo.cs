@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Entidad")]
-[assembly: AssemblyDescription("Publicidad Creativa - Sistema de Gestión Empresarial")]
+[assembly: AssemblyDescription("Publicidad Multisucursal")]
 [assembly: AssemblyProduct("SistemaPublicidad")]
 [assembly: AssemblyCopyright("Copyright © 2026")]
 [assembly: ComVisible(false)]

@@ -2,10 +2,12 @@
 {
     public class TipoServicio
     {
-        public string Codigo { get; set; }
-        public string Nombre { get; set; }
+        public int CodigoTipoServicio { get; set; }
+        public string NombreServicio { get; set; }
+        public decimal CostoServicio { get; set; }
+        public decimal RecargoServicio { get; set; }
+        public decimal TotalServicio { get; set; }
         public string Descripcion { get; set; }
-        public decimal PrecioBase { get; set; }
-        public string Estado { get; set; }
+        public bool Estado { get; set; }
     }
 }

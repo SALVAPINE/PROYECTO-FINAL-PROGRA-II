@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Datos;
 using Entidad;
 
@@ -16,14 +17,9 @@ namespace Negocio
             return datos.Listar();
         }
 
-        public List<Inventario> Buscar(string texto, string sucursal)
+        public List<Inventario> Buscar(string texto, string estado)
         {
-            return datos.Buscar(texto, sucursal);
-        }
-
-        public string SiguienteCodigo()
-        {
-            return datos.SiguienteCodigo();
+            return datos.Buscar(texto, estado);
         }
 
         public int Insertar(Inventario inventario)
@@ -38,10 +34,27 @@ namespace Negocio
             return datos.Actualizar(inventario);
         }
 
-        public int Eliminar(string codigo)
+        public int Eliminar(int codigo)
         {
             // TODO: validar reglas antes de eliminar.
             return datos.Eliminar(codigo);
+        }
+
+        /// <summary>Resumen del módulo (se muestra en la pestaña Resumen).</summary>
+        public ResumenModulo ObtenerResumen()
+        {
+            List<Inventario> lista = datos.Listar() ?? new List<Inventario>();
+            ResumenModulo r = new ResumenModulo();
+            r.Total = lista.Count;
+            r.TituloEstado = "Registros por estado";
+            r.PorEstado = ResumenHelper.Contar(lista.Select(x => x.Estado ? "Activo" : "Inactivo"), new string[] { "Activo", "Inactivo" }, 0);
+            r.TituloCategoria = "Inventario por tipo de producto";
+            r.PorCategoria = ResumenHelper.Contar(lista.Select(x => x.TipoProducto), new string[] {  }, 6);
+            r.TieneMonto = true;
+            r.EtiquetaMonto = "Existencias";
+            r.MontoEsMoneda = false;
+            r.MontoTotal = lista.Sum(x => x.Stock);
+            return r;
         }
     }
 }

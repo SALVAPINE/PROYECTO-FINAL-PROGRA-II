@@ -16,16 +16,10 @@ namespace Datos
             return new List<Usuario>();
         }
 
-        public List<Usuario> Buscar(string texto, string rol, string estado)
+        public List<Usuario> Buscar(string texto, string tipo, string estado)
         {
             // TODO: consultar la base de datos aplicando los filtros.
             return new List<Usuario>();
-        }
-
-        public string SiguienteCodigo()
-        {
-            // TODO: generar el siguiente código (por ejemplo USR001).
-            return string.Empty;
         }
 
         public int Insertar(Usuario usuario)
@@ -40,7 +34,7 @@ namespace Datos
             return 0;
         }
 
-        public int Eliminar(string codigo)
+        public int Eliminar(int codigo)
         {
             // TODO: eliminar el registro. Devolver las filas afectadas.
             return 0;

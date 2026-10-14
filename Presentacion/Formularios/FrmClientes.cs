@@ -1,33 +1,75 @@
 ﻿using System;
 using System.Windows.Forms;
+using Entidad;
+using Negocio;
 
 namespace Presentacion
 {
     public partial class FrmClientes : Form
     {
+        private readonly ClienteNegocio negocio = new ClienteNegocio();
+
         public FrmClientes()
         {
             InitializeComponent();
             Tema.EstilizarGrid(dgvClientes);
-            MostrarTab(true);
+
+            ToolTip ayuda = new ToolTip();
+            ayuda.SetToolTip(btnEditar, "Editar el registro seleccionado");
+            ayuda.SetToolTip(btnEliminar, "Eliminar el registro seleccionado");
+
+            MostrarTab(0);
         }
 
-        // ---------- Pestañas Gestionar / Consultar ----------
-        private void MostrarTab(bool gestionar)
+        // ---------- Pestañas: 0 = Consultar, 1 = Gestionar, 2 = Resumen ----------
+        // Cada página (tpConsultar, tpGestionar, tpResumen) se edita en el diseñador haciendo clic en su pestaña.
+        private void MostrarTab(int tab)
         {
-            pnlGestionar.Visible = gestionar;
-            pnlConsultar.Visible = !gestionar;
-            btnTabGestionar.Seleccionado = gestionar;
-            btnTabConsultar.Seleccionado = !gestionar;
+            tabModulo.SelectedIndex = tab;
+            btnTabConsultar.Seleccionado = (tab == 0);
+            btnTabGestionar.Seleccionado = (tab == 1);
+            btnTabResumen.Seleccionado = (tab == 2);
+
+            if (tab != 1)
+                ActualizarResumen();
         }
 
-        private void btnTabGestionar_Click(object sender, EventArgs e) { MostrarTab(true); }
-        private void btnTabConsultar_Click(object sender, EventArgs e) { MostrarTab(false); }
+        private void btnTabConsultar_Click(object sender, EventArgs e) { MostrarTab(0); }
+        private void btnTabGestionar_Click(object sender, EventArgs e) { MostrarTab(1); }
+        private void btnTabResumen_Click(object sender, EventArgs e) { MostrarTab(2); }
+
+        /// <summary>Llena los valores de las tarjetas y los gráficos con el resumen que calcula la capa de negocio.</summary>
+        private void ActualizarResumen()
+        {
+            ResumenModulo r;
+            try
+            {
+                r = negocio.ObtenerResumen();
+            }
+            catch (Exception ex)
+            {
+                Tema.Aviso("No se pudo cargar el resumen: " + ex.Message);
+                return;
+            }
+            Resumenes.Aplicar(r, statTotal, statEstado1, statEstado2, statExtra, graEstado, graCategoria);
+        }
 
         // ---------- Botones (pendientes de implementar) ----------
         // Use la capa de negocio (ClienteNegocio) desde estos métodos.
 
         private void btnNuevo_Click(object sender, EventArgs e)
+        {
+            MostrarTab(1);
+            // TODO: preparar un registro nuevo
+        }
+
+        private void btnEditar_Click(object sender, EventArgs e)
+        {
+            MostrarTab(1);
+            // TODO: cargar el registro seleccionado de la tabla
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
         {
             // TODO
         }
@@ -37,19 +79,9 @@ namespace Presentacion
             // TODO
         }
 
-        private void btnEditar_Click(object sender, EventArgs e)
-        {
-            // TODO
-        }
-
-        private void btnEliminar_Click(object sender, EventArgs e)
-        {
-            // TODO
-        }
-
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            // TODO
+            MostrarTab(0);
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
@@ -57,33 +89,11 @@ namespace Presentacion
             // TODO
         }
 
-        private void btnBuscar_Click(object sender, EventArgs e)
+        private void csBuscar_EnterPresionado(object sender, EventArgs e)
         {
-            // TODO
+            // TODO: buscar con el texto de csBuscar y los filtros
         }
 
-        private void btnQuitarFiltros_Click(object sender, EventArgs e)
-        {
-            // TODO
-        }
-
-        // ---------- Tabla ----------
-        // La tabla (dgvClientes) está vacía: cargue los datos desde aquí cuando implemente la consulta.
-
-        private void dgvClientes_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            // Colorea la columna Estado (verde / ámbar / rojo).
-            if (e.ColumnIndex >= 0 && dgvClientes.Columns[e.ColumnIndex] == colEstado && e.Value != null)
-            {
-                var color = Tema.ColorEstado(e.Value.ToString());
-                e.CellStyle.ForeColor = color;
-                e.CellStyle.SelectionForeColor = color;
-            }
-        }
-
-        private void lblCorreo_Click(object sender, EventArgs e)
-        {
-
-        }
+        // La tabla (dgvClientes) no tiene columnas definidas: se generan solas al asignar el DataSource con los datos de la base de datos.
     }
 }

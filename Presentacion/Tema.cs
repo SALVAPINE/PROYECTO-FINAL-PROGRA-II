@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Presentacion
 {
-    /// <summary>Colores y utilidades compartidas del diseño CAPAZ.</summary>
+    /// <summary>Colores y utilidades compartidas del diseño de Publicidad Multisucursal.</summary>
     public static class Tema
     {
         public static readonly Color Fondo = Color.FromArgb(14, 18, 52);
@@ -13,40 +13,57 @@ namespace Presentacion
         public static readonly Color Campo = Color.FromArgb(30, 37, 92);
         public static readonly Color Acento = Color.FromArgb(61, 63, 206);
         public static readonly Color TextoSuave = Color.FromArgb(160, 170, 220);
-        public static readonly Color Verde = Color.FromArgb(46, 212, 122);
-        public static readonly Color Rojo = Color.FromArgb(255, 59, 59);
-        public static readonly Color Ambar = Color.FromArgb(255, 193, 7);
+        public static readonly Color Verde = Color.FromArgb(34, 197, 130);
+        public static readonly Color Azul = Color.FromArgb(59, 130, 246);
+        public static readonly Color Ambar = Color.FromArgb(251, 176, 52);
+        public static readonly Color Rosa = Color.FromArgb(244, 63, 94);
         public static readonly Color[] Paleta =
         {
-            Color.FromArgb(61, 63, 206), Color.FromArgb(32, 201, 170), Color.FromArgb(140, 120, 240),
-            Color.FromArgb(255, 193, 7), Color.FromArgb(255, 99, 132), Color.FromArgb(100, 130, 255)
+            Color.FromArgb(139, 92, 246), Color.FromArgb(59, 130, 246), Color.FromArgb(251, 176, 52),
+            Color.FromArgb(34, 197, 130), Color.FromArgb(244, 63, 94), Color.FromArgb(20, 184, 166)
         };
+
+        public static bool EsEstadoConocido(string estado)
+        {
+            switch (estado)
+            {
+                case "Activo": case "Aprobada": case "Aprobado": case "Pagada": case "Terminada":
+                case "Entregada": case "Entregado": case "Recibida":
+                case "En proceso":
+                case "Pendiente": case "Emitida":
+                case "Inactivo": case "Rechazada": case "Anulada":
+                    return true;
+                default:
+                    return false;
+            }
+        }
 
         public static Color ColorEstado(string estado)
         {
             switch (estado)
             {
-                case "Activo":
-                case "Aprobada":
-                case "Aprobado":
-                case "Pagada":
-                case "Terminada":
-                case "Entregada":
-                case "Entregado":
-                case "Recibida":
+                case "Activo": case "Aprobada": case "Aprobado": case "Pagada": case "Terminada":
+                case "Entregada": case "Entregado": case "Recibida":
                     return Verde;
-                case "Pendiente":
                 case "En proceso":
-                case "Emitida":
+                    return Azul;
+                case "Pendiente": case "Emitida":
                     return Ambar;
                 default:
-                    return Rojo;
+                    return Rosa;
             }
         }
 
+        public static Color ColorEstadoOPaleta(string etiqueta, int indice)
+        {
+            return EsEstadoConocido(etiqueta) ? ColorEstado(etiqueta) : Paleta[indice % Paleta.Length];
+        }
+
+        /// <summary>Estilo oscuro de las tablas. Sin columnas definidas: se generan al enlazar los datos.</summary>
         public static void EstilizarGrid(DataGridView g)
         {
-            g.AutoGenerateColumns = false;
+            g.AutoGenerateColumns = true;
+            g.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             g.AllowUserToAddRows = false;
             g.AllowUserToDeleteRows = false;
             g.AllowUserToResizeRows = false;
@@ -79,17 +96,17 @@ namespace Presentacion
 
         public static void Info(string mensaje)
         {
-            MessageBox.Show(mensaje, "CAPAZ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(mensaje, "Publicidad Multisucursal", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public static void Aviso(string mensaje)
         {
-            MessageBox.Show(mensaje, "CAPAZ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(mensaje, "Publicidad Multisucursal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         public static bool Confirmar(string mensaje)
         {
-            return MessageBox.Show(mensaje, "CAPAZ", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+            return MessageBox.Show(mensaje, "Publicidad Multisucursal", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
     }
 
@@ -109,7 +126,7 @@ namespace Presentacion
 
         public static GraphicsPath Redondeado(Rectangle r, int radio)
         {
-            var p = new GraphicsPath();
+            GraphicsPath p = new GraphicsPath();
             int d = radio * 2;
             if (d <= 0 || r.Width <= d || r.Height <= d)
             {

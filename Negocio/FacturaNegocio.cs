@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Datos;
 using Entidad;
 
@@ -21,11 +22,6 @@ namespace Negocio
             return datos.Buscar(texto, estado);
         }
 
-        public string SiguienteCodigo()
-        {
-            return datos.SiguienteCodigo();
-        }
-
         public int Insertar(Factura factura)
         {
             // TODO: validar los datos antes de guardar.
@@ -38,10 +34,27 @@ namespace Negocio
             return datos.Actualizar(factura);
         }
 
-        public int Eliminar(string codigo)
+        public int Eliminar(int codigo)
         {
             // TODO: validar reglas antes de eliminar.
             return datos.Eliminar(codigo);
+        }
+
+        /// <summary>Resumen del módulo (se muestra en la pestaña Resumen).</summary>
+        public ResumenModulo ObtenerResumen()
+        {
+            List<Factura> lista = datos.Listar() ?? new List<Factura>();
+            ResumenModulo r = new ResumenModulo();
+            r.Total = lista.Count;
+            r.TituloEstado = "Registros por estado";
+            r.PorEstado = ResumenHelper.Contar(lista.Select(x => x.Estado ? "Activo" : "Inactivo"), new string[] { "Activo", "Inactivo" }, 0);
+            r.TituloCategoria = r.TituloEstado;
+            r.PorCategoria = r.PorEstado;
+            r.TieneMonto = true;
+            r.EtiquetaMonto = "Total facturado";
+            r.MontoEsMoneda = true;
+            r.MontoTotal = lista.Sum(x => x.TotalPagar);
+            return r;
         }
     }
 }

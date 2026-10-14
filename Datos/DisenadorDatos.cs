@@ -22,12 +22,6 @@ namespace Datos
             return new List<Disenador>();
         }
 
-        public string SiguienteCodigo()
-        {
-            // TODO: generar el siguiente código (por ejemplo DSN001).
-            return string.Empty;
-        }
-
         public int Insertar(Disenador disenador)
         {
             // TODO: insertar el registro. Devolver las filas afectadas.
@@ -40,7 +34,7 @@ namespace Datos
             return 0;
         }
 
-        public int Eliminar(string codigo)
+        public int Eliminar(int codigo)
         {
             // TODO: eliminar el registro. Devolver las filas afectadas.
             return 0;

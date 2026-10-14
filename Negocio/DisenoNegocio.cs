@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Datos;
 using Entidad;
 
@@ -21,11 +22,6 @@ namespace Negocio
             return datos.Buscar(texto, estado);
         }
 
-        public string SiguienteCodigo()
-        {
-            return datos.SiguienteCodigo();
-        }
-
         public int Insertar(Diseno diseno)
         {
             // TODO: validar los datos antes de guardar.
@@ -38,10 +34,23 @@ namespace Negocio
             return datos.Actualizar(diseno);
         }
 
-        public int Eliminar(string codigo)
+        public int Eliminar(int codigo)
         {
             // TODO: validar reglas antes de eliminar.
             return datos.Eliminar(codigo);
+        }
+
+        /// <summary>Resumen del módulo (se muestra en la pestaña Resumen).</summary>
+        public ResumenModulo ObtenerResumen()
+        {
+            List<Diseno> lista = datos.Listar() ?? new List<Diseno>();
+            ResumenModulo r = new ResumenModulo();
+            r.Total = lista.Count;
+            r.TituloEstado = "Registros por estado";
+            r.PorEstado = ResumenHelper.Contar(lista.Select(x => x.Estado ? "Activo" : "Inactivo"), new string[] { "Activo", "Inactivo" }, 0);
+            r.TituloCategoria = "Diseños por tipo";
+            r.PorCategoria = ResumenHelper.Contar(lista.Select(x => x.TipoDiseño), new string[] {  }, 6);
+            return r;
         }
     }
 }

@@ -17,146 +17,332 @@
 
         private void InitializeComponent()
         {
+            this.tabModulo = new Presentacion.TabControlSinEncabezado();
+            this.tpConsultar = new System.Windows.Forms.TabPage();
             this.pnlLista = new Presentacion.RoundedPanel();
             this.dgvFacturaciones = new System.Windows.Forms.DataGridView();
             this.pnlPie = new System.Windows.Forms.Panel();
             this.lblTotalRegistros = new System.Windows.Forms.Label();
-            this.pnlBusqueda = new System.Windows.Forms.Panel();
+            this.btnPagAnterior = new Presentacion.BotonIcono();
+            this.sepPagA = new System.Windows.Forms.Panel();
+            this.btnPagina = new Presentacion.BotonIcono();
+            this.sepPagB = new System.Windows.Forms.Panel();
+            this.btnPagSiguiente = new Presentacion.BotonIcono();
+            this.pnlToolbar = new System.Windows.Forms.Panel();
+            this.pnlToolbarFiltros = new System.Windows.Forms.Panel();
             this.csBuscar = new Presentacion.CampoBusqueda();
-            this.pnlSeparadorBusqueda = new System.Windows.Forms.Panel();
-            this.btnBuscar = new Presentacion.BotonIcono();
-            this.pnlSeccion = new System.Windows.Forms.Panel();
-            this.pnlGestionar = new System.Windows.Forms.Panel();
+            this.lblFiltroEstado = new System.Windows.Forms.Label();
+            this.pnlFiltroEstado = new System.Windows.Forms.Panel();
+            this.cmbFiltroEstado = new System.Windows.Forms.ComboBox();
+            this.pnlToolbarTop = new System.Windows.Forms.Panel();
+            this.pnlIconoLista = new Presentacion.RoundedPanel();
+            this.lblGlyphLista = new System.Windows.Forms.Label();
+            this.lblTituloLista = new System.Windows.Forms.Label();
+            this.btnEditar = new Presentacion.BotonIcono();
+            this.sepToolbarA = new System.Windows.Forms.Panel();
+            this.btnEliminar = new Presentacion.BotonIcono();
+            this.sepToolbarB = new System.Windows.Forms.Panel();
+            this.btnNuevo = new Presentacion.BotonIcono();
+            this.pnlKpi = new System.Windows.Forms.Panel();
+            this.tlpKpi = new System.Windows.Forms.TableLayoutPanel();
+            this.statTotal = new Presentacion.StatCard();
+            this.statEstado1 = new Presentacion.StatCard();
+            this.statEstado2 = new Presentacion.StatCard();
+            this.statExtra = new Presentacion.StatCard();
+            this.pnlTituloConsulta = new System.Windows.Forms.Panel();
+            this.lblTituloConsulta = new System.Windows.Forms.Label();
+            this.lblSubtituloConsulta = new System.Windows.Forms.Label();
+            this.tpGestionar = new System.Windows.Forms.TabPage();
+            this.pnlDetalle = new Presentacion.RoundedPanel();
+            this.dgvDetalleFactura = new System.Windows.Forms.DataGridView();
+            this.tlpDetalle = new System.Windows.Forms.TableLayoutPanel();
+            this.lblCodigoDetalleFactura = new System.Windows.Forms.Label();
+            this.txtCodigoDetalleFactura = new System.Windows.Forms.TextBox();
+            this.lblDescripcion = new System.Windows.Forms.Label();
+            this.txtDescripcion = new System.Windows.Forms.TextBox();
+            this.lblCantidad = new System.Windows.Forms.Label();
+            this.txtCantidad = new System.Windows.Forms.TextBox();
+            this.lblPrecio = new System.Windows.Forms.Label();
+            this.txtPrecio = new System.Windows.Forms.TextBox();
+            this.lblDescuentoAplicado = new System.Windows.Forms.Label();
+            this.txtDescuentoAplicado = new System.Windows.Forms.TextBox();
+            this.lblEstadoDetalle = new System.Windows.Forms.Label();
+            this.pnlEstadoDetalle = new System.Windows.Forms.Panel();
+            this.rdoActivoDetalle = new System.Windows.Forms.RadioButton();
+            this.rdoInactivoDetalle = new System.Windows.Forms.RadioButton();
+            this.btnAgregarDetalle = new Presentacion.BotonIcono();
+            this.pnlTituloDetalle = new System.Windows.Forms.Panel();
+            this.pnlIconoDetalle = new Presentacion.RoundedPanel();
+            this.lblGlyphDetalle = new System.Windows.Forms.Label();
+            this.lblTituloDetalle = new System.Windows.Forms.Label();
+            this.pnlBarra = new System.Windows.Forms.Panel();
+            this.lblSubtotalDetalle = new System.Windows.Forms.Label();
+            this.lblDescuentoDetalle = new System.Windows.Forms.Label();
+            this.lblTotalDetalle = new System.Windows.Forms.Label();
+            this.btnLimpiar = new Presentacion.BotonIcono();
+            this.sepBarraA = new System.Windows.Forms.Panel();
+            this.btnCancelar = new Presentacion.BotonIcono();
+            this.sepBarraB = new System.Windows.Forms.Panel();
+            this.btnGuardar = new Presentacion.BotonIcono();
+            this.pnlEncabezadoWrap = new System.Windows.Forms.Panel();
             this.pnlFormulario = new Presentacion.RoundedPanel();
             this.tlpCampos = new System.Windows.Forms.TableLayoutPanel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtTotal = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lblCodigo = new System.Windows.Forms.Label();
-            this.txtCodigoFactura = new System.Windows.Forms.TextBox();
+            this.lblCodigoFacturacion = new System.Windows.Forms.Label();
+            this.txtCodigoFacturacion = new System.Windows.Forms.TextBox();
+            this.lblCodigoOrdenTrabajo = new System.Windows.Forms.Label();
+            this.cmbCodigoOrdenTrabajo = new System.Windows.Forms.ComboBox();
+            this.lblNoFactura = new System.Windows.Forms.Label();
+            this.txtNoFactura = new System.Windows.Forms.TextBox();
+            this.lblFechaDeEntrega = new System.Windows.Forms.Label();
+            this.dtpFechaDeEntrega = new System.Windows.Forms.DateTimePicker();
+            this.lblSubtotal = new System.Windows.Forms.Label();
+            this.txtSubtotal = new System.Windows.Forms.TextBox();
+            this.lblImpuesto = new System.Windows.Forms.Label();
+            this.txtImpuesto = new System.Windows.Forms.TextBox();
+            this.lblTotalPagar = new System.Windows.Forms.Label();
+            this.txtTotalPagar = new System.Windows.Forms.TextBox();
             this.lblEstado = new System.Windows.Forms.Label();
-            this.lblCliente = new System.Windows.Forms.Label();
-            this.lblFecha = new System.Windows.Forms.Label();
-            this.lblSucursal = new System.Windows.Forms.Label();
-            this.lblTotal = new System.Windows.Forms.Label();
-            this.txtImpuestos = new System.Windows.Forms.TextBox();
-            this.cboxCodigoOrdenTrabajo = new System.Windows.Forms.ComboBox();
-            this.txtNoOrden = new System.Windows.Forms.TextBox();
-            this.dtpFechaEntrega = new System.Windows.Forms.DateTimePicker();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.lblDatos = new System.Windows.Forms.Label();
-            this.pnlSeparador = new System.Windows.Forms.Panel();
-            this.pnlAcciones = new Presentacion.RoundedPanel();
-            this.tlpAcciones = new System.Windows.Forms.TableLayoutPanel();
-            this.btnNuevo = new Presentacion.BotonIcono();
-            this.btnGuardar = new Presentacion.BotonIcono();
-            this.btnEditar = new Presentacion.BotonIcono();
-            this.btnEliminar = new Presentacion.BotonIcono();
-            this.btnCancelar = new Presentacion.BotonIcono();
-            this.btnLimpiar = new Presentacion.BotonIcono();
-            this.pnlConsultar = new Presentacion.RoundedPanel();
-            this.tlpFiltros = new System.Windows.Forms.TableLayoutPanel();
-            this.lblFiltroEstado = new System.Windows.Forms.Label();
-            this.cmbFiltroEstado = new System.Windows.Forms.ComboBox();
-            this.btnQuitarFiltros = new Presentacion.BotonIcono();
-            this.lblFiltros = new System.Windows.Forms.Label();
+            this.pnlEstado = new System.Windows.Forms.Panel();
+            this.rdoActivo = new System.Windows.Forms.RadioButton();
+            this.rdoInactivo = new System.Windows.Forms.RadioButton();
+            this.pnlTituloForm = new System.Windows.Forms.Panel();
+            this.pnlIconoForm = new Presentacion.RoundedPanel();
+            this.lblGlyphForm = new System.Windows.Forms.Label();
+            this.lblTituloForm = new System.Windows.Forms.Label();
+            this.pnlTituloGestion = new System.Windows.Forms.Panel();
+            this.lblTituloGestion = new System.Windows.Forms.Label();
+            this.lblSubtituloGestion = new System.Windows.Forms.Label();
+            this.tpResumen = new System.Windows.Forms.TabPage();
+            this.tlpResumenGraficos = new System.Windows.Forms.TableLayoutPanel();
+            this.pnlCardEstado = new Presentacion.RoundedPanel();
+            this.graEstado = new Presentacion.GraficoDona();
+            this.pnlTituloEstado = new System.Windows.Forms.Panel();
+            this.lblIconoEstado = new System.Windows.Forms.Label();
+            this.lblTituloEstado = new System.Windows.Forms.Label();
+            this.pnlCardCategoria = new Presentacion.RoundedPanel();
+            this.graCategoria = new Presentacion.GraficoBarras();
+            this.pnlTituloCategoria = new System.Windows.Forms.Panel();
+            this.lblIconoCategoria = new System.Windows.Forms.Label();
+            this.lblTituloCategoria = new System.Windows.Forms.Label();
+            this.pnlTituloResumen = new System.Windows.Forms.Panel();
+            this.lblTituloResumen = new System.Windows.Forms.Label();
+            this.lblSubtituloResumen = new System.Windows.Forms.Label();
             this.pnlCabecera = new System.Windows.Forms.Panel();
-            this.lblTitulo = new System.Windows.Forms.Label();
-            this.btnTabGestionar = new Presentacion.BotonIcono();
             this.btnTabConsultar = new Presentacion.BotonIcono();
-            this.panelEstado = new System.Windows.Forms.Panel();
-            this.rdbInactivo = new System.Windows.Forms.RadioButton();
-            this.rdbActivo = new System.Windows.Forms.RadioButton();
-            this.txtCódigoFactura = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cboxCodigoOrden = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.txtNoFactura = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colFecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.txtsubtotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.txtimpuesto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colEstado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnTabGestionar = new Presentacion.BotonIcono();
+            this.btnTabResumen = new Presentacion.BotonIcono();
+            this.tabModulo.SuspendLayout();
+            this.tpConsultar.SuspendLayout();
             this.pnlLista.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFacturaciones)).BeginInit();
             this.pnlPie.SuspendLayout();
-            this.pnlBusqueda.SuspendLayout();
-            this.pnlSeccion.SuspendLayout();
-            this.pnlGestionar.SuspendLayout();
+            this.pnlToolbar.SuspendLayout();
+            this.pnlToolbarFiltros.SuspendLayout();
+            this.pnlFiltroEstado.SuspendLayout();
+            this.pnlToolbarTop.SuspendLayout();
+            this.pnlIconoLista.SuspendLayout();
+            this.pnlKpi.SuspendLayout();
+            this.tlpKpi.SuspendLayout();
+            this.pnlTituloConsulta.SuspendLayout();
+            this.tpGestionar.SuspendLayout();
+            this.pnlDetalle.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDetalleFactura)).BeginInit();
+            this.tlpDetalle.SuspendLayout();
+            this.pnlEstadoDetalle.SuspendLayout();
+            this.pnlTituloDetalle.SuspendLayout();
+            this.pnlIconoDetalle.SuspendLayout();
+            this.pnlBarra.SuspendLayout();
+            this.pnlEncabezadoWrap.SuspendLayout();
             this.pnlFormulario.SuspendLayout();
             this.tlpCampos.SuspendLayout();
-            this.pnlAcciones.SuspendLayout();
-            this.tlpAcciones.SuspendLayout();
-            this.pnlConsultar.SuspendLayout();
-            this.tlpFiltros.SuspendLayout();
+            this.pnlEstado.SuspendLayout();
+            this.pnlTituloForm.SuspendLayout();
+            this.pnlIconoForm.SuspendLayout();
+            this.pnlTituloGestion.SuspendLayout();
+            this.tpResumen.SuspendLayout();
+            this.tlpResumenGraficos.SuspendLayout();
+            this.pnlCardEstado.SuspendLayout();
+            this.pnlTituloEstado.SuspendLayout();
+            this.pnlCardCategoria.SuspendLayout();
+            this.pnlTituloCategoria.SuspendLayout();
+            this.pnlTituloResumen.SuspendLayout();
             this.pnlCabecera.SuspendLayout();
-            this.panelEstado.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // tabModulo
+            // 
+            this.tabModulo.Controls.Add(this.tpConsultar);
+            this.tabModulo.Controls.Add(this.tpGestionar);
+            this.tabModulo.Controls.Add(this.tpResumen);
+            this.tabModulo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabModulo.Location = new System.Drawing.Point(20, 54);
+            this.tabModulo.Name = "tabModulo";
+            this.tabModulo.SelectedIndex = 0;
+            this.tabModulo.Size = new System.Drawing.Size(880, 578);
+            this.tabModulo.TabIndex = 0;
+            // 
+            // tpConsultar
+            // 
+            this.tpConsultar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.tpConsultar.Controls.Add(this.pnlLista);
+            this.tpConsultar.Controls.Add(this.pnlKpi);
+            this.tpConsultar.Controls.Add(this.pnlTituloConsulta);
+            this.tpConsultar.Location = new System.Drawing.Point(4, 25);
+            this.tpConsultar.Name = "tpConsultar";
+            this.tpConsultar.Size = new System.Drawing.Size(872, 549);
+            this.tpConsultar.TabIndex = 0;
+            this.tpConsultar.Text = "Consultar";
             // 
             // pnlLista
             // 
             this.pnlLista.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
             this.pnlLista.Controls.Add(this.dgvFacturaciones);
             this.pnlLista.Controls.Add(this.pnlPie);
-            this.pnlLista.Controls.Add(this.pnlBusqueda);
+            this.pnlLista.Controls.Add(this.pnlToolbar);
             this.pnlLista.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlLista.Location = new System.Drawing.Point(20, 305);
+            this.pnlLista.Location = new System.Drawing.Point(0, 202);
             this.pnlLista.Name = "pnlLista";
-            this.pnlLista.Padding = new System.Windows.Forms.Padding(12, 12, 12, 6);
-            this.pnlLista.Size = new System.Drawing.Size(1932, 1051);
+            this.pnlLista.Padding = new System.Windows.Forms.Padding(16, 8, 16, 4);
+            this.pnlLista.Size = new System.Drawing.Size(872, 347);
             this.pnlLista.TabIndex = 0;
             // 
             // dgvFacturaciones
             // 
-            this.dgvFacturaciones.ColumnHeadersHeight = 46;
-            this.dgvFacturaciones.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.txtCódigoFactura,
-            this.cboxCodigoOrden,
-            this.txtNoFactura,
-            this.colFecha,
-            this.txtsubtotal,
-            this.txtimpuesto,
-            this.colTotal,
-            this.colEstado});
+            this.dgvFacturaciones.ColumnHeadersHeight = 29;
             this.dgvFacturaciones.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvFacturaciones.Location = new System.Drawing.Point(12, 58);
+            this.dgvFacturaciones.Location = new System.Drawing.Point(16, 108);
             this.dgvFacturaciones.Name = "dgvFacturaciones";
-            this.dgvFacturaciones.RowHeadersWidth = 82;
-            this.dgvFacturaciones.Size = new System.Drawing.Size(1908, 961);
+            this.dgvFacturaciones.RowHeadersWidth = 51;
+            this.dgvFacturaciones.Size = new System.Drawing.Size(840, 193);
             this.dgvFacturaciones.TabIndex = 0;
-            this.dgvFacturaciones.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvFacturaciones_CellFormatting);
             // 
             // pnlPie
             // 
             this.pnlPie.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
             this.pnlPie.Controls.Add(this.lblTotalRegistros);
+            this.pnlPie.Controls.Add(this.btnPagAnterior);
+            this.pnlPie.Controls.Add(this.sepPagA);
+            this.pnlPie.Controls.Add(this.btnPagina);
+            this.pnlPie.Controls.Add(this.sepPagB);
+            this.pnlPie.Controls.Add(this.btnPagSiguiente);
             this.pnlPie.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlPie.Location = new System.Drawing.Point(12, 1019);
+            this.pnlPie.Location = new System.Drawing.Point(16, 301);
             this.pnlPie.Name = "pnlPie";
-            this.pnlPie.Size = new System.Drawing.Size(1908, 26);
+            this.pnlPie.Padding = new System.Windows.Forms.Padding(0, 6, 0, 0);
+            this.pnlPie.Size = new System.Drawing.Size(840, 42);
             this.pnlPie.TabIndex = 1;
             // 
             // lblTotalRegistros
             // 
             this.lblTotalRegistros.AutoSize = true;
             this.lblTotalRegistros.BackColor = System.Drawing.Color.Transparent;
-            this.lblTotalRegistros.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblTotalRegistros.Location = new System.Drawing.Point(0, 6);
+            this.lblTotalRegistros.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
+            this.lblTotalRegistros.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(208)))), ((int)(((byte)(240)))));
+            this.lblTotalRegistros.Location = new System.Drawing.Point(0, 12);
             this.lblTotalRegistros.Name = "lblTotalRegistros";
-            this.lblTotalRegistros.Size = new System.Drawing.Size(203, 25);
+            this.lblTotalRegistros.Size = new System.Drawing.Size(210, 20);
             this.lblTotalRegistros.TabIndex = 0;
-            this.lblTotalRegistros.Text = "Total de registros: 0";
+            this.lblTotalRegistros.Text = "Mostrando 0 de 0 resultados";
             // 
-            // pnlBusqueda
+            // btnPagAnterior
             // 
-            this.pnlBusqueda.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.pnlBusqueda.Controls.Add(this.csBuscar);
-            this.pnlBusqueda.Controls.Add(this.pnlSeparadorBusqueda);
-            this.pnlBusqueda.Controls.Add(this.btnBuscar);
-            this.pnlBusqueda.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlBusqueda.Location = new System.Drawing.Point(12, 12);
-            this.pnlBusqueda.Name = "pnlBusqueda";
-            this.pnlBusqueda.Padding = new System.Windows.Forms.Padding(0, 0, 0, 12);
-            this.pnlBusqueda.Size = new System.Drawing.Size(1908, 46);
-            this.pnlBusqueda.TabIndex = 2;
+            this.btnPagAnterior.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(38)))), ((int)(((byte)(100)))));
+            this.btnPagAnterior.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(58)))), ((int)(((byte)(130)))));
+            this.btnPagAnterior.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(130)))));
+            this.btnPagAnterior.ColorSeleccionado = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(130)))), ((int)(((byte)(170)))));
+            this.btnPagAnterior.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPagAnterior.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnPagAnterior.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPagAnterior.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnPagAnterior.ForeColor = System.Drawing.Color.White;
+            this.btnPagAnterior.Location = new System.Drawing.Point(732, 6);
+            this.btnPagAnterior.Name = "btnPagAnterior";
+            this.btnPagAnterior.Radio = 6;
+            this.btnPagAnterior.Size = new System.Drawing.Size(32, 36);
+            this.btnPagAnterior.TabIndex = 1;
+            this.btnPagAnterior.Text = "‹";
+            this.btnPagAnterior.UseVisualStyleBackColor = false;
+            // 
+            // sepPagA
+            // 
+            this.sepPagA.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.sepPagA.Dock = System.Windows.Forms.DockStyle.Right;
+            this.sepPagA.Location = new System.Drawing.Point(764, 6);
+            this.sepPagA.Name = "sepPagA";
+            this.sepPagA.Size = new System.Drawing.Size(6, 36);
+            this.sepPagA.TabIndex = 2;
+            // 
+            // btnPagina
+            // 
+            this.btnPagina.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(38)))), ((int)(((byte)(100)))));
+            this.btnPagina.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(58)))), ((int)(((byte)(130)))));
+            this.btnPagina.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(130)))));
+            this.btnPagina.ColorSeleccionado = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(130)))), ((int)(((byte)(170)))));
+            this.btnPagina.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPagina.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnPagina.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPagina.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnPagina.ForeColor = System.Drawing.Color.White;
+            this.btnPagina.Location = new System.Drawing.Point(770, 6);
+            this.btnPagina.Name = "btnPagina";
+            this.btnPagina.Radio = 6;
+            this.btnPagina.Seleccionado = true;
+            this.btnPagina.Size = new System.Drawing.Size(32, 36);
+            this.btnPagina.TabIndex = 3;
+            this.btnPagina.Text = "1";
+            this.btnPagina.UseVisualStyleBackColor = false;
+            // 
+            // sepPagB
+            // 
+            this.sepPagB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.sepPagB.Dock = System.Windows.Forms.DockStyle.Right;
+            this.sepPagB.Location = new System.Drawing.Point(802, 6);
+            this.sepPagB.Name = "sepPagB";
+            this.sepPagB.Size = new System.Drawing.Size(6, 36);
+            this.sepPagB.TabIndex = 4;
+            // 
+            // btnPagSiguiente
+            // 
+            this.btnPagSiguiente.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(38)))), ((int)(((byte)(100)))));
+            this.btnPagSiguiente.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(58)))), ((int)(((byte)(130)))));
+            this.btnPagSiguiente.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(130)))));
+            this.btnPagSiguiente.ColorSeleccionado = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(130)))), ((int)(((byte)(170)))));
+            this.btnPagSiguiente.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPagSiguiente.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnPagSiguiente.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPagSiguiente.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnPagSiguiente.ForeColor = System.Drawing.Color.White;
+            this.btnPagSiguiente.Location = new System.Drawing.Point(808, 6);
+            this.btnPagSiguiente.Name = "btnPagSiguiente";
+            this.btnPagSiguiente.Radio = 6;
+            this.btnPagSiguiente.Size = new System.Drawing.Size(32, 36);
+            this.btnPagSiguiente.TabIndex = 5;
+            this.btnPagSiguiente.Text = "›";
+            this.btnPagSiguiente.UseVisualStyleBackColor = false;
+            // 
+            // pnlToolbar
+            // 
+            this.pnlToolbar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlToolbar.Controls.Add(this.pnlToolbarFiltros);
+            this.pnlToolbar.Controls.Add(this.pnlToolbarTop);
+            this.pnlToolbar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlToolbar.Location = new System.Drawing.Point(16, 8);
+            this.pnlToolbar.Name = "pnlToolbar";
+            this.pnlToolbar.Size = new System.Drawing.Size(840, 100);
+            this.pnlToolbar.TabIndex = 2;
+            // 
+            // pnlToolbarFiltros
+            // 
+            this.pnlToolbarFiltros.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlToolbarFiltros.Controls.Add(this.csBuscar);
+            this.pnlToolbarFiltros.Controls.Add(this.lblFiltroEstado);
+            this.pnlToolbarFiltros.Controls.Add(this.pnlFiltroEstado);
+            this.pnlToolbarFiltros.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlToolbarFiltros.Location = new System.Drawing.Point(0, 54);
+            this.pnlToolbarFiltros.Name = "pnlToolbarFiltros";
+            this.pnlToolbarFiltros.Padding = new System.Windows.Forms.Padding(0, 0, 0, 12);
+            this.pnlToolbarFiltros.Size = new System.Drawing.Size(840, 46);
+            this.pnlToolbarFiltros.TabIndex = 0;
             // 
             // csBuscar
             // 
@@ -164,519 +350,35 @@
             this.csBuscar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.csBuscar.Location = new System.Drawing.Point(0, 0);
             this.csBuscar.Name = "csBuscar";
-            this.csBuscar.Placeholder = "Buscar por número o cliente...";
+            this.csBuscar.Placeholder = "Buscar por código o número de factura...";
             this.csBuscar.Radio = 8;
-            this.csBuscar.Size = new System.Drawing.Size(1742, 34);
+            this.csBuscar.Size = new System.Drawing.Size(637, 34);
             this.csBuscar.TabIndex = 0;
-            // 
-            // pnlSeparadorBusqueda
-            // 
-            this.pnlSeparadorBusqueda.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.pnlSeparadorBusqueda.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlSeparadorBusqueda.Location = new System.Drawing.Point(1742, 0);
-            this.pnlSeparadorBusqueda.Name = "pnlSeparadorBusqueda";
-            this.pnlSeparadorBusqueda.Size = new System.Drawing.Size(10, 34);
-            this.pnlSeparadorBusqueda.TabIndex = 1;
-            // 
-            // btnBuscar
-            // 
-            this.btnBuscar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(50)))), ((int)(((byte)(128)))));
-            this.btnBuscar.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(90)))), ((int)(((byte)(190)))));
-            this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBuscar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBuscar.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnBuscar.ForeColor = System.Drawing.Color.White;
-            this.btnBuscar.Glyph = "";
-            this.btnBuscar.Location = new System.Drawing.Point(1752, 0);
-            this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(156, 34);
-            this.btnBuscar.TabIndex = 2;
-            this.btnBuscar.Text = "Buscar";
-            this.btnBuscar.UseVisualStyleBackColor = false;
-            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
-            // 
-            // pnlSeccion
-            // 
-            this.pnlSeccion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
-            this.pnlSeccion.Controls.Add(this.pnlGestionar);
-            this.pnlSeccion.Controls.Add(this.pnlConsultar);
-            this.pnlSeccion.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlSeccion.Location = new System.Drawing.Point(20, 80);
-            this.pnlSeccion.Name = "pnlSeccion";
-            this.pnlSeccion.Padding = new System.Windows.Forms.Padding(0, 0, 0, 10);
-            this.pnlSeccion.Size = new System.Drawing.Size(1932, 225);
-            this.pnlSeccion.TabIndex = 1;
-            // 
-            // pnlGestionar
-            // 
-            this.pnlGestionar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
-            this.pnlGestionar.Controls.Add(this.pnlFormulario);
-            this.pnlGestionar.Controls.Add(this.pnlSeparador);
-            this.pnlGestionar.Controls.Add(this.pnlAcciones);
-            this.pnlGestionar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlGestionar.Location = new System.Drawing.Point(0, 0);
-            this.pnlGestionar.Name = "pnlGestionar";
-            this.pnlGestionar.Size = new System.Drawing.Size(1932, 215);
-            this.pnlGestionar.TabIndex = 0;
-            // 
-            // pnlFormulario
-            // 
-            this.pnlFormulario.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.pnlFormulario.Controls.Add(this.tlpCampos);
-            this.pnlFormulario.Controls.Add(this.lblDatos);
-            this.pnlFormulario.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlFormulario.Location = new System.Drawing.Point(0, 0);
-            this.pnlFormulario.Name = "pnlFormulario";
-            this.pnlFormulario.Padding = new System.Windows.Forms.Padding(15, 10, 15, 6);
-            this.pnlFormulario.Size = new System.Drawing.Size(1762, 215);
-            this.pnlFormulario.TabIndex = 0;
-            // 
-            // tlpCampos
-            // 
-            this.tlpCampos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.tlpCampos.ColumnCount = 3;
-            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tlpCampos.Controls.Add(this.panelEstado, 2, 3);
-            this.tlpCampos.Controls.Add(this.label2, 2, 2);
-            this.tlpCampos.Controls.Add(this.txtTotal, 2, 1);
-            this.tlpCampos.Controls.Add(this.label1, 2, 0);
-            this.tlpCampos.Controls.Add(this.lblCodigo, 0, 0);
-            this.tlpCampos.Controls.Add(this.txtCodigoFactura, 0, 1);
-            this.tlpCampos.Controls.Add(this.lblEstado, 1, 0);
-            this.tlpCampos.Controls.Add(this.lblCliente, 0, 2);
-            this.tlpCampos.Controls.Add(this.lblFecha, 1, 2);
-            this.tlpCampos.Controls.Add(this.lblSucursal, 0, 4);
-            this.tlpCampos.Controls.Add(this.lblTotal, 1, 4);
-            this.tlpCampos.Controls.Add(this.txtImpuestos, 1, 5);
-            this.tlpCampos.Controls.Add(this.cboxCodigoOrdenTrabajo, 0, 3);
-            this.tlpCampos.Controls.Add(this.txtNoOrden, 0, 5);
-            this.tlpCampos.Controls.Add(this.dtpFechaEntrega, 1, 1);
-            this.tlpCampos.Controls.Add(this.textBox3, 1, 3);
-            this.tlpCampos.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpCampos.Location = new System.Drawing.Point(15, 36);
-            this.tlpCampos.Name = "tlpCampos";
-            this.tlpCampos.RowCount = 6;
-            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tlpCampos.Size = new System.Drawing.Size(1732, 173);
-            this.tlpCampos.TabIndex = 0;
-            // 
-            // label2
-            // 
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.label2.Location = new System.Drawing.Point(1154, 54);
-            this.label2.Margin = new System.Windows.Forms.Padding(0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(578, 22);
-            this.label2.TabIndex = 17;
-            this.label2.Text = "Estado:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // txtTotal
-            // 
-            this.txtTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTotal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.txtTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtTotal.ForeColor = System.Drawing.Color.White;
-            this.txtTotal.Location = new System.Drawing.Point(1154, 25);
-            this.txtTotal.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtTotal.MaxLength = 15;
-            this.txtTotal.Name = "txtTotal";
-            this.txtTotal.Size = new System.Drawing.Size(562, 31);
-            this.txtTotal.TabIndex = 15;
-            // 
-            // label1
-            // 
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.label1.Location = new System.Drawing.Point(1154, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(578, 22);
-            this.label1.TabIndex = 13;
-            this.label1.Text = "Total:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // lblCodigo
-            // 
-            this.lblCodigo.BackColor = System.Drawing.Color.Transparent;
-            this.lblCodigo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCodigo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblCodigo.Location = new System.Drawing.Point(0, 0);
-            this.lblCodigo.Margin = new System.Windows.Forms.Padding(0);
-            this.lblCodigo.Name = "lblCodigo";
-            this.lblCodigo.Size = new System.Drawing.Size(577, 22);
-            this.lblCodigo.TabIndex = 0;
-            this.lblCodigo.Text = "Código Factura:";
-            this.lblCodigo.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // txtCodigoFactura
-            // 
-            this.txtCodigoFactura.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCodigoFactura.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.txtCodigoFactura.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCodigoFactura.ForeColor = System.Drawing.Color.White;
-            this.txtCodigoFactura.Location = new System.Drawing.Point(0, 25);
-            this.txtCodigoFactura.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtCodigoFactura.Name = "txtCodigoFactura";
-            this.txtCodigoFactura.ReadOnly = true;
-            this.txtCodigoFactura.Size = new System.Drawing.Size(561, 31);
-            this.txtCodigoFactura.TabIndex = 1;
-            // 
-            // lblEstado
-            // 
-            this.lblEstado.BackColor = System.Drawing.Color.Transparent;
-            this.lblEstado.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEstado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblEstado.Location = new System.Drawing.Point(577, 0);
-            this.lblEstado.Margin = new System.Windows.Forms.Padding(0);
-            this.lblEstado.Name = "lblEstado";
-            this.lblEstado.Size = new System.Drawing.Size(577, 22);
-            this.lblEstado.TabIndex = 2;
-            this.lblEstado.Text = "Fecha de entrega:";
-            this.lblEstado.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // lblCliente
-            // 
-            this.lblCliente.BackColor = System.Drawing.Color.Transparent;
-            this.lblCliente.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCliente.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblCliente.Location = new System.Drawing.Point(0, 54);
-            this.lblCliente.Margin = new System.Windows.Forms.Padding(0);
-            this.lblCliente.Name = "lblCliente";
-            this.lblCliente.Size = new System.Drawing.Size(577, 22);
-            this.lblCliente.TabIndex = 4;
-            this.lblCliente.Text = "Código Orden Trabajo:";
-            this.lblCliente.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // lblFecha
-            // 
-            this.lblFecha.BackColor = System.Drawing.Color.Transparent;
-            this.lblFecha.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFecha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblFecha.Location = new System.Drawing.Point(577, 54);
-            this.lblFecha.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFecha.Name = "lblFecha";
-            this.lblFecha.Size = new System.Drawing.Size(577, 22);
-            this.lblFecha.TabIndex = 6;
-            this.lblFecha.Text = "Subtotal:";
-            this.lblFecha.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // lblSucursal
-            // 
-            this.lblSucursal.BackColor = System.Drawing.Color.Transparent;
-            this.lblSucursal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSucursal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblSucursal.Location = new System.Drawing.Point(0, 108);
-            this.lblSucursal.Margin = new System.Windows.Forms.Padding(0);
-            this.lblSucursal.Name = "lblSucursal";
-            this.lblSucursal.Size = new System.Drawing.Size(577, 22);
-            this.lblSucursal.TabIndex = 8;
-            this.lblSucursal.Text = "No Factura:";
-            this.lblSucursal.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // lblTotal
-            // 
-            this.lblTotal.BackColor = System.Drawing.Color.Transparent;
-            this.lblTotal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblTotal.Location = new System.Drawing.Point(577, 108);
-            this.lblTotal.Margin = new System.Windows.Forms.Padding(0);
-            this.lblTotal.Name = "lblTotal";
-            this.lblTotal.Size = new System.Drawing.Size(577, 22);
-            this.lblTotal.TabIndex = 10;
-            this.lblTotal.Text = "Impuesto:";
-            this.lblTotal.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // txtImpuestos
-            // 
-            this.txtImpuestos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtImpuestos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.txtImpuestos.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtImpuestos.ForeColor = System.Drawing.Color.White;
-            this.txtImpuestos.Location = new System.Drawing.Point(577, 136);
-            this.txtImpuestos.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtImpuestos.MaxLength = 15;
-            this.txtImpuestos.Name = "txtImpuestos";
-            this.txtImpuestos.Size = new System.Drawing.Size(561, 31);
-            this.txtImpuestos.TabIndex = 11;
-            // 
-            // cboxCodigoOrdenTrabajo
-            // 
-            this.cboxCodigoOrdenTrabajo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboxCodigoOrdenTrabajo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.cboxCodigoOrdenTrabajo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboxCodigoOrdenTrabajo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboxCodigoOrdenTrabajo.ForeColor = System.Drawing.Color.White;
-            this.cboxCodigoOrdenTrabajo.Location = new System.Drawing.Point(0, 79);
-            this.cboxCodigoOrdenTrabajo.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.cboxCodigoOrdenTrabajo.Name = "cboxCodigoOrdenTrabajo";
-            this.cboxCodigoOrdenTrabajo.Size = new System.Drawing.Size(561, 33);
-            this.cboxCodigoOrdenTrabajo.TabIndex = 5;
-            // 
-            // txtNoOrden
-            // 
-            this.txtNoOrden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtNoOrden.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.txtNoOrden.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtNoOrden.ForeColor = System.Drawing.Color.White;
-            this.txtNoOrden.Location = new System.Drawing.Point(0, 136);
-            this.txtNoOrden.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.txtNoOrden.MaxLength = 15;
-            this.txtNoOrden.Name = "txtNoOrden";
-            this.txtNoOrden.Size = new System.Drawing.Size(561, 31);
-            this.txtNoOrden.TabIndex = 14;
-            // 
-            // dtpFechaEntrega
-            // 
-            this.dtpFechaEntrega.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpFechaEntrega.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpFechaEntrega.Location = new System.Drawing.Point(577, 25);
-            this.dtpFechaEntrega.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.dtpFechaEntrega.Name = "dtpFechaEntrega";
-            this.dtpFechaEntrega.Size = new System.Drawing.Size(561, 31);
-            this.dtpFechaEntrega.TabIndex = 7;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox3.ForeColor = System.Drawing.Color.White;
-            this.textBox3.Location = new System.Drawing.Point(577, 79);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
-            this.textBox3.MaxLength = 15;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(561, 31);
-            this.textBox3.TabIndex = 16;
-            // 
-            // lblDatos
-            // 
-            this.lblDatos.BackColor = System.Drawing.Color.Transparent;
-            this.lblDatos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblDatos.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblDatos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(208)))), ((int)(((byte)(240)))));
-            this.lblDatos.Location = new System.Drawing.Point(15, 10);
-            this.lblDatos.Name = "lblDatos";
-            this.lblDatos.Size = new System.Drawing.Size(1732, 26);
-            this.lblDatos.TabIndex = 1;
-            this.lblDatos.Text = "Datos de la Factura";
-            this.lblDatos.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // pnlSeparador
-            // 
-            this.pnlSeparador.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
-            this.pnlSeparador.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlSeparador.Location = new System.Drawing.Point(1762, 0);
-            this.pnlSeparador.Name = "pnlSeparador";
-            this.pnlSeparador.Size = new System.Drawing.Size(10, 215);
-            this.pnlSeparador.TabIndex = 1;
-            // 
-            // pnlAcciones
-            // 
-            this.pnlAcciones.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.pnlAcciones.Controls.Add(this.tlpAcciones);
-            this.pnlAcciones.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlAcciones.Location = new System.Drawing.Point(1772, 0);
-            this.pnlAcciones.Name = "pnlAcciones";
-            this.pnlAcciones.Padding = new System.Windows.Forms.Padding(12, 8, 12, 8);
-            this.pnlAcciones.Size = new System.Drawing.Size(160, 215);
-            this.pnlAcciones.TabIndex = 2;
-            // 
-            // tlpAcciones
-            // 
-            this.tlpAcciones.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.tlpAcciones.ColumnCount = 1;
-            this.tlpAcciones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAcciones.Controls.Add(this.btnNuevo, 0, 0);
-            this.tlpAcciones.Controls.Add(this.btnGuardar, 0, 1);
-            this.tlpAcciones.Controls.Add(this.btnEditar, 0, 2);
-            this.tlpAcciones.Controls.Add(this.btnEliminar, 0, 3);
-            this.tlpAcciones.Controls.Add(this.btnCancelar, 0, 4);
-            this.tlpAcciones.Controls.Add(this.btnLimpiar, 0, 5);
-            this.tlpAcciones.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpAcciones.Location = new System.Drawing.Point(12, 8);
-            this.tlpAcciones.Name = "tlpAcciones";
-            this.tlpAcciones.RowCount = 6;
-            this.tlpAcciones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tlpAcciones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tlpAcciones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tlpAcciones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tlpAcciones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tlpAcciones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tlpAcciones.Size = new System.Drawing.Size(136, 199);
-            this.tlpAcciones.TabIndex = 0;
-            // 
-            // btnNuevo
-            // 
-            this.btnNuevo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(130)))), ((int)(((byte)(170)))));
-            this.btnNuevo.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(180)))), ((int)(((byte)(220)))));
-            this.btnNuevo.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(160)))), ((int)(((byte)(205)))));
-            this.btnNuevo.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnNuevo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNuevo.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnNuevo.ForeColor = System.Drawing.Color.White;
-            this.btnNuevo.Glyph = "";
-            this.btnNuevo.Location = new System.Drawing.Point(0, 3);
-            this.btnNuevo.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.btnNuevo.Name = "btnNuevo";
-            this.btnNuevo.Size = new System.Drawing.Size(136, 27);
-            this.btnNuevo.TabIndex = 0;
-            this.btnNuevo.Text = "Nuevo";
-            this.btnNuevo.UseVisualStyleBackColor = false;
-            this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
-            // 
-            // btnGuardar
-            // 
-            this.btnGuardar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(50)))), ((int)(((byte)(128)))));
-            this.btnGuardar.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(90)))), ((int)(((byte)(190)))));
-            this.btnGuardar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnGuardar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGuardar.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Glyph = "";
-            this.btnGuardar.Location = new System.Drawing.Point(0, 36);
-            this.btnGuardar.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(136, 27);
-            this.btnGuardar.TabIndex = 1;
-            this.btnGuardar.Text = "Guardar";
-            this.btnGuardar.UseVisualStyleBackColor = false;
-            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
-            // 
-            // btnEditar
-            // 
-            this.btnEditar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(50)))), ((int)(((byte)(128)))));
-            this.btnEditar.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(90)))), ((int)(((byte)(190)))));
-            this.btnEditar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnEditar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnEditar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnEditar.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnEditar.ForeColor = System.Drawing.Color.White;
-            this.btnEditar.Glyph = "";
-            this.btnEditar.Location = new System.Drawing.Point(0, 69);
-            this.btnEditar.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.btnEditar.Name = "btnEditar";
-            this.btnEditar.Size = new System.Drawing.Size(136, 27);
-            this.btnEditar.TabIndex = 2;
-            this.btnEditar.Text = "Editar";
-            this.btnEditar.UseVisualStyleBackColor = false;
-            this.btnEditar.Click += new System.EventHandler(this.btnEditar_Click);
-            // 
-            // btnEliminar
-            // 
-            this.btnEliminar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(50)))), ((int)(((byte)(128)))));
-            this.btnEliminar.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(90)))), ((int)(((byte)(190)))));
-            this.btnEliminar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnEliminar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnEliminar.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnEliminar.ForeColor = System.Drawing.Color.White;
-            this.btnEliminar.Glyph = "";
-            this.btnEliminar.Location = new System.Drawing.Point(0, 102);
-            this.btnEliminar.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(136, 27);
-            this.btnEliminar.TabIndex = 3;
-            this.btnEliminar.Text = "Eliminar";
-            this.btnEliminar.UseVisualStyleBackColor = false;
-            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
-            // 
-            // btnCancelar
-            // 
-            this.btnCancelar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(50)))), ((int)(((byte)(128)))));
-            this.btnCancelar.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(90)))), ((int)(((byte)(190)))));
-            this.btnCancelar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnCancelar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCancelar.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnCancelar.ForeColor = System.Drawing.Color.White;
-            this.btnCancelar.Glyph = "";
-            this.btnCancelar.Location = new System.Drawing.Point(0, 135);
-            this.btnCancelar.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.btnCancelar.Name = "btnCancelar";
-            this.btnCancelar.Size = new System.Drawing.Size(136, 27);
-            this.btnCancelar.TabIndex = 4;
-            this.btnCancelar.Text = "Cancelar";
-            this.btnCancelar.UseVisualStyleBackColor = false;
-            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
-            // 
-            // btnLimpiar
-            // 
-            this.btnLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(50)))), ((int)(((byte)(128)))));
-            this.btnLimpiar.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(90)))), ((int)(((byte)(190)))));
-            this.btnLimpiar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLimpiar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLimpiar.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnLimpiar.ForeColor = System.Drawing.Color.White;
-            this.btnLimpiar.Glyph = "";
-            this.btnLimpiar.Location = new System.Drawing.Point(0, 168);
-            this.btnLimpiar.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(136, 28);
-            this.btnLimpiar.TabIndex = 5;
-            this.btnLimpiar.Text = "Limpiar";
-            this.btnLimpiar.UseVisualStyleBackColor = false;
-            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
-            // 
-            // pnlConsultar
-            // 
-            this.pnlConsultar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.pnlConsultar.Controls.Add(this.tlpFiltros);
-            this.pnlConsultar.Controls.Add(this.lblFiltros);
-            this.pnlConsultar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlConsultar.Location = new System.Drawing.Point(0, 0);
-            this.pnlConsultar.Name = "pnlConsultar";
-            this.pnlConsultar.Padding = new System.Windows.Forms.Padding(15, 10, 15, 6);
-            this.pnlConsultar.Size = new System.Drawing.Size(1932, 215);
-            this.pnlConsultar.TabIndex = 1;
-            this.pnlConsultar.Visible = false;
-            // 
-            // tlpFiltros
-            // 
-            this.tlpFiltros.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.tlpFiltros.ColumnCount = 2;
-            this.tlpFiltros.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpFiltros.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpFiltros.Controls.Add(this.lblFiltroEstado, 0, 0);
-            this.tlpFiltros.Controls.Add(this.cmbFiltroEstado, 0, 1);
-            this.tlpFiltros.Controls.Add(this.btnQuitarFiltros, 0, 2);
-            this.tlpFiltros.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpFiltros.Location = new System.Drawing.Point(15, 36);
-            this.tlpFiltros.Name = "tlpFiltros";
-            this.tlpFiltros.RowCount = 3;
-            this.tlpFiltros.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tlpFiltros.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tlpFiltros.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44F));
-            this.tlpFiltros.Size = new System.Drawing.Size(1902, 173);
-            this.tlpFiltros.TabIndex = 0;
+            this.csBuscar.EnterPresionado += new System.EventHandler(this.csBuscar_EnterPresionado);
             // 
             // lblFiltroEstado
             // 
+            this.lblFiltroEstado.AutoSize = true;
             this.lblFiltroEstado.BackColor = System.Drawing.Color.Transparent;
-            this.lblFiltroEstado.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFiltroEstado.Dock = System.Windows.Forms.DockStyle.Right;
             this.lblFiltroEstado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblFiltroEstado.Location = new System.Drawing.Point(0, 0);
-            this.lblFiltroEstado.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFiltroEstado.Location = new System.Drawing.Point(637, 0);
             this.lblFiltroEstado.Name = "lblFiltroEstado";
-            this.lblFiltroEstado.Size = new System.Drawing.Size(951, 22);
-            this.lblFiltroEstado.TabIndex = 0;
+            this.lblFiltroEstado.Padding = new System.Windows.Forms.Padding(14, 0, 6, 0);
+            this.lblFiltroEstado.Size = new System.Drawing.Size(73, 16);
+            this.lblFiltroEstado.TabIndex = 1;
             this.lblFiltroEstado.Text = "Estado:";
-            this.lblFiltroEstado.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblFiltroEstado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // pnlFiltroEstado
+            // 
+            this.pnlFiltroEstado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlFiltroEstado.Controls.Add(this.cmbFiltroEstado);
+            this.pnlFiltroEstado.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnlFiltroEstado.Location = new System.Drawing.Point(710, 0);
+            this.pnlFiltroEstado.Name = "pnlFiltroEstado";
+            this.pnlFiltroEstado.Size = new System.Drawing.Size(130, 34);
+            this.pnlFiltroEstado.TabIndex = 2;
             // 
             // cmbFiltroEstado
             // 
@@ -687,297 +389,1502 @@
             this.cmbFiltroEstado.ForeColor = System.Drawing.Color.White;
             this.cmbFiltroEstado.Items.AddRange(new object[] {
             "Todos",
-            "Emitida",
-            "Pagada",
-            "Anulada"});
-            this.cmbFiltroEstado.Location = new System.Drawing.Point(0, 25);
-            this.cmbFiltroEstado.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
+            "Activo",
+            "Inactivo"});
+            this.cmbFiltroEstado.Location = new System.Drawing.Point(0, 5);
             this.cmbFiltroEstado.Name = "cmbFiltroEstado";
-            this.cmbFiltroEstado.Size = new System.Drawing.Size(935, 33);
-            this.cmbFiltroEstado.TabIndex = 1;
+            this.cmbFiltroEstado.Size = new System.Drawing.Size(130, 24);
+            this.cmbFiltroEstado.TabIndex = 0;
             // 
-            // btnQuitarFiltros
+            // pnlToolbarTop
             // 
-            this.btnQuitarFiltros.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.btnQuitarFiltros.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(50)))), ((int)(((byte)(128)))));
-            this.btnQuitarFiltros.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(90)))), ((int)(((byte)(190)))));
-            this.btnQuitarFiltros.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnQuitarFiltros.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQuitarFiltros.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnQuitarFiltros.ForeColor = System.Drawing.Color.White;
-            this.btnQuitarFiltros.Glyph = "";
-            this.btnQuitarFiltros.Location = new System.Drawing.Point(3, 98);
-            this.btnQuitarFiltros.Name = "btnQuitarFiltros";
-            this.btnQuitarFiltros.Size = new System.Drawing.Size(150, 30);
-            this.btnQuitarFiltros.TabIndex = 2;
-            this.btnQuitarFiltros.Text = "Quitar filtros";
-            this.btnQuitarFiltros.UseVisualStyleBackColor = false;
-            this.btnQuitarFiltros.Click += new System.EventHandler(this.btnQuitarFiltros_Click);
+            this.pnlToolbarTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlToolbarTop.Controls.Add(this.pnlIconoLista);
+            this.pnlToolbarTop.Controls.Add(this.lblTituloLista);
+            this.pnlToolbarTop.Controls.Add(this.btnEditar);
+            this.pnlToolbarTop.Controls.Add(this.sepToolbarA);
+            this.pnlToolbarTop.Controls.Add(this.btnEliminar);
+            this.pnlToolbarTop.Controls.Add(this.sepToolbarB);
+            this.pnlToolbarTop.Controls.Add(this.btnNuevo);
+            this.pnlToolbarTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlToolbarTop.Location = new System.Drawing.Point(0, 0);
+            this.pnlToolbarTop.Name = "pnlToolbarTop";
+            this.pnlToolbarTop.Padding = new System.Windows.Forms.Padding(0, 8, 0, 10);
+            this.pnlToolbarTop.Size = new System.Drawing.Size(840, 54);
+            this.pnlToolbarTop.TabIndex = 1;
             // 
-            // lblFiltros
+            // pnlIconoLista
             // 
-            this.lblFiltros.BackColor = System.Drawing.Color.Transparent;
-            this.lblFiltros.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblFiltros.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblFiltros.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(208)))), ((int)(((byte)(240)))));
-            this.lblFiltros.Location = new System.Drawing.Point(15, 10);
-            this.lblFiltros.Name = "lblFiltros";
-            this.lblFiltros.Size = new System.Drawing.Size(1902, 26);
-            this.lblFiltros.TabIndex = 1;
-            this.lblFiltros.Text = "Filtros de consulta";
-            this.lblFiltros.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.pnlIconoLista.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(52)))), ((int)(((byte)(120)))));
+            this.pnlIconoLista.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(52)))), ((int)(((byte)(120)))));
+            this.pnlIconoLista.Controls.Add(this.lblGlyphLista);
+            this.pnlIconoLista.Location = new System.Drawing.Point(0, 8);
+            this.pnlIconoLista.Name = "pnlIconoLista";
+            this.pnlIconoLista.Radio = 10;
+            this.pnlIconoLista.Size = new System.Drawing.Size(38, 38);
+            this.pnlIconoLista.TabIndex = 0;
+            // 
+            // lblGlyphLista
+            // 
+            this.lblGlyphLista.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(52)))), ((int)(((byte)(120)))));
+            this.lblGlyphLista.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblGlyphLista.Font = new System.Drawing.Font("Segoe MDL2 Assets", 13F);
+            this.lblGlyphLista.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(165)))), ((int)(((byte)(250)))));
+            this.lblGlyphLista.Location = new System.Drawing.Point(0, 0);
+            this.lblGlyphLista.Name = "lblGlyphLista";
+            this.lblGlyphLista.Size = new System.Drawing.Size(38, 38);
+            this.lblGlyphLista.TabIndex = 0;
+            this.lblGlyphLista.Text = "";
+            this.lblGlyphLista.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblTituloLista
+            // 
+            this.lblTituloLista.AutoSize = true;
+            this.lblTituloLista.BackColor = System.Drawing.Color.Transparent;
+            this.lblTituloLista.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.lblTituloLista.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.lblTituloLista.Location = new System.Drawing.Point(48, 17);
+            this.lblTituloLista.Name = "lblTituloLista";
+            this.lblTituloLista.Size = new System.Drawing.Size(179, 25);
+            this.lblTituloLista.TabIndex = 1;
+            this.lblTituloLista.Text = "Listado de facturas";
+            // 
+            // btnEditar
+            // 
+            this.btnEditar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(38)))), ((int)(((byte)(100)))));
+            this.btnEditar.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(58)))), ((int)(((byte)(130)))));
+            this.btnEditar.ColorGlyph = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(165)))), ((int)(((byte)(250)))));
+            this.btnEditar.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(130)))));
+            this.btnEditar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnEditar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnEditar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEditar.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnEditar.ForeColor = System.Drawing.Color.White;
+            this.btnEditar.Glyph = "";
+            this.btnEditar.Location = new System.Drawing.Point(606, 8);
+            this.btnEditar.Name = "btnEditar";
+            this.btnEditar.Size = new System.Drawing.Size(44, 36);
+            this.btnEditar.TabIndex = 2;
+            this.btnEditar.UseVisualStyleBackColor = false;
+            this.btnEditar.Click += new System.EventHandler(this.btnEditar_Click);
+            // 
+            // sepToolbarA
+            // 
+            this.sepToolbarA.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.sepToolbarA.Dock = System.Windows.Forms.DockStyle.Right;
+            this.sepToolbarA.Location = new System.Drawing.Point(650, 8);
+            this.sepToolbarA.Name = "sepToolbarA";
+            this.sepToolbarA.Size = new System.Drawing.Size(8, 36);
+            this.sepToolbarA.TabIndex = 3;
+            // 
+            // btnEliminar
+            // 
+            this.btnEliminar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(38)))), ((int)(((byte)(100)))));
+            this.btnEliminar.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(58)))), ((int)(((byte)(130)))));
+            this.btnEliminar.ColorGlyph = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(63)))), ((int)(((byte)(94)))));
+            this.btnEliminar.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(130)))));
+            this.btnEliminar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnEliminar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEliminar.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnEliminar.ForeColor = System.Drawing.Color.White;
+            this.btnEliminar.Glyph = "";
+            this.btnEliminar.Location = new System.Drawing.Point(658, 8);
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.Size = new System.Drawing.Size(44, 36);
+            this.btnEliminar.TabIndex = 4;
+            this.btnEliminar.UseVisualStyleBackColor = false;
+            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
+            // 
+            // sepToolbarB
+            // 
+            this.sepToolbarB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.sepToolbarB.Dock = System.Windows.Forms.DockStyle.Right;
+            this.sepToolbarB.Location = new System.Drawing.Point(702, 8);
+            this.sepToolbarB.Name = "sepToolbarB";
+            this.sepToolbarB.Size = new System.Drawing.Size(8, 36);
+            this.sepToolbarB.TabIndex = 5;
+            // 
+            // btnNuevo
+            // 
+            this.btnNuevo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(130)))), ((int)(((byte)(170)))));
+            this.btnNuevo.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(180)))), ((int)(((byte)(220)))));
+            this.btnNuevo.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(160)))), ((int)(((byte)(205)))));
+            this.btnNuevo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnNuevo.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNuevo.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnNuevo.ForeColor = System.Drawing.Color.White;
+            this.btnNuevo.Glyph = "";
+            this.btnNuevo.Location = new System.Drawing.Point(710, 8);
+            this.btnNuevo.Name = "btnNuevo";
+            this.btnNuevo.Size = new System.Drawing.Size(130, 36);
+            this.btnNuevo.TabIndex = 6;
+            this.btnNuevo.Text = "Nuevo";
+            this.btnNuevo.UseVisualStyleBackColor = false;
+            this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
+            // 
+            // pnlKpi
+            // 
+            this.pnlKpi.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.pnlKpi.Controls.Add(this.tlpKpi);
+            this.pnlKpi.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlKpi.Location = new System.Drawing.Point(0, 70);
+            this.pnlKpi.Name = "pnlKpi";
+            this.pnlKpi.Padding = new System.Windows.Forms.Padding(0, 0, 0, 12);
+            this.pnlKpi.Size = new System.Drawing.Size(872, 132);
+            this.pnlKpi.TabIndex = 1;
+            // 
+            // tlpKpi
+            // 
+            this.tlpKpi.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.tlpKpi.ColumnCount = 4;
+            this.tlpKpi.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpKpi.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpKpi.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpKpi.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpKpi.Controls.Add(this.statTotal, 0, 0);
+            this.tlpKpi.Controls.Add(this.statEstado1, 1, 0);
+            this.tlpKpi.Controls.Add(this.statEstado2, 2, 0);
+            this.tlpKpi.Controls.Add(this.statExtra, 3, 0);
+            this.tlpKpi.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpKpi.Location = new System.Drawing.Point(0, 0);
+            this.tlpKpi.Name = "tlpKpi";
+            this.tlpKpi.RowCount = 1;
+            this.tlpKpi.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpKpi.Size = new System.Drawing.Size(872, 120);
+            this.tlpKpi.TabIndex = 0;
+            // 
+            // statTotal
+            // 
+            this.statTotal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.statTotal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.statTotal.Glyph = "";
+            this.statTotal.Location = new System.Drawing.Point(0, 0);
+            this.statTotal.Margin = new System.Windows.Forms.Padding(0, 0, 14, 0);
+            this.statTotal.Name = "statTotal";
+            this.statTotal.Size = new System.Drawing.Size(204, 120);
+            this.statTotal.Subtitulo = "Registros";
+            this.statTotal.TabIndex = 0;
+            this.statTotal.Titulo = "Total de facturas";
+            // 
+            // statEstado1
+            // 
+            this.statEstado1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.statEstado1.ColorFin = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(40)))), ((int)(((byte)(120)))));
+            this.statEstado1.ColorInicio = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(62)))), ((int)(((byte)(140)))));
+            this.statEstado1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.statEstado1.Glyph = "";
+            this.statEstado1.Location = new System.Drawing.Point(218, 0);
+            this.statEstado1.Margin = new System.Windows.Forms.Padding(0, 0, 14, 0);
+            this.statEstado1.Name = "statEstado1";
+            this.statEstado1.Size = new System.Drawing.Size(204, 120);
+            this.statEstado1.TabIndex = 1;
+            this.statEstado1.Titulo = "Activos";
+            // 
+            // statEstado2
+            // 
+            this.statEstado2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.statEstado2.ColorFin = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(116)))), ((int)(((byte)(144)))));
+            this.statEstado2.ColorInicio = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(184)))), ((int)(((byte)(166)))));
+            this.statEstado2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.statEstado2.Glyph = "";
+            this.statEstado2.Location = new System.Drawing.Point(436, 0);
+            this.statEstado2.Margin = new System.Windows.Forms.Padding(0, 0, 14, 0);
+            this.statEstado2.Name = "statEstado2";
+            this.statEstado2.Size = new System.Drawing.Size(204, 120);
+            this.statEstado2.TabIndex = 2;
+            this.statEstado2.Titulo = "Inactivos";
+            // 
+            // statExtra
+            // 
+            this.statExtra.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.statExtra.ColorFin = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(101)))), ((int)(((byte)(12)))));
+            this.statExtra.ColorInicio = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(158)))), ((int)(((byte)(11)))));
+            this.statExtra.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.statExtra.Glyph = "";
+            this.statExtra.Location = new System.Drawing.Point(654, 0);
+            this.statExtra.Margin = new System.Windows.Forms.Padding(0);
+            this.statExtra.Name = "statExtra";
+            this.statExtra.Size = new System.Drawing.Size(218, 120);
+            this.statExtra.TabIndex = 3;
+            this.statExtra.Titulo = "Total facturado";
+            // 
+            // pnlTituloConsulta
+            // 
+            this.pnlTituloConsulta.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.pnlTituloConsulta.Controls.Add(this.lblTituloConsulta);
+            this.pnlTituloConsulta.Controls.Add(this.lblSubtituloConsulta);
+            this.pnlTituloConsulta.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTituloConsulta.Location = new System.Drawing.Point(0, 0);
+            this.pnlTituloConsulta.Name = "pnlTituloConsulta";
+            this.pnlTituloConsulta.Size = new System.Drawing.Size(872, 70);
+            this.pnlTituloConsulta.TabIndex = 2;
+            // 
+            // lblTituloConsulta
+            // 
+            this.lblTituloConsulta.AutoSize = true;
+            this.lblTituloConsulta.BackColor = System.Drawing.Color.Transparent;
+            this.lblTituloConsulta.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            this.lblTituloConsulta.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.lblTituloConsulta.Location = new System.Drawing.Point(0, 0);
+            this.lblTituloConsulta.Name = "lblTituloConsulta";
+            this.lblTituloConsulta.Size = new System.Drawing.Size(305, 41);
+            this.lblTituloConsulta.TabIndex = 0;
+            this.lblTituloConsulta.Text = "Consulta de facturas";
+            // 
+            // lblSubtituloConsulta
+            // 
+            this.lblSubtituloConsulta.AutoSize = true;
+            this.lblSubtituloConsulta.BackColor = System.Drawing.Color.Transparent;
+            this.lblSubtituloConsulta.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblSubtituloConsulta.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblSubtituloConsulta.Location = new System.Drawing.Point(0, 36);
+            this.lblSubtituloConsulta.Name = "lblSubtituloConsulta";
+            this.lblSubtituloConsulta.Size = new System.Drawing.Size(317, 21);
+            this.lblSubtituloConsulta.TabIndex = 1;
+            this.lblSubtituloConsulta.Text = "Consulte y administre facturas de la agencia.";
+            // 
+            // tpGestionar
+            // 
+            this.tpGestionar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.tpGestionar.Controls.Add(this.pnlDetalle);
+            this.tpGestionar.Controls.Add(this.pnlBarra);
+            this.tpGestionar.Controls.Add(this.pnlEncabezadoWrap);
+            this.tpGestionar.Controls.Add(this.pnlTituloGestion);
+            this.tpGestionar.Location = new System.Drawing.Point(4, 25);
+            this.tpGestionar.Name = "tpGestionar";
+            this.tpGestionar.Size = new System.Drawing.Size(872, 549);
+            this.tpGestionar.TabIndex = 1;
+            this.tpGestionar.Text = "Gestionar";
+            // 
+            // pnlDetalle
+            // 
+            this.pnlDetalle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlDetalle.Controls.Add(this.dgvDetalleFactura);
+            this.pnlDetalle.Controls.Add(this.tlpDetalle);
+            this.pnlDetalle.Controls.Add(this.pnlTituloDetalle);
+            this.pnlDetalle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlDetalle.Location = new System.Drawing.Point(0, 248);
+            this.pnlDetalle.Name = "pnlDetalle";
+            this.pnlDetalle.Padding = new System.Windows.Forms.Padding(18, 10, 18, 8);
+            this.pnlDetalle.Size = new System.Drawing.Size(872, 243);
+            this.pnlDetalle.TabIndex = 0;
+            // 
+            // dgvDetalleFactura
+            // 
+            this.dgvDetalleFactura.ColumnHeadersHeight = 29;
+            this.dgvDetalleFactura.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvDetalleFactura.Location = new System.Drawing.Point(18, 158);
+            this.dgvDetalleFactura.Name = "dgvDetalleFactura";
+            this.dgvDetalleFactura.RowHeadersWidth = 51;
+            this.dgvDetalleFactura.Size = new System.Drawing.Size(836, 77);
+            this.dgvDetalleFactura.TabIndex = 0;
+            // 
+            // tlpDetalle
+            // 
+            this.tlpDetalle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.tlpDetalle.ColumnCount = 4;
+            this.tlpDetalle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpDetalle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpDetalle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpDetalle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpDetalle.Controls.Add(this.lblCodigoDetalleFactura, 0, 0);
+            this.tlpDetalle.Controls.Add(this.txtCodigoDetalleFactura, 0, 1);
+            this.tlpDetalle.Controls.Add(this.lblDescripcion, 1, 0);
+            this.tlpDetalle.Controls.Add(this.txtDescripcion, 1, 1);
+            this.tlpDetalle.Controls.Add(this.lblCantidad, 2, 0);
+            this.tlpDetalle.Controls.Add(this.txtCantidad, 2, 1);
+            this.tlpDetalle.Controls.Add(this.lblPrecio, 3, 0);
+            this.tlpDetalle.Controls.Add(this.txtPrecio, 3, 1);
+            this.tlpDetalle.Controls.Add(this.lblDescuentoAplicado, 0, 2);
+            this.tlpDetalle.Controls.Add(this.txtDescuentoAplicado, 0, 3);
+            this.tlpDetalle.Controls.Add(this.lblEstadoDetalle, 1, 2);
+            this.tlpDetalle.Controls.Add(this.pnlEstadoDetalle, 1, 3);
+            this.tlpDetalle.Controls.Add(this.btnAgregarDetalle, 3, 3);
+            this.tlpDetalle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tlpDetalle.Location = new System.Drawing.Point(18, 62);
+            this.tlpDetalle.Name = "tlpDetalle";
+            this.tlpDetalle.RowCount = 4;
+            this.tlpDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
+            this.tlpDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tlpDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
+            this.tlpDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tlpDetalle.Size = new System.Drawing.Size(836, 96);
+            this.tlpDetalle.TabIndex = 1;
+            // 
+            // lblCodigoDetalleFactura
+            // 
+            this.lblCodigoDetalleFactura.BackColor = System.Drawing.Color.Transparent;
+            this.lblCodigoDetalleFactura.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCodigoDetalleFactura.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblCodigoDetalleFactura.Location = new System.Drawing.Point(0, 0);
+            this.lblCodigoDetalleFactura.Margin = new System.Windows.Forms.Padding(0);
+            this.lblCodigoDetalleFactura.Name = "lblCodigoDetalleFactura";
+            this.lblCodigoDetalleFactura.Size = new System.Drawing.Size(209, 18);
+            this.lblCodigoDetalleFactura.TabIndex = 0;
+            this.lblCodigoDetalleFactura.Text = "CodigoDetalleFactura:";
+            this.lblCodigoDetalleFactura.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // txtCodigoDetalleFactura
+            // 
+            this.txtCodigoDetalleFactura.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCodigoDetalleFactura.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtCodigoDetalleFactura.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCodigoDetalleFactura.ForeColor = System.Drawing.Color.White;
+            this.txtCodigoDetalleFactura.Location = new System.Drawing.Point(0, 21);
+            this.txtCodigoDetalleFactura.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.txtCodigoDetalleFactura.Name = "txtCodigoDetalleFactura";
+            this.txtCodigoDetalleFactura.ReadOnly = true;
+            this.txtCodigoDetalleFactura.Size = new System.Drawing.Size(199, 22);
+            this.txtCodigoDetalleFactura.TabIndex = 1;
+            // 
+            // lblDescripcion
+            // 
+            this.lblDescripcion.BackColor = System.Drawing.Color.Transparent;
+            this.lblDescripcion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDescripcion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblDescripcion.Location = new System.Drawing.Point(209, 0);
+            this.lblDescripcion.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDescripcion.Name = "lblDescripcion";
+            this.lblDescripcion.Size = new System.Drawing.Size(209, 18);
+            this.lblDescripcion.TabIndex = 2;
+            this.lblDescripcion.Text = "Descripcion:";
+            this.lblDescripcion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // txtDescripcion
+            // 
+            this.txtDescripcion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDescripcion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtDescripcion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDescripcion.ForeColor = System.Drawing.Color.White;
+            this.txtDescripcion.Location = new System.Drawing.Point(209, 21);
+            this.txtDescripcion.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.txtDescripcion.MaxLength = 150;
+            this.txtDescripcion.Name = "txtDescripcion";
+            this.txtDescripcion.Size = new System.Drawing.Size(199, 22);
+            this.txtDescripcion.TabIndex = 3;
+            // 
+            // lblCantidad
+            // 
+            this.lblCantidad.BackColor = System.Drawing.Color.Transparent;
+            this.lblCantidad.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCantidad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblCantidad.Location = new System.Drawing.Point(418, 0);
+            this.lblCantidad.Margin = new System.Windows.Forms.Padding(0);
+            this.lblCantidad.Name = "lblCantidad";
+            this.lblCantidad.Size = new System.Drawing.Size(209, 18);
+            this.lblCantidad.TabIndex = 4;
+            this.lblCantidad.Text = "Cantidad:";
+            this.lblCantidad.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // txtCantidad
+            // 
+            this.txtCantidad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCantidad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtCantidad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCantidad.ForeColor = System.Drawing.Color.White;
+            this.txtCantidad.Location = new System.Drawing.Point(418, 21);
+            this.txtCantidad.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.txtCantidad.MaxLength = 10;
+            this.txtCantidad.Name = "txtCantidad";
+            this.txtCantidad.Size = new System.Drawing.Size(199, 22);
+            this.txtCantidad.TabIndex = 5;
+            // 
+            // lblPrecio
+            // 
+            this.lblPrecio.BackColor = System.Drawing.Color.Transparent;
+            this.lblPrecio.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblPrecio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblPrecio.Location = new System.Drawing.Point(627, 0);
+            this.lblPrecio.Margin = new System.Windows.Forms.Padding(0);
+            this.lblPrecio.Name = "lblPrecio";
+            this.lblPrecio.Size = new System.Drawing.Size(209, 18);
+            this.lblPrecio.TabIndex = 6;
+            this.lblPrecio.Text = "Precio:";
+            this.lblPrecio.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // txtPrecio
+            // 
+            this.txtPrecio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPrecio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtPrecio.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtPrecio.ForeColor = System.Drawing.Color.White;
+            this.txtPrecio.Location = new System.Drawing.Point(627, 21);
+            this.txtPrecio.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.txtPrecio.MaxLength = 15;
+            this.txtPrecio.Name = "txtPrecio";
+            this.txtPrecio.Size = new System.Drawing.Size(199, 22);
+            this.txtPrecio.TabIndex = 7;
+            // 
+            // lblDescuentoAplicado
+            // 
+            this.lblDescuentoAplicado.BackColor = System.Drawing.Color.Transparent;
+            this.lblDescuentoAplicado.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDescuentoAplicado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblDescuentoAplicado.Location = new System.Drawing.Point(0, 46);
+            this.lblDescuentoAplicado.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDescuentoAplicado.Name = "lblDescuentoAplicado";
+            this.lblDescuentoAplicado.Size = new System.Drawing.Size(209, 18);
+            this.lblDescuentoAplicado.TabIndex = 8;
+            this.lblDescuentoAplicado.Text = "DescuentoAplicado:";
+            this.lblDescuentoAplicado.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // txtDescuentoAplicado
+            // 
+            this.txtDescuentoAplicado.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDescuentoAplicado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtDescuentoAplicado.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDescuentoAplicado.ForeColor = System.Drawing.Color.White;
+            this.txtDescuentoAplicado.Location = new System.Drawing.Point(0, 69);
+            this.txtDescuentoAplicado.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.txtDescuentoAplicado.MaxLength = 15;
+            this.txtDescuentoAplicado.Name = "txtDescuentoAplicado";
+            this.txtDescuentoAplicado.Size = new System.Drawing.Size(199, 22);
+            this.txtDescuentoAplicado.TabIndex = 9;
+            // 
+            // lblEstadoDetalle
+            // 
+            this.lblEstadoDetalle.BackColor = System.Drawing.Color.Transparent;
+            this.lblEstadoDetalle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblEstadoDetalle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblEstadoDetalle.Location = new System.Drawing.Point(209, 46);
+            this.lblEstadoDetalle.Margin = new System.Windows.Forms.Padding(0);
+            this.lblEstadoDetalle.Name = "lblEstadoDetalle";
+            this.lblEstadoDetalle.Size = new System.Drawing.Size(209, 18);
+            this.lblEstadoDetalle.TabIndex = 10;
+            this.lblEstadoDetalle.Text = "Estado:";
+            this.lblEstadoDetalle.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // pnlEstadoDetalle
+            // 
+            this.pnlEstadoDetalle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlEstadoDetalle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlEstadoDetalle.Controls.Add(this.rdoActivoDetalle);
+            this.pnlEstadoDetalle.Controls.Add(this.rdoInactivoDetalle);
+            this.pnlEstadoDetalle.Location = new System.Drawing.Point(209, 68);
+            this.pnlEstadoDetalle.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.pnlEstadoDetalle.Name = "pnlEstadoDetalle";
+            this.pnlEstadoDetalle.Size = new System.Drawing.Size(199, 23);
+            this.pnlEstadoDetalle.TabIndex = 11;
+            // 
+            // rdoActivoDetalle
+            // 
+            this.rdoActivoDetalle.AutoSize = true;
+            this.rdoActivoDetalle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.rdoActivoDetalle.Checked = true;
+            this.rdoActivoDetalle.ForeColor = System.Drawing.Color.White;
+            this.rdoActivoDetalle.Location = new System.Drawing.Point(2, 2);
+            this.rdoActivoDetalle.Name = "rdoActivoDetalle";
+            this.rdoActivoDetalle.Size = new System.Drawing.Size(65, 20);
+            this.rdoActivoDetalle.TabIndex = 0;
+            this.rdoActivoDetalle.TabStop = true;
+            this.rdoActivoDetalle.Text = "Activo";
+            this.rdoActivoDetalle.UseVisualStyleBackColor = false;
+            // 
+            // rdoInactivoDetalle
+            // 
+            this.rdoInactivoDetalle.AutoSize = true;
+            this.rdoInactivoDetalle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.rdoInactivoDetalle.ForeColor = System.Drawing.Color.White;
+            this.rdoInactivoDetalle.Location = new System.Drawing.Point(76, 2);
+            this.rdoInactivoDetalle.Name = "rdoInactivoDetalle";
+            this.rdoInactivoDetalle.Size = new System.Drawing.Size(74, 20);
+            this.rdoInactivoDetalle.TabIndex = 1;
+            this.rdoInactivoDetalle.Text = "Inactivo";
+            this.rdoInactivoDetalle.UseVisualStyleBackColor = false;
+            // 
+            // btnAgregarDetalle
+            // 
+            this.btnAgregarDetalle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(130)))), ((int)(((byte)(170)))));
+            this.btnAgregarDetalle.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(180)))), ((int)(((byte)(220)))));
+            this.btnAgregarDetalle.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(160)))), ((int)(((byte)(205)))));
+            this.btnAgregarDetalle.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAgregarDetalle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnAgregarDetalle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAgregarDetalle.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnAgregarDetalle.ForeColor = System.Drawing.Color.White;
+            this.btnAgregarDetalle.Glyph = "";
+            this.btnAgregarDetalle.Location = new System.Drawing.Point(633, 66);
+            this.btnAgregarDetalle.Margin = new System.Windows.Forms.Padding(6, 2, 0, 2);
+            this.btnAgregarDetalle.Name = "btnAgregarDetalle";
+            this.btnAgregarDetalle.Size = new System.Drawing.Size(203, 28);
+            this.btnAgregarDetalle.TabIndex = 12;
+            this.btnAgregarDetalle.Text = "Agregar línea";
+            this.btnAgregarDetalle.UseVisualStyleBackColor = false;
+            this.btnAgregarDetalle.Click += new System.EventHandler(this.btnAgregarDetalle_Click);
+            // 
+            // pnlTituloDetalle
+            // 
+            this.pnlTituloDetalle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlTituloDetalle.Controls.Add(this.pnlIconoDetalle);
+            this.pnlTituloDetalle.Controls.Add(this.lblTituloDetalle);
+            this.pnlTituloDetalle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTituloDetalle.Location = new System.Drawing.Point(18, 10);
+            this.pnlTituloDetalle.Name = "pnlTituloDetalle";
+            this.pnlTituloDetalle.Size = new System.Drawing.Size(836, 52);
+            this.pnlTituloDetalle.TabIndex = 2;
+            // 
+            // pnlIconoDetalle
+            // 
+            this.pnlIconoDetalle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(52)))), ((int)(((byte)(120)))));
+            this.pnlIconoDetalle.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(52)))), ((int)(((byte)(120)))));
+            this.pnlIconoDetalle.Controls.Add(this.lblGlyphDetalle);
+            this.pnlIconoDetalle.Location = new System.Drawing.Point(0, 7);
+            this.pnlIconoDetalle.Name = "pnlIconoDetalle";
+            this.pnlIconoDetalle.Radio = 10;
+            this.pnlIconoDetalle.Size = new System.Drawing.Size(38, 38);
+            this.pnlIconoDetalle.TabIndex = 0;
+            // 
+            // lblGlyphDetalle
+            // 
+            this.lblGlyphDetalle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(52)))), ((int)(((byte)(120)))));
+            this.lblGlyphDetalle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblGlyphDetalle.Font = new System.Drawing.Font("Segoe MDL2 Assets", 13F);
+            this.lblGlyphDetalle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(165)))), ((int)(((byte)(250)))));
+            this.lblGlyphDetalle.Location = new System.Drawing.Point(0, 0);
+            this.lblGlyphDetalle.Name = "lblGlyphDetalle";
+            this.lblGlyphDetalle.Size = new System.Drawing.Size(38, 38);
+            this.lblGlyphDetalle.TabIndex = 0;
+            this.lblGlyphDetalle.Text = "";
+            this.lblGlyphDetalle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblTituloDetalle
+            // 
+            this.lblTituloDetalle.AutoSize = true;
+            this.lblTituloDetalle.BackColor = System.Drawing.Color.Transparent;
+            this.lblTituloDetalle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTituloDetalle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.lblTituloDetalle.Location = new System.Drawing.Point(50, 15);
+            this.lblTituloDetalle.Name = "lblTituloDetalle";
+            this.lblTituloDetalle.Size = new System.Drawing.Size(206, 28);
+            this.lblTituloDetalle.TabIndex = 1;
+            this.lblTituloDetalle.Text = "Detalle de la factura";
+            // 
+            // pnlBarra
+            // 
+            this.pnlBarra.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.pnlBarra.Controls.Add(this.lblSubtotalDetalle);
+            this.pnlBarra.Controls.Add(this.lblDescuentoDetalle);
+            this.pnlBarra.Controls.Add(this.lblTotalDetalle);
+            this.pnlBarra.Controls.Add(this.btnLimpiar);
+            this.pnlBarra.Controls.Add(this.sepBarraA);
+            this.pnlBarra.Controls.Add(this.btnCancelar);
+            this.pnlBarra.Controls.Add(this.sepBarraB);
+            this.pnlBarra.Controls.Add(this.btnGuardar);
+            this.pnlBarra.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlBarra.Location = new System.Drawing.Point(0, 491);
+            this.pnlBarra.Name = "pnlBarra";
+            this.pnlBarra.Padding = new System.Windows.Forms.Padding(0, 12, 0, 0);
+            this.pnlBarra.Size = new System.Drawing.Size(872, 58);
+            this.pnlBarra.TabIndex = 1;
+            // 
+            // lblSubtotalDetalle
+            // 
+            this.lblSubtotalDetalle.AutoSize = true;
+            this.lblSubtotalDetalle.BackColor = System.Drawing.Color.Transparent;
+            this.lblSubtotalDetalle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblSubtotalDetalle.Location = new System.Drawing.Point(0, 22);
+            this.lblSubtotalDetalle.Name = "lblSubtotalDetalle";
+            this.lblSubtotalDetalle.Size = new System.Drawing.Size(102, 16);
+            this.lblSubtotalDetalle.TabIndex = 0;
+            this.lblSubtotalDetalle.Text = "Subtotal:  Q 0.00";
+            // 
+            // lblDescuentoDetalle
+            // 
+            this.lblDescuentoDetalle.AutoSize = true;
+            this.lblDescuentoDetalle.BackColor = System.Drawing.Color.Transparent;
+            this.lblDescuentoDetalle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblDescuentoDetalle.Location = new System.Drawing.Point(140, 22);
+            this.lblDescuentoDetalle.Name = "lblDescuentoDetalle";
+            this.lblDescuentoDetalle.Size = new System.Drawing.Size(118, 16);
+            this.lblDescuentoDetalle.TabIndex = 1;
+            this.lblDescuentoDetalle.Text = "Descuento:  Q 0.00";
+            // 
+            // lblTotalDetalle
+            // 
+            this.lblTotalDetalle.AutoSize = true;
+            this.lblTotalDetalle.BackColor = System.Drawing.Color.Transparent;
+            this.lblTotalDetalle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTotalDetalle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.lblTotalDetalle.Location = new System.Drawing.Point(290, 17);
+            this.lblTotalDetalle.Name = "lblTotalDetalle";
+            this.lblTotalDetalle.Size = new System.Drawing.Size(138, 28);
+            this.lblTotalDetalle.TabIndex = 2;
+            this.lblTotalDetalle.Text = "Total:  Q 0.00";
+            // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(50)))), ((int)(((byte)(128)))));
+            this.btnLimpiar.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(90)))), ((int)(((byte)(190)))));
+            this.btnLimpiar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLimpiar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLimpiar.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnLimpiar.ForeColor = System.Drawing.Color.White;
+            this.btnLimpiar.Glyph = "";
+            this.btnLimpiar.Location = new System.Drawing.Point(508, 12);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(104, 46);
+            this.btnLimpiar.TabIndex = 3;
+            this.btnLimpiar.Text = "Limpiar";
+            this.btnLimpiar.UseVisualStyleBackColor = false;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            // 
+            // sepBarraA
+            // 
+            this.sepBarraA.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.sepBarraA.Dock = System.Windows.Forms.DockStyle.Right;
+            this.sepBarraA.Location = new System.Drawing.Point(612, 12);
+            this.sepBarraA.Name = "sepBarraA";
+            this.sepBarraA.Size = new System.Drawing.Size(8, 46);
+            this.sepBarraA.TabIndex = 4;
+            // 
+            // btnCancelar
+            // 
+            this.btnCancelar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(50)))), ((int)(((byte)(128)))));
+            this.btnCancelar.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(90)))), ((int)(((byte)(190)))));
+            this.btnCancelar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCancelar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCancelar.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnCancelar.ForeColor = System.Drawing.Color.White;
+            this.btnCancelar.Glyph = "";
+            this.btnCancelar.Location = new System.Drawing.Point(620, 12);
+            this.btnCancelar.Name = "btnCancelar";
+            this.btnCancelar.Size = new System.Drawing.Size(112, 46);
+            this.btnCancelar.TabIndex = 5;
+            this.btnCancelar.Text = "Cancelar";
+            this.btnCancelar.UseVisualStyleBackColor = false;
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            // 
+            // sepBarraB
+            // 
+            this.sepBarraB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.sepBarraB.Dock = System.Windows.Forms.DockStyle.Right;
+            this.sepBarraB.Location = new System.Drawing.Point(732, 12);
+            this.sepBarraB.Name = "sepBarraB";
+            this.sepBarraB.Size = new System.Drawing.Size(8, 46);
+            this.sepBarraB.TabIndex = 6;
+            // 
+            // btnGuardar
+            // 
+            this.btnGuardar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(130)))), ((int)(((byte)(170)))));
+            this.btnGuardar.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(180)))), ((int)(((byte)(220)))));
+            this.btnGuardar.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(160)))), ((int)(((byte)(205)))));
+            this.btnGuardar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnGuardar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGuardar.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnGuardar.ForeColor = System.Drawing.Color.White;
+            this.btnGuardar.Glyph = "";
+            this.btnGuardar.Location = new System.Drawing.Point(740, 12);
+            this.btnGuardar.Name = "btnGuardar";
+            this.btnGuardar.Size = new System.Drawing.Size(132, 46);
+            this.btnGuardar.TabIndex = 7;
+            this.btnGuardar.Text = "Guardar";
+            this.btnGuardar.UseVisualStyleBackColor = false;
+            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
+            // 
+            // pnlEncabezadoWrap
+            // 
+            this.pnlEncabezadoWrap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.pnlEncabezadoWrap.Controls.Add(this.pnlFormulario);
+            this.pnlEncabezadoWrap.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlEncabezadoWrap.Location = new System.Drawing.Point(0, 70);
+            this.pnlEncabezadoWrap.Name = "pnlEncabezadoWrap";
+            this.pnlEncabezadoWrap.Padding = new System.Windows.Forms.Padding(0, 0, 0, 12);
+            this.pnlEncabezadoWrap.Size = new System.Drawing.Size(872, 178);
+            this.pnlEncabezadoWrap.TabIndex = 2;
+            // 
+            // pnlFormulario
+            // 
+            this.pnlFormulario.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlFormulario.Controls.Add(this.tlpCampos);
+            this.pnlFormulario.Controls.Add(this.pnlTituloForm);
+            this.pnlFormulario.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlFormulario.Location = new System.Drawing.Point(0, 0);
+            this.pnlFormulario.Name = "pnlFormulario";
+            this.pnlFormulario.Padding = new System.Windows.Forms.Padding(18, 10, 18, 6);
+            this.pnlFormulario.Size = new System.Drawing.Size(872, 166);
+            this.pnlFormulario.TabIndex = 0;
+            // 
+            // tlpCampos
+            // 
+            this.tlpCampos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.tlpCampos.ColumnCount = 4;
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpCampos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpCampos.Controls.Add(this.lblCodigoFacturacion, 0, 0);
+            this.tlpCampos.Controls.Add(this.txtCodigoFacturacion, 0, 1);
+            this.tlpCampos.Controls.Add(this.lblCodigoOrdenTrabajo, 1, 0);
+            this.tlpCampos.Controls.Add(this.cmbCodigoOrdenTrabajo, 1, 1);
+            this.tlpCampos.Controls.Add(this.lblNoFactura, 2, 0);
+            this.tlpCampos.Controls.Add(this.txtNoFactura, 2, 1);
+            this.tlpCampos.Controls.Add(this.lblFechaDeEntrega, 3, 0);
+            this.tlpCampos.Controls.Add(this.dtpFechaDeEntrega, 3, 1);
+            this.tlpCampos.Controls.Add(this.lblSubtotal, 0, 2);
+            this.tlpCampos.Controls.Add(this.txtSubtotal, 0, 3);
+            this.tlpCampos.Controls.Add(this.lblImpuesto, 1, 2);
+            this.tlpCampos.Controls.Add(this.txtImpuesto, 1, 3);
+            this.tlpCampos.Controls.Add(this.lblTotalPagar, 2, 2);
+            this.tlpCampos.Controls.Add(this.txtTotalPagar, 2, 3);
+            this.tlpCampos.Controls.Add(this.lblEstado, 3, 2);
+            this.tlpCampos.Controls.Add(this.pnlEstado, 3, 3);
+            this.tlpCampos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpCampos.Location = new System.Drawing.Point(18, 62);
+            this.tlpCampos.Name = "tlpCampos";
+            this.tlpCampos.RowCount = 5;
+            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
+            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
+            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tlpCampos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpCampos.Size = new System.Drawing.Size(836, 98);
+            this.tlpCampos.TabIndex = 0;
+            // 
+            // lblCodigoFacturacion
+            // 
+            this.lblCodigoFacturacion.BackColor = System.Drawing.Color.Transparent;
+            this.lblCodigoFacturacion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCodigoFacturacion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblCodigoFacturacion.Location = new System.Drawing.Point(0, 0);
+            this.lblCodigoFacturacion.Margin = new System.Windows.Forms.Padding(0);
+            this.lblCodigoFacturacion.Name = "lblCodigoFacturacion";
+            this.lblCodigoFacturacion.Size = new System.Drawing.Size(209, 18);
+            this.lblCodigoFacturacion.TabIndex = 0;
+            this.lblCodigoFacturacion.Text = "CodigoFacturacion:";
+            this.lblCodigoFacturacion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // txtCodigoFacturacion
+            // 
+            this.txtCodigoFacturacion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCodigoFacturacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtCodigoFacturacion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCodigoFacturacion.ForeColor = System.Drawing.Color.White;
+            this.txtCodigoFacturacion.Location = new System.Drawing.Point(0, 21);
+            this.txtCodigoFacturacion.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.txtCodigoFacturacion.Name = "txtCodigoFacturacion";
+            this.txtCodigoFacturacion.ReadOnly = true;
+            this.txtCodigoFacturacion.Size = new System.Drawing.Size(199, 22);
+            this.txtCodigoFacturacion.TabIndex = 1;
+            // 
+            // lblCodigoOrdenTrabajo
+            // 
+            this.lblCodigoOrdenTrabajo.BackColor = System.Drawing.Color.Transparent;
+            this.lblCodigoOrdenTrabajo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCodigoOrdenTrabajo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblCodigoOrdenTrabajo.Location = new System.Drawing.Point(209, 0);
+            this.lblCodigoOrdenTrabajo.Margin = new System.Windows.Forms.Padding(0);
+            this.lblCodigoOrdenTrabajo.Name = "lblCodigoOrdenTrabajo";
+            this.lblCodigoOrdenTrabajo.Size = new System.Drawing.Size(209, 18);
+            this.lblCodigoOrdenTrabajo.TabIndex = 2;
+            this.lblCodigoOrdenTrabajo.Text = "CodigoOrdenTrabajo:";
+            this.lblCodigoOrdenTrabajo.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // cmbCodigoOrdenTrabajo
+            // 
+            this.cmbCodigoOrdenTrabajo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbCodigoOrdenTrabajo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.cmbCodigoOrdenTrabajo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCodigoOrdenTrabajo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbCodigoOrdenTrabajo.ForeColor = System.Drawing.Color.White;
+            this.cmbCodigoOrdenTrabajo.Location = new System.Drawing.Point(209, 20);
+            this.cmbCodigoOrdenTrabajo.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.cmbCodigoOrdenTrabajo.Name = "cmbCodigoOrdenTrabajo";
+            this.cmbCodigoOrdenTrabajo.Size = new System.Drawing.Size(199, 24);
+            this.cmbCodigoOrdenTrabajo.TabIndex = 3;
+            // 
+            // lblNoFactura
+            // 
+            this.lblNoFactura.BackColor = System.Drawing.Color.Transparent;
+            this.lblNoFactura.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblNoFactura.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblNoFactura.Location = new System.Drawing.Point(418, 0);
+            this.lblNoFactura.Margin = new System.Windows.Forms.Padding(0);
+            this.lblNoFactura.Name = "lblNoFactura";
+            this.lblNoFactura.Size = new System.Drawing.Size(209, 18);
+            this.lblNoFactura.TabIndex = 4;
+            this.lblNoFactura.Text = "NoFactura:";
+            this.lblNoFactura.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // txtNoFactura
+            // 
+            this.txtNoFactura.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNoFactura.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtNoFactura.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtNoFactura.ForeColor = System.Drawing.Color.White;
+            this.txtNoFactura.Location = new System.Drawing.Point(418, 21);
+            this.txtNoFactura.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.txtNoFactura.MaxLength = 10;
+            this.txtNoFactura.Name = "txtNoFactura";
+            this.txtNoFactura.Size = new System.Drawing.Size(199, 22);
+            this.txtNoFactura.TabIndex = 5;
+            // 
+            // lblFechaDeEntrega
+            // 
+            this.lblFechaDeEntrega.BackColor = System.Drawing.Color.Transparent;
+            this.lblFechaDeEntrega.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFechaDeEntrega.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblFechaDeEntrega.Location = new System.Drawing.Point(627, 0);
+            this.lblFechaDeEntrega.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFechaDeEntrega.Name = "lblFechaDeEntrega";
+            this.lblFechaDeEntrega.Size = new System.Drawing.Size(209, 18);
+            this.lblFechaDeEntrega.TabIndex = 6;
+            this.lblFechaDeEntrega.Text = "FechaDeEntrega:";
+            this.lblFechaDeEntrega.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // dtpFechaDeEntrega
+            // 
+            this.dtpFechaDeEntrega.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtpFechaDeEntrega.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpFechaDeEntrega.Location = new System.Drawing.Point(627, 21);
+            this.dtpFechaDeEntrega.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.dtpFechaDeEntrega.Name = "dtpFechaDeEntrega";
+            this.dtpFechaDeEntrega.Size = new System.Drawing.Size(199, 22);
+            this.dtpFechaDeEntrega.TabIndex = 7;
+            // 
+            // lblSubtotal
+            // 
+            this.lblSubtotal.BackColor = System.Drawing.Color.Transparent;
+            this.lblSubtotal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSubtotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblSubtotal.Location = new System.Drawing.Point(0, 46);
+            this.lblSubtotal.Margin = new System.Windows.Forms.Padding(0);
+            this.lblSubtotal.Name = "lblSubtotal";
+            this.lblSubtotal.Size = new System.Drawing.Size(209, 18);
+            this.lblSubtotal.TabIndex = 8;
+            this.lblSubtotal.Text = "Subtotal:";
+            this.lblSubtotal.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // txtSubtotal
+            // 
+            this.txtSubtotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSubtotal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtSubtotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtSubtotal.ForeColor = System.Drawing.Color.White;
+            this.txtSubtotal.Location = new System.Drawing.Point(0, 67);
+            this.txtSubtotal.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.txtSubtotal.MaxLength = 15;
+            this.txtSubtotal.Name = "txtSubtotal";
+            this.txtSubtotal.Size = new System.Drawing.Size(199, 22);
+            this.txtSubtotal.TabIndex = 9;
+            // 
+            // lblImpuesto
+            // 
+            this.lblImpuesto.BackColor = System.Drawing.Color.Transparent;
+            this.lblImpuesto.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblImpuesto.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblImpuesto.Location = new System.Drawing.Point(209, 46);
+            this.lblImpuesto.Margin = new System.Windows.Forms.Padding(0);
+            this.lblImpuesto.Name = "lblImpuesto";
+            this.lblImpuesto.Size = new System.Drawing.Size(209, 18);
+            this.lblImpuesto.TabIndex = 10;
+            this.lblImpuesto.Text = "Impuesto:";
+            this.lblImpuesto.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // txtImpuesto
+            // 
+            this.txtImpuesto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtImpuesto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtImpuesto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtImpuesto.ForeColor = System.Drawing.Color.White;
+            this.txtImpuesto.Location = new System.Drawing.Point(209, 67);
+            this.txtImpuesto.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.txtImpuesto.MaxLength = 15;
+            this.txtImpuesto.Name = "txtImpuesto";
+            this.txtImpuesto.Size = new System.Drawing.Size(199, 22);
+            this.txtImpuesto.TabIndex = 11;
+            // 
+            // lblTotalPagar
+            // 
+            this.lblTotalPagar.BackColor = System.Drawing.Color.Transparent;
+            this.lblTotalPagar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTotalPagar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblTotalPagar.Location = new System.Drawing.Point(418, 46);
+            this.lblTotalPagar.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTotalPagar.Name = "lblTotalPagar";
+            this.lblTotalPagar.Size = new System.Drawing.Size(209, 18);
+            this.lblTotalPagar.TabIndex = 12;
+            this.lblTotalPagar.Text = "TotalPagar:";
+            this.lblTotalPagar.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // txtTotalPagar
+            // 
+            this.txtTotalPagar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTotalPagar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
+            this.txtTotalPagar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTotalPagar.ForeColor = System.Drawing.Color.White;
+            this.txtTotalPagar.Location = new System.Drawing.Point(418, 67);
+            this.txtTotalPagar.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.txtTotalPagar.MaxLength = 15;
+            this.txtTotalPagar.Name = "txtTotalPagar";
+            this.txtTotalPagar.Size = new System.Drawing.Size(199, 22);
+            this.txtTotalPagar.TabIndex = 13;
+            // 
+            // lblEstado
+            // 
+            this.lblEstado.BackColor = System.Drawing.Color.Transparent;
+            this.lblEstado.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblEstado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblEstado.Location = new System.Drawing.Point(627, 46);
+            this.lblEstado.Margin = new System.Windows.Forms.Padding(0);
+            this.lblEstado.Name = "lblEstado";
+            this.lblEstado.Size = new System.Drawing.Size(209, 18);
+            this.lblEstado.TabIndex = 14;
+            this.lblEstado.Text = "Estado:";
+            this.lblEstado.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // pnlEstado
+            // 
+            this.pnlEstado.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlEstado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlEstado.Controls.Add(this.rdoActivo);
+            this.pnlEstado.Controls.Add(this.rdoInactivo);
+            this.pnlEstado.Location = new System.Drawing.Point(627, 66);
+            this.pnlEstado.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
+            this.pnlEstado.Name = "pnlEstado";
+            this.pnlEstado.Size = new System.Drawing.Size(199, 23);
+            this.pnlEstado.TabIndex = 15;
+            // 
+            // rdoActivo
+            // 
+            this.rdoActivo.AutoSize = true;
+            this.rdoActivo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.rdoActivo.Checked = true;
+            this.rdoActivo.ForeColor = System.Drawing.Color.White;
+            this.rdoActivo.Location = new System.Drawing.Point(2, 2);
+            this.rdoActivo.Name = "rdoActivo";
+            this.rdoActivo.Size = new System.Drawing.Size(65, 20);
+            this.rdoActivo.TabIndex = 0;
+            this.rdoActivo.TabStop = true;
+            this.rdoActivo.Text = "Activo";
+            this.rdoActivo.UseVisualStyleBackColor = false;
+            // 
+            // rdoInactivo
+            // 
+            this.rdoInactivo.AutoSize = true;
+            this.rdoInactivo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.rdoInactivo.ForeColor = System.Drawing.Color.White;
+            this.rdoInactivo.Location = new System.Drawing.Point(76, 2);
+            this.rdoInactivo.Name = "rdoInactivo";
+            this.rdoInactivo.Size = new System.Drawing.Size(74, 20);
+            this.rdoInactivo.TabIndex = 1;
+            this.rdoInactivo.Text = "Inactivo";
+            this.rdoInactivo.UseVisualStyleBackColor = false;
+            // 
+            // pnlTituloForm
+            // 
+            this.pnlTituloForm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlTituloForm.Controls.Add(this.pnlIconoForm);
+            this.pnlTituloForm.Controls.Add(this.lblTituloForm);
+            this.pnlTituloForm.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTituloForm.Location = new System.Drawing.Point(18, 10);
+            this.pnlTituloForm.Name = "pnlTituloForm";
+            this.pnlTituloForm.Size = new System.Drawing.Size(836, 52);
+            this.pnlTituloForm.TabIndex = 1;
+            // 
+            // pnlIconoForm
+            // 
+            this.pnlIconoForm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(52)))), ((int)(((byte)(120)))));
+            this.pnlIconoForm.ColorBorde = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(52)))), ((int)(((byte)(120)))));
+            this.pnlIconoForm.Controls.Add(this.lblGlyphForm);
+            this.pnlIconoForm.Location = new System.Drawing.Point(0, 7);
+            this.pnlIconoForm.Name = "pnlIconoForm";
+            this.pnlIconoForm.Radio = 10;
+            this.pnlIconoForm.Size = new System.Drawing.Size(38, 38);
+            this.pnlIconoForm.TabIndex = 0;
+            // 
+            // lblGlyphForm
+            // 
+            this.lblGlyphForm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(52)))), ((int)(((byte)(120)))));
+            this.lblGlyphForm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblGlyphForm.Font = new System.Drawing.Font("Segoe MDL2 Assets", 13F);
+            this.lblGlyphForm.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(165)))), ((int)(((byte)(250)))));
+            this.lblGlyphForm.Location = new System.Drawing.Point(0, 0);
+            this.lblGlyphForm.Name = "lblGlyphForm";
+            this.lblGlyphForm.Size = new System.Drawing.Size(38, 38);
+            this.lblGlyphForm.TabIndex = 0;
+            this.lblGlyphForm.Text = "";
+            this.lblGlyphForm.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblTituloForm
+            // 
+            this.lblTituloForm.AutoSize = true;
+            this.lblTituloForm.BackColor = System.Drawing.Color.Transparent;
+            this.lblTituloForm.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTituloForm.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.lblTituloForm.Location = new System.Drawing.Point(50, 15);
+            this.lblTituloForm.Name = "lblTituloForm";
+            this.lblTituloForm.Size = new System.Drawing.Size(250, 28);
+            this.lblTituloForm.TabIndex = 1;
+            this.lblTituloForm.Text = "Encabezado de la factura";
+            // 
+            // pnlTituloGestion
+            // 
+            this.pnlTituloGestion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.pnlTituloGestion.Controls.Add(this.lblTituloGestion);
+            this.pnlTituloGestion.Controls.Add(this.lblSubtituloGestion);
+            this.pnlTituloGestion.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTituloGestion.Location = new System.Drawing.Point(0, 0);
+            this.pnlTituloGestion.Name = "pnlTituloGestion";
+            this.pnlTituloGestion.Size = new System.Drawing.Size(872, 70);
+            this.pnlTituloGestion.TabIndex = 3;
+            // 
+            // lblTituloGestion
+            // 
+            this.lblTituloGestion.AutoSize = true;
+            this.lblTituloGestion.BackColor = System.Drawing.Color.Transparent;
+            this.lblTituloGestion.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            this.lblTituloGestion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.lblTituloGestion.Location = new System.Drawing.Point(0, 0);
+            this.lblTituloGestion.Name = "lblTituloGestion";
+            this.lblTituloGestion.Size = new System.Drawing.Size(289, 41);
+            this.lblTituloGestion.TabIndex = 0;
+            this.lblTituloGestion.Text = "Gestión de facturas";
+            // 
+            // lblSubtituloGestion
+            // 
+            this.lblSubtituloGestion.AutoSize = true;
+            this.lblSubtituloGestion.BackColor = System.Drawing.Color.Transparent;
+            this.lblSubtituloGestion.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblSubtituloGestion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblSubtituloGestion.Location = new System.Drawing.Point(0, 36);
+            this.lblSubtituloGestion.Name = "lblSubtituloGestion";
+            this.lblSubtituloGestion.Size = new System.Drawing.Size(326, 21);
+            this.lblSubtituloGestion.TabIndex = 1;
+            this.lblSubtituloGestion.Text = "Registre el encabezado y las líneas del detalle.";
+            // 
+            // tpResumen
+            // 
+            this.tpResumen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.tpResumen.Controls.Add(this.tlpResumenGraficos);
+            this.tpResumen.Controls.Add(this.pnlTituloResumen);
+            this.tpResumen.Location = new System.Drawing.Point(4, 25);
+            this.tpResumen.Name = "tpResumen";
+            this.tpResumen.Size = new System.Drawing.Size(872, 531);
+            this.tpResumen.TabIndex = 2;
+            this.tpResumen.Text = "Resumen";
+            // 
+            // tlpResumenGraficos
+            // 
+            this.tlpResumenGraficos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.tlpResumenGraficos.ColumnCount = 2;
+            this.tlpResumenGraficos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpResumenGraficos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpResumenGraficos.Controls.Add(this.pnlCardEstado, 0, 0);
+            this.tlpResumenGraficos.Controls.Add(this.pnlCardCategoria, 1, 0);
+            this.tlpResumenGraficos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpResumenGraficos.Location = new System.Drawing.Point(0, 70);
+            this.tlpResumenGraficos.Name = "tlpResumenGraficos";
+            this.tlpResumenGraficos.RowCount = 1;
+            this.tlpResumenGraficos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpResumenGraficos.Size = new System.Drawing.Size(872, 461);
+            this.tlpResumenGraficos.TabIndex = 0;
+            // 
+            // pnlCardEstado
+            // 
+            this.pnlCardEstado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlCardEstado.Controls.Add(this.graEstado);
+            this.pnlCardEstado.Controls.Add(this.pnlTituloEstado);
+            this.pnlCardEstado.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCardEstado.Location = new System.Drawing.Point(0, 0);
+            this.pnlCardEstado.Margin = new System.Windows.Forms.Padding(0, 0, 14, 0);
+            this.pnlCardEstado.Name = "pnlCardEstado";
+            this.pnlCardEstado.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
+            this.pnlCardEstado.Size = new System.Drawing.Size(422, 461);
+            this.pnlCardEstado.TabIndex = 0;
+            // 
+            // graEstado
+            // 
+            this.graEstado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.graEstado.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.graEstado.ForeColor = System.Drawing.Color.White;
+            this.graEstado.Location = new System.Drawing.Point(14, 42);
+            this.graEstado.Name = "graEstado";
+            this.graEstado.Size = new System.Drawing.Size(394, 409);
+            this.graEstado.TabIndex = 0;
+            // 
+            // pnlTituloEstado
+            // 
+            this.pnlTituloEstado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlTituloEstado.Controls.Add(this.lblIconoEstado);
+            this.pnlTituloEstado.Controls.Add(this.lblTituloEstado);
+            this.pnlTituloEstado.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTituloEstado.Location = new System.Drawing.Point(14, 10);
+            this.pnlTituloEstado.Name = "pnlTituloEstado";
+            this.pnlTituloEstado.Size = new System.Drawing.Size(394, 32);
+            this.pnlTituloEstado.TabIndex = 1;
+            // 
+            // lblIconoEstado
+            // 
+            this.lblIconoEstado.AutoSize = true;
+            this.lblIconoEstado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.lblIconoEstado.Font = new System.Drawing.Font("Segoe MDL2 Assets", 13F);
+            this.lblIconoEstado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(85)))), ((int)(((byte)(247)))));
+            this.lblIconoEstado.Location = new System.Drawing.Point(0, 3);
+            this.lblIconoEstado.Name = "lblIconoEstado";
+            this.lblIconoEstado.Size = new System.Drawing.Size(32, 22);
+            this.lblIconoEstado.TabIndex = 0;
+            this.lblIconoEstado.Text = "";
+            // 
+            // lblTituloEstado
+            // 
+            this.lblTituloEstado.AutoSize = true;
+            this.lblTituloEstado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.lblTituloEstado.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.lblTituloEstado.ForeColor = System.Drawing.Color.White;
+            this.lblTituloEstado.Location = new System.Drawing.Point(28, 4);
+            this.lblTituloEstado.Name = "lblTituloEstado";
+            this.lblTituloEstado.Size = new System.Drawing.Size(175, 23);
+            this.lblTituloEstado.TabIndex = 1;
+            this.lblTituloEstado.Text = "Registros por estado";
+            // 
+            // pnlCardCategoria
+            // 
+            this.pnlCardCategoria.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlCardCategoria.Controls.Add(this.graCategoria);
+            this.pnlCardCategoria.Controls.Add(this.pnlTituloCategoria);
+            this.pnlCardCategoria.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCardCategoria.Location = new System.Drawing.Point(436, 0);
+            this.pnlCardCategoria.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlCardCategoria.Name = "pnlCardCategoria";
+            this.pnlCardCategoria.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
+            this.pnlCardCategoria.Size = new System.Drawing.Size(436, 461);
+            this.pnlCardCategoria.TabIndex = 1;
+            // 
+            // graCategoria
+            // 
+            this.graCategoria.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.graCategoria.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.graCategoria.ForeColor = System.Drawing.Color.White;
+            this.graCategoria.Location = new System.Drawing.Point(14, 42);
+            this.graCategoria.Name = "graCategoria";
+            this.graCategoria.Size = new System.Drawing.Size(408, 409);
+            this.graCategoria.TabIndex = 0;
+            // 
+            // pnlTituloCategoria
+            // 
+            this.pnlTituloCategoria.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.pnlTituloCategoria.Controls.Add(this.lblIconoCategoria);
+            this.pnlTituloCategoria.Controls.Add(this.lblTituloCategoria);
+            this.pnlTituloCategoria.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTituloCategoria.Location = new System.Drawing.Point(14, 10);
+            this.pnlTituloCategoria.Name = "pnlTituloCategoria";
+            this.pnlTituloCategoria.Size = new System.Drawing.Size(408, 32);
+            this.pnlTituloCategoria.TabIndex = 1;
+            // 
+            // lblIconoCategoria
+            // 
+            this.lblIconoCategoria.AutoSize = true;
+            this.lblIconoCategoria.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.lblIconoCategoria.Font = new System.Drawing.Font("Segoe MDL2 Assets", 13F);
+            this.lblIconoCategoria.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(165)))), ((int)(((byte)(250)))));
+            this.lblIconoCategoria.Location = new System.Drawing.Point(0, 3);
+            this.lblIconoCategoria.Name = "lblIconoCategoria";
+            this.lblIconoCategoria.Size = new System.Drawing.Size(32, 22);
+            this.lblIconoCategoria.TabIndex = 0;
+            this.lblIconoCategoria.Text = "";
+            // 
+            // lblTituloCategoria
+            // 
+            this.lblTituloCategoria.AutoSize = true;
+            this.lblTituloCategoria.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.lblTituloCategoria.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.lblTituloCategoria.ForeColor = System.Drawing.Color.White;
+            this.lblTituloCategoria.Location = new System.Drawing.Point(28, 4);
+            this.lblTituloCategoria.Name = "lblTituloCategoria";
+            this.lblTituloCategoria.Size = new System.Drawing.Size(175, 23);
+            this.lblTituloCategoria.TabIndex = 1;
+            this.lblTituloCategoria.Text = "Registros por estado";
+            // 
+            // pnlTituloResumen
+            // 
+            this.pnlTituloResumen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.pnlTituloResumen.Controls.Add(this.lblTituloResumen);
+            this.pnlTituloResumen.Controls.Add(this.lblSubtituloResumen);
+            this.pnlTituloResumen.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTituloResumen.Location = new System.Drawing.Point(0, 0);
+            this.pnlTituloResumen.Name = "pnlTituloResumen";
+            this.pnlTituloResumen.Size = new System.Drawing.Size(872, 70);
+            this.pnlTituloResumen.TabIndex = 1;
+            // 
+            // lblTituloResumen
+            // 
+            this.lblTituloResumen.AutoSize = true;
+            this.lblTituloResumen.BackColor = System.Drawing.Color.Transparent;
+            this.lblTituloResumen.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            this.lblTituloResumen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.lblTituloResumen.Location = new System.Drawing.Point(0, 0);
+            this.lblTituloResumen.Name = "lblTituloResumen";
+            this.lblTituloResumen.Size = new System.Drawing.Size(309, 41);
+            this.lblTituloResumen.TabIndex = 0;
+            this.lblTituloResumen.Text = "Resumen de facturas";
+            // 
+            // lblSubtituloResumen
+            // 
+            this.lblSubtituloResumen.AutoSize = true;
+            this.lblSubtituloResumen.BackColor = System.Drawing.Color.Transparent;
+            this.lblSubtituloResumen.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblSubtituloResumen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.lblSubtituloResumen.Location = new System.Drawing.Point(0, 36);
+            this.lblSubtituloResumen.Name = "lblSubtituloResumen";
+            this.lblSubtituloResumen.Size = new System.Drawing.Size(270, 21);
+            this.lblSubtituloResumen.TabIndex = 1;
+            this.lblSubtituloResumen.Text = "Estadísticas y distribución de facturas.";
             // 
             // pnlCabecera
             // 
             this.pnlCabecera.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
-            this.pnlCabecera.Controls.Add(this.lblTitulo);
-            this.pnlCabecera.Controls.Add(this.btnTabGestionar);
             this.pnlCabecera.Controls.Add(this.btnTabConsultar);
+            this.pnlCabecera.Controls.Add(this.btnTabGestionar);
+            this.pnlCabecera.Controls.Add(this.btnTabResumen);
             this.pnlCabecera.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlCabecera.Location = new System.Drawing.Point(20, 8);
+            this.pnlCabecera.Location = new System.Drawing.Point(20, 10);
             this.pnlCabecera.Name = "pnlCabecera";
-            this.pnlCabecera.Size = new System.Drawing.Size(1932, 72);
-            this.pnlCabecera.TabIndex = 2;
-            // 
-            // lblTitulo
-            // 
-            this.lblTitulo.AutoSize = true;
-            this.lblTitulo.BackColor = System.Drawing.Color.Transparent;
-            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.lblTitulo.Location = new System.Drawing.Point(0, 4);
-            this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(244, 47);
-            this.lblTitulo.TabIndex = 0;
-            this.lblTitulo.Text = "Facturaciones";
-            // 
-            // btnTabGestionar
-            // 
-            this.btnTabGestionar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(76)))));
-            this.btnTabGestionar.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(42)))), ((int)(((byte)(110)))));
-            this.btnTabGestionar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnTabGestionar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTabGestionar.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnTabGestionar.ForeColor = System.Drawing.Color.White;
-            this.btnTabGestionar.Location = new System.Drawing.Point(0, 38);
-            this.btnTabGestionar.Name = "btnTabGestionar";
-            this.btnTabGestionar.Radio = 6;
-            this.btnTabGestionar.Size = new System.Drawing.Size(90, 30);
-            this.btnTabGestionar.TabIndex = 1;
-            this.btnTabGestionar.Text = "Gestionar";
-            this.btnTabGestionar.UseVisualStyleBackColor = false;
-            this.btnTabGestionar.Click += new System.EventHandler(this.btnTabGestionar_Click);
+            this.pnlCabecera.Size = new System.Drawing.Size(880, 44);
+            this.pnlCabecera.TabIndex = 1;
             // 
             // btnTabConsultar
             // 
             this.btnTabConsultar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(76)))));
             this.btnTabConsultar.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(42)))), ((int)(((byte)(110)))));
+            this.btnTabConsultar.ColorSeleccionado = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(70)))), ((int)(((byte)(229)))));
             this.btnTabConsultar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTabConsultar.Degradado = true;
             this.btnTabConsultar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTabConsultar.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.btnTabConsultar.ForeColor = System.Drawing.Color.White;
-            this.btnTabConsultar.Location = new System.Drawing.Point(94, 38);
+            this.btnTabConsultar.Location = new System.Drawing.Point(0, 6);
             this.btnTabConsultar.Name = "btnTabConsultar";
             this.btnTabConsultar.Radio = 6;
-            this.btnTabConsultar.Size = new System.Drawing.Size(90, 30);
-            this.btnTabConsultar.TabIndex = 2;
+            this.btnTabConsultar.Size = new System.Drawing.Size(104, 30);
+            this.btnTabConsultar.TabIndex = 0;
             this.btnTabConsultar.Text = "Consultar";
             this.btnTabConsultar.UseVisualStyleBackColor = false;
             this.btnTabConsultar.Click += new System.EventHandler(this.btnTabConsultar_Click);
             // 
-            // panelEstado
+            // btnTabGestionar
             // 
-            this.panelEstado.Controls.Add(this.rdbInactivo);
-            this.panelEstado.Controls.Add(this.rdbActivo);
-            this.panelEstado.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelEstado.Location = new System.Drawing.Point(1157, 79);
-            this.panelEstado.Name = "panelEstado";
-            this.panelEstado.Size = new System.Drawing.Size(572, 26);
-            this.panelEstado.TabIndex = 18;
+            this.btnTabGestionar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(76)))));
+            this.btnTabGestionar.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(42)))), ((int)(((byte)(110)))));
+            this.btnTabGestionar.ColorSeleccionado = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(70)))), ((int)(((byte)(229)))));
+            this.btnTabGestionar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTabGestionar.Degradado = true;
+            this.btnTabGestionar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTabGestionar.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnTabGestionar.ForeColor = System.Drawing.Color.White;
+            this.btnTabGestionar.Location = new System.Drawing.Point(108, 6);
+            this.btnTabGestionar.Name = "btnTabGestionar";
+            this.btnTabGestionar.Radio = 6;
+            this.btnTabGestionar.Size = new System.Drawing.Size(104, 30);
+            this.btnTabGestionar.TabIndex = 1;
+            this.btnTabGestionar.Text = "Gestionar";
+            this.btnTabGestionar.UseVisualStyleBackColor = false;
+            this.btnTabGestionar.Click += new System.EventHandler(this.btnTabGestionar_Click);
             // 
-            // rdbInactivo
+            // btnTabResumen
             // 
-            this.rdbInactivo.AutoSize = true;
-            this.rdbInactivo.Location = new System.Drawing.Point(358, 0);
-            this.rdbInactivo.Name = "rdbInactivo";
-            this.rdbInactivo.Size = new System.Drawing.Size(117, 29);
-            this.rdbInactivo.TabIndex = 15;
-            this.rdbInactivo.TabStop = true;
-            this.rdbInactivo.Text = "Inactivo";
-            this.rdbInactivo.UseVisualStyleBackColor = true;
-            // 
-            // rdbActivo
-            // 
-            this.rdbActivo.AutoSize = true;
-            this.rdbActivo.Location = new System.Drawing.Point(0, -3);
-            this.rdbActivo.Name = "rdbActivo";
-            this.rdbActivo.Size = new System.Drawing.Size(102, 29);
-            this.rdbActivo.TabIndex = 14;
-            this.rdbActivo.TabStop = true;
-            this.rdbActivo.Text = "Activo";
-            this.rdbActivo.UseVisualStyleBackColor = true;
-            // 
-            // txtCódigoFactura
-            // 
-            this.txtCódigoFactura.DataPropertyName = "CodigoFactura";
-            this.txtCódigoFactura.HeaderText = "Código Factura";
-            this.txtCódigoFactura.MinimumWidth = 10;
-            this.txtCódigoFactura.Name = "txtCódigoFactura";
-            this.txtCódigoFactura.Width = 90;
-            // 
-            // cboxCodigoOrden
-            // 
-            this.cboxCodigoOrden.DataPropertyName = "CodigoOrdenTrabajo";
-            this.cboxCodigoOrden.HeaderText = "Codigo Orden Trabajo";
-            this.cboxCodigoOrden.MinimumWidth = 10;
-            this.cboxCodigoOrden.Name = "cboxCodigoOrden";
-            this.cboxCodigoOrden.Width = 90;
-            // 
-            // txtNoFactura
-            // 
-            this.txtNoFactura.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.txtNoFactura.DataPropertyName = "NoFactura";
-            this.txtNoFactura.HeaderText = "No. factura";
-            this.txtNoFactura.MinimumWidth = 10;
-            this.txtNoFactura.Name = "txtNoFactura";
-            this.txtNoFactura.Width = 200;
-            // 
-            // colFecha
-            // 
-            this.colFecha.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colFecha.DataPropertyName = "FechaDeEntrega";
-            this.colFecha.HeaderText = "Fecha de Entrega";
-            this.colFecha.MinimumWidth = 10;
-            this.colFecha.Name = "colFecha";
-            this.colFecha.Width = 200;
-            // 
-            // txtsubtotal
-            // 
-            this.txtsubtotal.DataPropertyName = "Subtotal";
-            this.txtsubtotal.HeaderText = "Subtotal";
-            this.txtsubtotal.MinimumWidth = 10;
-            this.txtsubtotal.Name = "txtsubtotal";
-            this.txtsubtotal.Width = 200;
-            // 
-            // txtimpuesto
-            // 
-            this.txtimpuesto.DataPropertyName = "Impuesto";
-            this.txtimpuesto.HeaderText = "Impuesto";
-            this.txtimpuesto.MinimumWidth = 10;
-            this.txtimpuesto.Name = "txtimpuesto";
-            this.txtimpuesto.Width = 150;
-            // 
-            // colTotal
-            // 
-            this.colTotal.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colTotal.DataPropertyName = "Total";
-            this.colTotal.HeaderText = "Total";
-            this.colTotal.MinimumWidth = 10;
-            this.colTotal.Name = "colTotal";
-            this.colTotal.Width = 200;
-            // 
-            // colEstado
-            // 
-            this.colEstado.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colEstado.DataPropertyName = "Estado";
-            this.colEstado.HeaderText = "Estado";
-            this.colEstado.MinimumWidth = 10;
-            this.colEstado.Name = "colEstado";
-            this.colEstado.Width = 90;
+            this.btnTabResumen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(76)))));
+            this.btnTabResumen.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(42)))), ((int)(((byte)(110)))));
+            this.btnTabResumen.ColorSeleccionado = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(70)))), ((int)(((byte)(229)))));
+            this.btnTabResumen.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTabResumen.Degradado = true;
+            this.btnTabResumen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTabResumen.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnTabResumen.ForeColor = System.Drawing.Color.White;
+            this.btnTabResumen.Location = new System.Drawing.Point(216, 6);
+            this.btnTabResumen.Name = "btnTabResumen";
+            this.btnTabResumen.Radio = 6;
+            this.btnTabResumen.Size = new System.Drawing.Size(104, 30);
+            this.btnTabResumen.TabIndex = 2;
+            this.btnTabResumen.Text = "Resumen";
+            this.btnTabResumen.UseVisualStyleBackColor = false;
+            this.btnTabResumen.Click += new System.EventHandler(this.btnTabResumen_Click);
             // 
             // FrmFacturaciones
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
-            this.ClientSize = new System.Drawing.Size(1972, 1372);
-            this.Controls.Add(this.pnlLista);
-            this.Controls.Add(this.pnlSeccion);
+            this.ClientSize = new System.Drawing.Size(920, 640);
+            this.Controls.Add(this.tabModulo);
             this.Controls.Add(this.pnlCabecera);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FrmFacturaciones";
-            this.Padding = new System.Windows.Forms.Padding(20, 8, 20, 16);
+            this.Padding = new System.Windows.Forms.Padding(20, 10, 20, 8);
             this.Text = "Facturaciones";
+            this.tabModulo.ResumeLayout(false);
+            this.tpConsultar.ResumeLayout(false);
             this.pnlLista.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFacturaciones)).EndInit();
             this.pnlPie.ResumeLayout(false);
             this.pnlPie.PerformLayout();
-            this.pnlBusqueda.ResumeLayout(false);
-            this.pnlSeccion.ResumeLayout(false);
-            this.pnlGestionar.ResumeLayout(false);
+            this.pnlToolbar.ResumeLayout(false);
+            this.pnlToolbarFiltros.ResumeLayout(false);
+            this.pnlToolbarFiltros.PerformLayout();
+            this.pnlFiltroEstado.ResumeLayout(false);
+            this.pnlToolbarTop.ResumeLayout(false);
+            this.pnlToolbarTop.PerformLayout();
+            this.pnlIconoLista.ResumeLayout(false);
+            this.pnlKpi.ResumeLayout(false);
+            this.tlpKpi.ResumeLayout(false);
+            this.pnlTituloConsulta.ResumeLayout(false);
+            this.pnlTituloConsulta.PerformLayout();
+            this.tpGestionar.ResumeLayout(false);
+            this.pnlDetalle.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDetalleFactura)).EndInit();
+            this.tlpDetalle.ResumeLayout(false);
+            this.tlpDetalle.PerformLayout();
+            this.pnlEstadoDetalle.ResumeLayout(false);
+            this.pnlEstadoDetalle.PerformLayout();
+            this.pnlTituloDetalle.ResumeLayout(false);
+            this.pnlTituloDetalle.PerformLayout();
+            this.pnlIconoDetalle.ResumeLayout(false);
+            this.pnlBarra.ResumeLayout(false);
+            this.pnlBarra.PerformLayout();
+            this.pnlEncabezadoWrap.ResumeLayout(false);
             this.pnlFormulario.ResumeLayout(false);
             this.tlpCampos.ResumeLayout(false);
             this.tlpCampos.PerformLayout();
-            this.pnlAcciones.ResumeLayout(false);
-            this.tlpAcciones.ResumeLayout(false);
-            this.pnlConsultar.ResumeLayout(false);
-            this.tlpFiltros.ResumeLayout(false);
+            this.pnlEstado.ResumeLayout(false);
+            this.pnlEstado.PerformLayout();
+            this.pnlTituloForm.ResumeLayout(false);
+            this.pnlTituloForm.PerformLayout();
+            this.pnlIconoForm.ResumeLayout(false);
+            this.pnlTituloGestion.ResumeLayout(false);
+            this.pnlTituloGestion.PerformLayout();
+            this.tpResumen.ResumeLayout(false);
+            this.tlpResumenGraficos.ResumeLayout(false);
+            this.pnlCardEstado.ResumeLayout(false);
+            this.pnlTituloEstado.ResumeLayout(false);
+            this.pnlTituloEstado.PerformLayout();
+            this.pnlCardCategoria.ResumeLayout(false);
+            this.pnlTituloCategoria.ResumeLayout(false);
+            this.pnlTituloCategoria.PerformLayout();
+            this.pnlTituloResumen.ResumeLayout(false);
+            this.pnlTituloResumen.PerformLayout();
             this.pnlCabecera.ResumeLayout(false);
-            this.pnlCabecera.PerformLayout();
-            this.panelEstado.ResumeLayout(false);
-            this.panelEstado.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
+        private Presentacion.TabControlSinEncabezado tabModulo;
+        private System.Windows.Forms.TabPage tpConsultar;
         private Presentacion.RoundedPanel pnlLista;
         private System.Windows.Forms.DataGridView dgvFacturaciones;
         private System.Windows.Forms.Panel pnlPie;
         private System.Windows.Forms.Label lblTotalRegistros;
-        private System.Windows.Forms.Panel pnlBusqueda;
+        private Presentacion.BotonIcono btnPagAnterior;
+        private System.Windows.Forms.Panel sepPagA;
+        private Presentacion.BotonIcono btnPagina;
+        private System.Windows.Forms.Panel sepPagB;
+        private Presentacion.BotonIcono btnPagSiguiente;
+        private System.Windows.Forms.Panel pnlToolbar;
+        private System.Windows.Forms.Panel pnlToolbarFiltros;
         private Presentacion.CampoBusqueda csBuscar;
-        private System.Windows.Forms.Panel pnlSeparadorBusqueda;
-        private Presentacion.BotonIcono btnBuscar;
-        private System.Windows.Forms.Panel pnlSeccion;
-        private System.Windows.Forms.Panel pnlGestionar;
+        private System.Windows.Forms.Label lblFiltroEstado;
+        private System.Windows.Forms.Panel pnlFiltroEstado;
+        private System.Windows.Forms.ComboBox cmbFiltroEstado;
+        private System.Windows.Forms.Panel pnlToolbarTop;
+        private Presentacion.RoundedPanel pnlIconoLista;
+        private System.Windows.Forms.Label lblGlyphLista;
+        private System.Windows.Forms.Label lblTituloLista;
+        private Presentacion.BotonIcono btnEditar;
+        private System.Windows.Forms.Panel sepToolbarA;
+        private Presentacion.BotonIcono btnEliminar;
+        private System.Windows.Forms.Panel sepToolbarB;
+        private Presentacion.BotonIcono btnNuevo;
+        private System.Windows.Forms.Panel pnlKpi;
+        private System.Windows.Forms.TableLayoutPanel tlpKpi;
+        private Presentacion.StatCard statTotal;
+        private Presentacion.StatCard statEstado1;
+        private Presentacion.StatCard statEstado2;
+        private Presentacion.StatCard statExtra;
+        private System.Windows.Forms.Panel pnlTituloConsulta;
+        private System.Windows.Forms.Label lblTituloConsulta;
+        private System.Windows.Forms.Label lblSubtituloConsulta;
+        private System.Windows.Forms.TabPage tpGestionar;
+        private Presentacion.RoundedPanel pnlDetalle;
+        private System.Windows.Forms.DataGridView dgvDetalleFactura;
+        private System.Windows.Forms.TableLayoutPanel tlpDetalle;
+        private System.Windows.Forms.Label lblCodigoDetalleFactura;
+        private System.Windows.Forms.TextBox txtCodigoDetalleFactura;
+        private System.Windows.Forms.Label lblDescripcion;
+        private System.Windows.Forms.TextBox txtDescripcion;
+        private System.Windows.Forms.Label lblCantidad;
+        private System.Windows.Forms.TextBox txtCantidad;
+        private System.Windows.Forms.Label lblPrecio;
+        private System.Windows.Forms.TextBox txtPrecio;
+        private System.Windows.Forms.Label lblDescuentoAplicado;
+        private System.Windows.Forms.TextBox txtDescuentoAplicado;
+        private System.Windows.Forms.Label lblEstadoDetalle;
+        private System.Windows.Forms.Panel pnlEstadoDetalle;
+        private System.Windows.Forms.RadioButton rdoActivoDetalle;
+        private System.Windows.Forms.RadioButton rdoInactivoDetalle;
+        private Presentacion.BotonIcono btnAgregarDetalle;
+        private System.Windows.Forms.Panel pnlTituloDetalle;
+        private Presentacion.RoundedPanel pnlIconoDetalle;
+        private System.Windows.Forms.Label lblGlyphDetalle;
+        private System.Windows.Forms.Label lblTituloDetalle;
+        private System.Windows.Forms.Panel pnlBarra;
+        private System.Windows.Forms.Label lblSubtotalDetalle;
+        private System.Windows.Forms.Label lblDescuentoDetalle;
+        private System.Windows.Forms.Label lblTotalDetalle;
+        private Presentacion.BotonIcono btnLimpiar;
+        private System.Windows.Forms.Panel sepBarraA;
+        private Presentacion.BotonIcono btnCancelar;
+        private System.Windows.Forms.Panel sepBarraB;
+        private Presentacion.BotonIcono btnGuardar;
+        private System.Windows.Forms.Panel pnlEncabezadoWrap;
         private Presentacion.RoundedPanel pnlFormulario;
         private System.Windows.Forms.TableLayoutPanel tlpCampos;
-        private System.Windows.Forms.Label lblCodigo;
-        private System.Windows.Forms.TextBox txtCodigoFactura;
+        private System.Windows.Forms.Label lblCodigoFacturacion;
+        private System.Windows.Forms.TextBox txtCodigoFacturacion;
+        private System.Windows.Forms.Label lblCodigoOrdenTrabajo;
+        private System.Windows.Forms.ComboBox cmbCodigoOrdenTrabajo;
+        private System.Windows.Forms.Label lblNoFactura;
+        private System.Windows.Forms.TextBox txtNoFactura;
+        private System.Windows.Forms.Label lblFechaDeEntrega;
+        private System.Windows.Forms.DateTimePicker dtpFechaDeEntrega;
+        private System.Windows.Forms.Label lblSubtotal;
+        private System.Windows.Forms.TextBox txtSubtotal;
+        private System.Windows.Forms.Label lblImpuesto;
+        private System.Windows.Forms.TextBox txtImpuesto;
+        private System.Windows.Forms.Label lblTotalPagar;
+        private System.Windows.Forms.TextBox txtTotalPagar;
         private System.Windows.Forms.Label lblEstado;
-        private System.Windows.Forms.Label lblCliente;
-        private System.Windows.Forms.ComboBox cboxCodigoOrdenTrabajo;
-        private System.Windows.Forms.Label lblFecha;
-        private System.Windows.Forms.DateTimePicker dtpFechaEntrega;
-        private System.Windows.Forms.Label lblSucursal;
-        private System.Windows.Forms.Label lblTotal;
-        private System.Windows.Forms.TextBox txtImpuestos;
-        private System.Windows.Forms.Label lblDatos;
-        private System.Windows.Forms.Panel pnlSeparador;
-        private Presentacion.RoundedPanel pnlAcciones;
-        private System.Windows.Forms.TableLayoutPanel tlpAcciones;
-        private Presentacion.BotonIcono btnNuevo;
-        private Presentacion.BotonIcono btnGuardar;
-        private Presentacion.BotonIcono btnEditar;
-        private Presentacion.BotonIcono btnEliminar;
-        private Presentacion.BotonIcono btnCancelar;
-        private Presentacion.BotonIcono btnLimpiar;
-        private Presentacion.RoundedPanel pnlConsultar;
-        private System.Windows.Forms.TableLayoutPanel tlpFiltros;
-        private System.Windows.Forms.Label lblFiltroEstado;
-        private System.Windows.Forms.ComboBox cmbFiltroEstado;
-        private Presentacion.BotonIcono btnQuitarFiltros;
-        private System.Windows.Forms.Label lblFiltros;
+        private System.Windows.Forms.Panel pnlEstado;
+        private System.Windows.Forms.RadioButton rdoActivo;
+        private System.Windows.Forms.RadioButton rdoInactivo;
+        private System.Windows.Forms.Panel pnlTituloForm;
+        private Presentacion.RoundedPanel pnlIconoForm;
+        private System.Windows.Forms.Label lblGlyphForm;
+        private System.Windows.Forms.Label lblTituloForm;
+        private System.Windows.Forms.Panel pnlTituloGestion;
+        private System.Windows.Forms.Label lblTituloGestion;
+        private System.Windows.Forms.Label lblSubtituloGestion;
+        private System.Windows.Forms.TabPage tpResumen;
+        private System.Windows.Forms.TableLayoutPanel tlpResumenGraficos;
+        private Presentacion.RoundedPanel pnlCardEstado;
+        private Presentacion.GraficoDona graEstado;
+        private System.Windows.Forms.Panel pnlTituloEstado;
+        private System.Windows.Forms.Label lblIconoEstado;
+        private System.Windows.Forms.Label lblTituloEstado;
+        private Presentacion.RoundedPanel pnlCardCategoria;
+        private Presentacion.GraficoBarras graCategoria;
+        private System.Windows.Forms.Panel pnlTituloCategoria;
+        private System.Windows.Forms.Label lblIconoCategoria;
+        private System.Windows.Forms.Label lblTituloCategoria;
+        private System.Windows.Forms.Panel pnlTituloResumen;
+        private System.Windows.Forms.Label lblTituloResumen;
+        private System.Windows.Forms.Label lblSubtituloResumen;
         private System.Windows.Forms.Panel pnlCabecera;
-        private System.Windows.Forms.Label lblTitulo;
-        private Presentacion.BotonIcono btnTabGestionar;
         private Presentacion.BotonIcono btnTabConsultar;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtNoOrden;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtTotal;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Panel panelEstado;
-        private System.Windows.Forms.RadioButton rdbInactivo;
-        private System.Windows.Forms.RadioButton rdbActivo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn txtCódigoFactura;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cboxCodigoOrden;
-        private System.Windows.Forms.DataGridViewTextBoxColumn txtNoFactura;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colFecha;
-        private System.Windows.Forms.DataGridViewTextBoxColumn txtsubtotal;
-        private System.Windows.Forms.DataGridViewTextBoxColumn txtimpuesto;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colTotal;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colEstado;
+        private Presentacion.BotonIcono btnTabGestionar;
+        private Presentacion.BotonIcono btnTabResumen;
     }
 }

@@ -25,14 +25,14 @@ namespace Negocio
 
             ResumenDashboard r = new ResumenDashboard();
             r.TotalUsuarios = listaUsuarios.Count;
-            r.UsuariosActivos = listaUsuarios.Count(u => u.Estado == "Activo");
+            r.UsuariosActivos = listaUsuarios.Count(u => u.Estado);
             r.TotalClientes = listaClientes.Count;
             r.TotalCotizaciones = listaCotizaciones.Count;
-            r.MontoTotalCotizado = listaCotizaciones.Sum(c => c.Monto);
+            r.MontoTotalCotizado = listaCotizaciones.Sum(c => c.Total);
 
-            r.CotizacionesPorEstado = Contar(listaCotizaciones.Select(c => c.Estado), new[] { "Pendiente", "Aprobada", "Rechazada" });
-            r.ClientesPorEstado = Contar(listaClientes.Select(c => c.Estado), new[] { "Activo", "Inactivo" });
-            r.UsuariosPorRol = Contar(listaUsuarios.Select(u => u.Rol), new[] { "Administrador", "Supervisor", "Usuario" });
+            r.CotizacionesPorEstado = Contar(listaCotizaciones.Select(c => c.Estado ? "Activo" : "Inactivo"), new[] { "Activo", "Inactivo" });
+            r.ClientesPorEstado = Contar(listaClientes.Select(c => c.Estado ? "Activo" : "Inactivo"), new[] { "Activo", "Inactivo" });
+            r.UsuariosPorRol = Contar(listaUsuarios.Select(u => u.TipoUsuario), new[] { "Administrador", "Supervisor", "Usuario" });
             r.MontoPorMes = MontoUltimosMeses(listaCotizaciones, 6);
             return r;
         }
@@ -63,7 +63,7 @@ namespace Negocio
             for (int i = meses - 1; i >= 0; i--)
             {
                 DateTime mes = inicio.AddMonths(-i);
-                decimal total = lista.Where(c => c.Fecha.Year == mes.Year && c.Fecha.Month == mes.Month).Sum(c => c.Monto);
+                decimal total = lista.Where(c => c.FechaEmision.Year == mes.Year && c.FechaEmision.Month == mes.Month).Sum(c => c.Total);
                 resultado.Add(new ItemGrafico { Etiqueta = mes.ToString("MMM yy", CultureInfo.CurrentCulture), Valor = total });
             }
             return resultado;

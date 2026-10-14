@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Datos;
 using Entidad;
 
@@ -16,14 +17,9 @@ namespace Negocio
             return datos.Listar();
         }
 
-        public List<Usuario> Buscar(string texto, string rol, string estado)
+        public List<Usuario> Buscar(string texto, string tipo, string estado)
         {
-            return datos.Buscar(texto, rol, estado);
-        }
-
-        public string SiguienteCodigo()
-        {
-            return datos.SiguienteCodigo();
+            return datos.Buscar(texto, tipo, estado);
         }
 
         public int Insertar(Usuario usuario)
@@ -38,10 +34,23 @@ namespace Negocio
             return datos.Actualizar(usuario);
         }
 
-        public int Eliminar(string codigo)
+        public int Eliminar(int codigo)
         {
             // TODO: validar reglas antes de eliminar.
             return datos.Eliminar(codigo);
+        }
+
+        /// <summary>Resumen del módulo (se muestra en la pestaña Resumen).</summary>
+        public ResumenModulo ObtenerResumen()
+        {
+            List<Usuario> lista = datos.Listar() ?? new List<Usuario>();
+            ResumenModulo r = new ResumenModulo();
+            r.Total = lista.Count;
+            r.TituloEstado = "Registros por estado";
+            r.PorEstado = ResumenHelper.Contar(lista.Select(x => x.Estado ? "Activo" : "Inactivo"), new string[] { "Activo", "Inactivo" }, 0);
+            r.TituloCategoria = "Usuarios por rol";
+            r.PorCategoria = ResumenHelper.Contar(lista.Select(x => x.TipoUsuario), new string[] { "Administrador", "Supervisor", "Usuario" }, 0);
+            return r;
         }
     }
 }

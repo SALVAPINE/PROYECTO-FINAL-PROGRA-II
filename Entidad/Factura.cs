@@ -4,11 +4,13 @@ namespace Entidad
 {
     public class Factura
     {
-        public string Codigo { get; set; }
-        public string Cliente { get; set; }
-        public string Sucursal { get; set; }
-        public DateTime Fecha { get; set; }
-        public decimal Total { get; set; }
-        public string Estado { get; set; }
+        public int CodigoFacturacion { get; set; }
+        public int CodigoOrdenTrabajo { get; set; }
+        public int NoFactura { get; set; }
+        public DateTime FechaDeEntrega { get; set; }
+        public decimal Subtotal { get; set; }
+        public decimal Impuesto { get; set; }
+        public decimal TotalPagar { get; set; }
+        public bool Estado { get; set; }
     }
 }

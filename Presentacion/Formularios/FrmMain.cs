@@ -18,10 +18,8 @@ namespace Presentacion
         private FrmFacturaciones frmFacturaciones;
         private FrmSucursales frmSucursales;
         private FrmProveedores frmProveedores;
-        private FrmDetalleFactura frmDetalleFactura;
         private FrmInventarios frmInventarios;
         private FrmCompras frmCompras;
-        private FrmDetalleCompra frmDetalleCompra;
 
         public FrmMain()
         {
@@ -40,10 +38,8 @@ namespace Presentacion
             frmFacturaciones = new FrmFacturaciones();
             frmSucursales = new FrmSucursales();
             frmProveedores = new FrmProveedores();
-            frmDetalleFactura = new FrmDetalleFactura();
             frmInventarios = new FrmInventarios();
             frmCompras = new FrmCompras();
-            frmDetalleCompra = new FrmDetalleCompra();
 
             Incrustar(frmInicio);
             Incrustar(frmUsuarios);
@@ -57,10 +53,8 @@ namespace Presentacion
             Incrustar(frmFacturaciones);
             Incrustar(frmSucursales);
             Incrustar(frmProveedores);
-            Incrustar(frmDetalleFactura);
             Incrustar(frmInventarios);
             Incrustar(frmCompras);
-            Incrustar(frmDetalleCompra);
 
             Mostrar(frmInicio, btnInicio);
         }
@@ -79,7 +73,7 @@ namespace Presentacion
         {
             foreach (Control c in pnlContenido.Controls)
                 c.Visible = (c == vista);
-            foreach (BotonIcono b in new[] { btnInicio, btnUsuarios, btnClientes, btnCotizaciones, btnTipoServicio, btnMateriales, btnDisenos, btnDisenadores, btnOrdenesTrabajo, btnFacturaciones, btnSucursales, btnProveedores, btnDetalleFactura, btnInventarios, btnCompras, btnDetalleCompra })
+            foreach (BotonIcono b in new[] { btnInicio, btnUsuarios, btnClientes, btnCotizaciones, btnTipoServicio, btnMateriales, btnDisenos, btnDisenadores, btnOrdenesTrabajo, btnFacturaciones, btnSucursales, btnProveedores, btnInventarios, btnCompras })
                 b.Seleccionado = (b == boton);
 
             vista.BringToFront();
@@ -102,10 +96,8 @@ namespace Presentacion
         private void btnFacturaciones_Click(object sender, EventArgs e) { Mostrar(frmFacturaciones, btnFacturaciones); }
         private void btnSucursales_Click(object sender, EventArgs e) { Mostrar(frmSucursales, btnSucursales); }
         private void btnProveedores_Click(object sender, EventArgs e) { Mostrar(frmProveedores, btnProveedores); }
-        private void btnDetalleFactura_Click(object sender, EventArgs e) { Mostrar(frmDetalleFactura, btnDetalleFactura); }
         private void btnInventarios_Click(object sender, EventArgs e) { Mostrar(frmInventarios, btnInventarios); }
         private void btnCompras_Click(object sender, EventArgs e) { Mostrar(frmCompras, btnCompras); }
-        private void btnDetalleCompra_Click(object sender, EventArgs e) { Mostrar(frmDetalleCompra, btnDetalleCompra); }
 
         // ---------- Pendientes de implementar ----------
         private void btnConfiguracion_Click(object sender, EventArgs e)

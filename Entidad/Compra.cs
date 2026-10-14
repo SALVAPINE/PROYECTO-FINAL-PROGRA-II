@@ -4,11 +4,13 @@ namespace Entidad
 {
     public class Compra
     {
-        public string Codigo { get; set; }
-        public string Proveedor { get; set; }
-        public string Sucursal { get; set; }
-        public DateTime Fecha { get; set; }
-        public decimal Total { get; set; }
-        public string Estado { get; set; }
+        public int CodigoCompra { get; set; }
+        public int CodigoProveedor { get; set; }
+        public int CodigoMaterial { get; set; }
+        public int CantidadComprada { get; set; }
+        public decimal TotalCompra { get; set; }
+        public DateTime FechaCompra { get; set; }
+        public DateTime FechaEntrega { get; set; }
+        public bool Estado { get; set; }
     }
 }

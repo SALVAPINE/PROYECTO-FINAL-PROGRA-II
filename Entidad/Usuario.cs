@@ -1,11 +1,15 @@
-﻿namespace Entidad
+﻿using System;
+
+namespace Entidad
 {
     public class Usuario
     {
-        public string Codigo { get; set; }
-        public string Nombre { get; set; }
-        public string Correo { get; set; }
-        public string Rol { get; set; }
-        public string Estado { get; set; }
+        public int CodigoUsuario { get; set; }
+        public int CodigoSucursal { get; set; }
+        public string NombreUsuario { get; set; }
+        public string Clave { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        public string TipoUsuario { get; set; }
+        public bool Estado { get; set; }
     }
 }

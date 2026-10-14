@@ -4,11 +4,14 @@ namespace Entidad
 {
     public class Diseno
     {
-        public string Codigo { get; set; }
-        public string Nombre { get; set; }
-        public string TipoServicio { get; set; }
-        public string Disenador { get; set; }
-        public DateTime Fecha { get; set; }
-        public string Estado { get; set; }
+        public int CodigoDiseño { get; set; }
+        public int CodigoCliente { get; set; }
+        public int CodigoDiseñador { get; set; }
+        public string NombreDiseño { get; set; }
+        public string TipoDiseño { get; set; }
+        public string Descripcion { get; set; }
+        public string RangoDiseño { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        public bool Estado { get; set; }
     }
 }

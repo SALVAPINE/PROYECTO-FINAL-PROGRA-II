@@ -2,11 +2,12 @@
 {
     public class DetalleFactura
     {
-        public string Codigo { get; set; }
-        public string Factura { get; set; }
-        public string TipoServicio { get; set; }
+        public int CodigoDetalleFactura { get; set; }
+        public string Descripcion { get; set; }
         public int Cantidad { get; set; }
-        public decimal PrecioUnitario { get; set; }
-        public decimal Subtotal { get; set; }
+        public decimal Precio { get; set; }
+        public decimal DescuentoAplicado { get; set; }
+        public bool Estado { get; set; }
+        public int CodigoFacturacion { get; set; }
     }
 }

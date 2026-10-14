@@ -2,11 +2,13 @@
 {
     public class Cliente
     {
-        public string Codigo { get; set; }
-        public string Nombre { get; set; }
-        public string Correo { get; set; }
-        public string Telefono { get; set; }
+        public int CodigoCliente { get; set; }
+        public string NombreCliente { get; set; }
         public string Direccion { get; set; }
-        public string Estado { get; set; }
+        public int DPI { get; set; }
+        public int Edad { get; set; }
+        public int? NIT { get; set; }
+        public int Telefono { get; set; }
+        public bool Estado { get; set; }
     }
 }

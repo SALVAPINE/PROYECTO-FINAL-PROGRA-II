@@ -1,4 +1,4 @@
-﻿SISTEMA PUBLICIDAD  (Publicidad Creativa - CAPAZ)
+﻿PUBLICIDAD MULTISUCURSAL
 Windows Forms · C# · .NET Framework 4.8 · Arquitectura por capas
 
 CÓMO ABRIRLO
@@ -7,38 +7,42 @@ CÓMO ABRIRLO
 
 CAPAS (4 proyectos)
   Presentacion   Formularios y diseño (lo que se ve). Cada formulario tiene .cs, .Designer.cs y .resx.
-  Negocio        Reglas y validaciones. Llama a la capa de datos. DashboardNegocio calcula los datos del Inicio.
+  Negocio        Reglas y validaciones. Llama a la capa de datos. Calcula los resúmenes y el dashboard.
   Datos          Acceso a datos. SIN conexión ni base de datos: los métodos están vacíos (con TODO).
-  Entidad        Clases del dominio: Usuario, Cliente, Cotizacion y los DTO del dashboard.
+  Entidad        Una clase por tabla del script SQL (mismos nombres, campos y tipos) y los DTO de los resúmenes.
 Referencias: Presentacion -> Negocio -> Datos -> Entidad (Presentacion también usa Entidad).
 
 FORMULARIOS (Presentacion\Formularios)
-  FrmMain           Ventana principal: menú lateral y barra superior. Muestra los demás formularios dentro del panel.
-  FrmInicio         Dashboard: 4 tarjetas de resumen y 4 gráficos (Chart de System.Windows.Forms.DataVisualization).
-  Un formulario por módulo, todos con pestañas Gestionar / Consultar, tabla vacía y botones sin lógica:
-    FrmUsuarios        Usuarios
-    FrmClientes        Clientes
-    FrmCotizaciones    Cotizaciones
-    FrmTipoServicio    Tipo de Servicio
-    FrmMateriales      Materiales
-    FrmDisenos         Diseños
-    FrmDisenadores     Diseñadores
-    FrmOrdenesTrabajo  Órdenes de Trabajo
-    FrmFacturaciones   Facturaciones
-    FrmSucursales      Sucursales
-    FrmProveedores     Proveedores
-    FrmDetalleFactura  Detalle de Factura
-    FrmInventarios     Inventarios
-    FrmCompras         Compras
-    FrmDetalleCompra   Detalle de Compra
+  FrmMain            Ventana principal: menú lateral, barra superior y pie. Muestra los demás formularios dentro del panel.
+  FrmInicio          Dashboard: 4 tarjetas y 4 gráficos (gráficos propios, sin librerías externas).
+  Un formulario por apartado, con pestañas Consultar / Gestionar / Resumen:
+    FrmUsuarios          Usuarios
+    FrmClientes          Clientes
+    FrmCotizaciones      Cotizaciones
+    FrmTipoServicio      Tipo de Servicio
+    FrmMateriales        Materiales
+    FrmDisenos           Diseños
+    FrmDisenadores       Diseñadores
+    FrmOrdenesTrabajo    Órdenes de Trabajo
+    FrmFacturaciones     Facturaciones  (incluye detalle de la factura)
+    FrmSucursales        Sucursales
+    FrmProveedores       Proveedores
+    FrmInventarios       Inventarios
+    FrmCompras           Compras  (incluye detalle de la compra)
 
-DASHBOARD
-FrmInicio.ActualizarDashboard() pide los datos a DashboardNegocio, que usa los métodos Listar() de la capa Datos.
-Cuando implemente Listar() en UsuarioDatos, ClienteDatos y CotizacionDatos, el dashboard se llena solo
-cada vez que se abre Inicio.
+DETALLES
+  - Facturaciones y Compras incluyen su detalle (DetalleFactura, DetalleCompra) en el mismo formulario.
+  - Los campos y las entidades salen de las tablas del script SQL (Db_PublicidadMultisucursal). En Tbl_Proveedores la llave está escrita
+    CodgioProveedor; la entidad la usa tal cual (CodgioProveedor).
+  - Los campos Activo / Inactivo (Estado, tipo BIT) son botones de opción (RadioButton).
+  - Las tablas (DataGridView) no tienen columnas ni títulos: se generan solas al asignar el DataSource con los datos de la base.
+  - Cada formulario usa un TabControl: en el diseñador haga clic en las pestañas Consultar / Gestionar / Resumen para editar cada página.
+    Al ejecutar, las pestañas del TabControl no se ven; se cambia con los botones de arriba.
+  - El espacio inferior de la pestaña Gestionar lleva un fondo decorativo (BannerDegradado), sin texto ni animación; se puede cambiar su Glyph y sus colores.
+  - La pestaña Resumen y el dashboard se llenan solos cuando los métodos Listar() de la capa Datos devuelvan registros.
 
 PENDIENTE (a cargo suyo)
   - Conexión y consultas en el proyecto Datos.
-  - Cargar las tablas (DataGridView) y programar los botones: en cada formulario hay métodos vacíos con TODO.
+  - Cargar las tablas y programar los botones: en cada formulario hay métodos vacíos con TODO.
 
-ICONOS: fuente "Segoe MDL2 Assets" (incluida en Windows 10 y 11).
+ICONOS: fuente "Segoe MDL2 Assets" (incluida en Windows 10 y 11). Lema: fuente "Segoe Script".

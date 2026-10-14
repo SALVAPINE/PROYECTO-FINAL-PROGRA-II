@@ -16,16 +16,10 @@ namespace Datos
             return new List<Inventario>();
         }
 
-        public List<Inventario> Buscar(string texto, string sucursal)
+        public List<Inventario> Buscar(string texto, string estado)
         {
             // TODO: consultar la base de datos aplicando los filtros.
             return new List<Inventario>();
-        }
-
-        public string SiguienteCodigo()
-        {
-            // TODO: generar el siguiente código (por ejemplo INV001).
-            return string.Empty;
         }
 
         public int Insertar(Inventario inventario)
@@ -40,7 +34,7 @@ namespace Datos
             return 0;
         }
 
-        public int Eliminar(string codigo)
+        public int Eliminar(int codigo)
         {
             // TODO: eliminar el registro. Devolver las filas afectadas.
             return 0;

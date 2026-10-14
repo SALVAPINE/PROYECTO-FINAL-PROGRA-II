@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 using Entidad;
 using Negocio;
 
@@ -16,7 +14,8 @@ namespace Presentacion
         public FrmInicio()
         {
             InitializeComponent();
-            lblFecha.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy");
+            string fecha = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy");
+            lblFecha.Text = char.ToUpper(fecha[0]) + fecha.Substring(1);
         }
 
         /// <summary>
@@ -42,46 +41,10 @@ namespace Presentacion
             statCotizaciones.Valor = r.TotalCotizaciones.ToString();
             statMonto.Valor = r.MontoTotalCotizado.ToString("C2");
 
-            CargarDona(chtCotizaciones, r.CotizacionesPorEstado);
-            CargarDona(chtClientes, r.ClientesPorEstado);
-            CargarBarras(chtMonto, r.MontoPorMes);
-            CargarBarras(chtUsuarios, r.UsuariosPorRol);
-        }
-
-        private static void CargarDona(Chart grafico, List<ItemGrafico> datos)
-        {
-            Series serie = grafico.Series[0];
-            serie.Points.Clear();
-
-            decimal total = datos == null ? 0 : datos.Sum(d => d.Valor);
-            if (total == 0)
-            {
-                int vacio = serie.Points.AddY(1);
-                serie.Points[vacio].Color = Color.FromArgb(60, 70, 140);
-                serie.Points[vacio].LegendText = "Sin datos";
-                return;
-            }
-
-            foreach (ItemGrafico item in datos)
-            {
-                if (item.Valor == 0) continue;
-                int i = serie.Points.AddY((double)item.Valor);
-                serie.Points[i].Color = Tema.ColorEstado(item.Etiqueta);
-                serie.Points[i].LegendText = item.Etiqueta + " (" + item.Valor.ToString("0") + ")";
-            }
-        }
-
-        private static void CargarBarras(Chart grafico, List<ItemGrafico> datos)
-        {
-            Series serie = grafico.Series[0];
-            serie.Points.Clear();
-            if (datos == null) return;
-
-            foreach (ItemGrafico item in datos)
-            {
-                int i = serie.Points.AddY((double)item.Valor);
-                serie.Points[i].AxisLabel = item.Etiqueta;
-            }
+            graCotizaciones.SetDatos(Resumenes.PuntosEstado(r.CotizacionesPorEstado));
+            graClientes.SetDatos(Resumenes.PuntosEstado(r.ClientesPorEstado));
+            graUsuarios.SetDatos(Resumenes.PuntosPaleta(r.UsuariosPorRol));
+            graMonto.SetDatos(r.MontoPorMes.Select(i => new PuntoGrafico(i.Etiqueta, i.Valor, Color.Empty)).ToList());
         }
     }
 }

@@ -1,189 +1,99 @@
 ﻿using System;
-using System.Net.Mail;
 using System.Windows.Forms;
+using Entidad;
+using Negocio;
 
 namespace Presentacion
 {
     public partial class FrmProveedores : Form
     {
+        private readonly ProveedorNegocio negocio = new ProveedorNegocio();
+
         public FrmProveedores()
         {
             InitializeComponent();
             Tema.EstilizarGrid(dgvProveedores);
-            MostrarTab(true);
 
-            cmbFiltroEstado.SelectedIndex = 0;
-            rbActivo.Checked = true;
+            ToolTip ayuda = new ToolTip();
+            ayuda.SetToolTip(btnEditar, "Editar el registro seleccionado");
+            ayuda.SetToolTip(btnEliminar, "Eliminar el registro seleccionado");
 
-            // Teléfono: solo dígitos
-            txtTelefono.KeyPress += (s, e) =>
-            {
-                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-                    e.Handled = true;
-            };
+            MostrarTab(0);
         }
 
-        // ---------- Pestañas Gestionar / Consultar ----------
-        private void MostrarTab(bool gestionar)
+        // ---------- Pestañas: 0 = Consultar, 1 = Gestionar, 2 = Resumen ----------
+        // Cada página (tpConsultar, tpGestionar, tpResumen) se edita en el diseñador haciendo clic en su pestaña.
+        private void MostrarTab(int tab)
         {
-            pnlGestionar.Visible = gestionar;
-            pnlConsultar.Visible = !gestionar;
-            btnTabGestionar.Seleccionado = gestionar;
-            btnTabConsultar.Seleccionado = !gestionar;
+            tabModulo.SelectedIndex = tab;
+            btnTabConsultar.Seleccionado = (tab == 0);
+            btnTabGestionar.Seleccionado = (tab == 1);
+            btnTabResumen.Seleccionado = (tab == 2);
+
+            if (tab != 1)
+                ActualizarResumen();
         }
 
-        private void btnTabGestionar_Click(object sender, EventArgs e) { MostrarTab(true); }
-        private void btnTabConsultar_Click(object sender, EventArgs e) { MostrarTab(false); }
+        private void btnTabConsultar_Click(object sender, EventArgs e) { MostrarTab(0); }
+        private void btnTabGestionar_Click(object sender, EventArgs e) { MostrarTab(1); }
+        private void btnTabResumen_Click(object sender, EventArgs e) { MostrarTab(2); }
 
-        // ---------- Utilidades del formulario ----------
-
-        private void LimpiarCampos()
+        /// <summary>Llena los valores de las tarjetas y los gráficos con el resumen que calcula la capa de negocio.</summary>
+        private void ActualizarResumen()
         {
-            txtCodigo.Clear();
-            txtNombre.Clear();
-            txtTelefono.Clear();
-            txtCorreo.Clear();
-            txtTipo.Clear();
-            txtDireccion.Clear();
-            rbActivo.Checked = true;
-            txtNombre.Focus();
+            ResumenModulo r;
+            try
+            {
+                r = negocio.ObtenerResumen();
+            }
+            catch (Exception ex)
+            {
+                Tema.Aviso("No se pudo cargar el resumen: " + ex.Message);
+                return;
+            }
+            Resumenes.Aplicar(r, statTotal, statEstado1, statEstado2, statExtra, graEstado, graCategoria);
         }
 
-        private bool Validar()
-        {
-            if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
-                string.IsNullOrWhiteSpace(txtCorreo.Text) ||
-                string.IsNullOrWhiteSpace(txtTipo.Text) ||
-                string.IsNullOrWhiteSpace(txtDireccion.Text))
-            {
-                MessageBox.Show("Complete todos los campos obligatorios.", "Validación",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (txtTelefono.Text.Length != 8 || !int.TryParse(txtTelefono.Text, out _))
-            {
-                MessageBox.Show("El teléfono debe tener 8 dígitos numéricos.", "Validación",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtTelefono.Focus();
-                return false;
-            }
-
-            try { new MailAddress(txtCorreo.Text.Trim()); }
-            catch
-            {
-                MessageBox.Show("El correo no tiene un formato válido.", "Validación",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtCorreo.Focus();
-                return false;
-            }
-            return true;
-        }
-
-        // Valores listos para enviar a la capa de negocio / entidad
-        private int CodigoActual { get { return string.IsNullOrWhiteSpace(txtCodigo.Text) ? 0 : int.Parse(txtCodigo.Text); } }
-        private string NombreActual { get { return txtNombre.Text.Trim(); } }
-        private int TelefonoActual { get { return int.Parse(txtTelefono.Text.Trim()); } }
-        private string CorreoActual { get { return txtCorreo.Text.Trim(); } }
-        private string TipoActual { get { return txtTipo.Text.Trim(); } }
-        private string DireccionActual { get { return txtDireccion.Text.Trim(); } }
-        private bool EstadoActual { get { return rbActivo.Checked; } }   // SQL BIT (Activo = 1)
-
-        // ---------- Botones ----------
+        // ---------- Botones (pendientes de implementar) ----------
+        // Use la capa de negocio (ProveedorNegocio) desde estos métodos.
 
         private void btnNuevo_Click(object sender, EventArgs e)
         {
-            LimpiarCampos();
-        }
-
-        private void btnGuardar_Click(object sender, EventArgs e)
-        {
-            if (!Validar()) return;
-
-            // TODO: llamar a ProveedorNegocio
-            //   CodigoActual == 0  -> insertar
-            //   CodigoActual  > 0  -> actualizar
-            // usando: NombreActual, TelefonoActual, CorreoActual,
-            //         TipoActual, DireccionActual, EstadoActual
+            MostrarTab(1);
+            // TODO: preparar un registro nuevo
         }
 
         private void btnEditar_Click(object sender, EventArgs e)
         {
-            if (dgvProveedores.CurrentRow == null)
-            {
-                MessageBox.Show("Seleccione un proveedor de la tabla.", "Editar",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            var fila = dgvProveedores.CurrentRow;
-            txtCodigo.Text = Convert.ToString(fila.Cells[colCodigo.Index].Value);
-            txtNombre.Text = Convert.ToString(fila.Cells[colNombre.Index].Value);
-            txtTelefono.Text = Convert.ToString(fila.Cells[colTelefono.Index].Value);
-            txtCorreo.Text = Convert.ToString(fila.Cells[colCorreo.Index].Value);
-            txtTipo.Text = Convert.ToString(fila.Cells[colTipo.Index].Value);
-            txtDireccion.Text = Convert.ToString(fila.Cells[colDireccion.Index].Value);
-
-            bool inactivo = Convert.ToString(fila.Cells[colEstado.Index].Value) == "Inactivo";
-            rbInactivo.Checked = inactivo;
-            rbActivo.Checked = !inactivo;
-
-            MostrarTab(true);
+            MostrarTab(1);
+            // TODO: cargar el registro seleccionado de la tabla
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            if (CodigoActual == 0)
-            {
-                MessageBox.Show("Seleccione un proveedor y pulse Editar antes de eliminar.", "Eliminar",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+            // TODO
+        }
 
-            if (MessageBox.Show("¿Desea eliminar este proveedor?", "Confirmar",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-                return;
-
-            // TODO: ProveedorNegocio.Eliminar(CodigoActual);
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            // TODO
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            LimpiarCampos();
+            MostrarTab(0);
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
-            LimpiarCampos();
+            // TODO
         }
 
-        private void btnBuscar_Click(object sender, EventArgs e)
+        private void csBuscar_EnterPresionado(object sender, EventArgs e)
         {
-            // TODO: filtrar por nombre, código o correo con ProveedorNegocio y llenar la tabla
+            // TODO: buscar con el texto de csBuscar y los filtros
         }
 
-        private void btnQuitarFiltros_Click(object sender, EventArgs e)
-        {
-            cmbFiltroEstado.SelectedIndex = 0;
-            // TODO: recargar todos los registros
-        }
-
-        // ---------- Tabla ----------
-        // Para llenar la tabla (Estado BIT -> texto):
-        //   dgvProveedores.Rows.Add(
-        //       p.CodigoProveedor, p.NombreProveedor, p.Telefono, p.Correo,
-        //       p.TipoProveedor, p.Direccion, p.Estado ? "Activo" : "Inactivo");
-        //   lblTotalRegistros.Text = "Total de registros: " + dgvProveedores.Rows.Count;
-
-        private void dgvProveedores_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            // Colorea la columna Estado (verde / ámbar / rojo).
-            if (e.ColumnIndex >= 0 && dgvProveedores.Columns[e.ColumnIndex] == colEstado && e.Value != null)
-            {
-                var color = Tema.ColorEstado(e.Value.ToString());
-                e.CellStyle.ForeColor = color;
-                e.CellStyle.SelectionForeColor = color;
-            }
-        }
+        // La tabla (dgvProveedores) no tiene columnas definidas: se generan solas al asignar el DataSource con los datos de la base de datos.
     }
 }

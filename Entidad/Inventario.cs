@@ -4,11 +4,14 @@ namespace Entidad
 {
     public class Inventario
     {
-        public string Codigo { get; set; }
-        public string Material { get; set; }
-        public string Sucursal { get; set; }
-        public decimal Cantidad { get; set; }
-        public decimal StockMinimo { get; set; }
-        public DateTime FechaActualizacion { get; set; }
+        public int CodigoInventario { get; set; }
+        public int CodigoSucursal { get; set; }
+        public int CodigoMaterial { get; set; }
+        public string NombreProducto { get; set; }
+        public string TipoProducto { get; set; }
+        public int Stock { get; set; }
+        public decimal PrecioCompra { get; set; }
+        public DateTime FechaAlmacenamiento { get; set; }
+        public bool Estado { get; set; }
     }
 }

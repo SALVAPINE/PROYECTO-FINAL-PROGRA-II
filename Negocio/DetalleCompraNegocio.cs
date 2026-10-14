@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Datos;
 using Entidad;
 
@@ -16,14 +17,9 @@ namespace Negocio
             return datos.Listar();
         }
 
-        public List<DetalleCompra> Buscar(string texto, string compra)
+        public List<DetalleCompra> Buscar(string texto, string estado)
         {
-            return datos.Buscar(texto, compra);
-        }
-
-        public string SiguienteCodigo()
-        {
-            return datos.SiguienteCodigo();
+            return datos.Buscar(texto, estado);
         }
 
         public int Insertar(DetalleCompra detalleCompra)
@@ -38,10 +34,11 @@ namespace Negocio
             return datos.Actualizar(detalleCompra);
         }
 
-        public int Eliminar(string codigo)
+        public int Eliminar(int codigo)
         {
             // TODO: validar reglas antes de eliminar.
             return datos.Eliminar(codigo);
         }
+
     }
 }
