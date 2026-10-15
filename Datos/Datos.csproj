@@ -44,6 +44,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConexionDatos.cs" />
     <Compile Include="UsuarioDatos.cs" />
     <Compile Include="ClienteDatos.cs" />
     <Compile Include="CotizacionDatos.cs" />

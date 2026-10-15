@@ -121,7 +121,7 @@
             // colCodigo
             // 
             this.colCodigo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colCodigo.DataPropertyName = "Codigo";
+            this.colCodigo.DataPropertyName = "CodigoDetalleFactura";
             this.colCodigo.HeaderText = "Código";
             this.colCodigo.MinimumWidth = 6;
             this.colCodigo.Name = "colCodigo";
@@ -130,7 +130,7 @@
             // colFactura
             // 
             this.colFactura.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colFactura.DataPropertyName = "Factura";
+            this.colFactura.DataPropertyName = "CodigoFacturacion";
             this.colFactura.FillWeight = 30F;
             this.colFactura.HeaderText = "Factura";
             this.colFactura.MinimumWidth = 6;
@@ -139,7 +139,7 @@
             // colTipoServicio
             // 
             this.colTipoServicio.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colTipoServicio.DataPropertyName = "TipoServicio";
+            this.colTipoServicio.DataPropertyName = "";
             this.colTipoServicio.FillWeight = 40F;
             this.colTipoServicio.HeaderText = "Tipo de servicio";
             this.colTipoServicio.MinimumWidth = 6;
@@ -157,7 +157,7 @@
             // colPrecioUnitario
             // 
             this.colPrecioUnitario.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colPrecioUnitario.DataPropertyName = "PrecioUnitario";
+            this.colPrecioUnitario.DataPropertyName = "Precio";
             this.colPrecioUnitario.HeaderText = "Precio unitario";
             this.colPrecioUnitario.MinimumWidth = 6;
             this.colPrecioUnitario.Name = "colPrecioUnitario";
@@ -166,7 +166,7 @@
             // colSubtotal
             // 
             this.colSubtotal.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colSubtotal.DataPropertyName = "Subtotal";
+            this.colSubtotal.DataPropertyName = "";
             this.colSubtotal.HeaderText = "Subtotal";
             this.colSubtotal.MinimumWidth = 6;
             this.colSubtotal.Name = "colSubtotal";

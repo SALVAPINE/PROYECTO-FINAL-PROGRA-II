@@ -17,6 +17,7 @@
 
         private void InitializeComponent()
         {
+            this.pnlCabecera = new System.Windows.Forms.Panel();
             this.tabModulo = new Presentacion.TabControlSinEncabezado();
             this.tpConsultar = new System.Windows.Forms.TabPage();
             this.pnlLista = new Presentacion.RoundedPanel();
@@ -31,7 +32,6 @@
             this.pnlToolbar = new System.Windows.Forms.Panel();
             this.pnlToolbarFiltros = new System.Windows.Forms.Panel();
             this.csBuscar = new Presentacion.CampoBusqueda();
-            this.lblFiltroEstado = new System.Windows.Forms.Label();
             this.pnlFiltroEstado = new System.Windows.Forms.Panel();
             this.cmbFiltroEstado = new System.Windows.Forms.ComboBox();
             this.pnlToolbarTop = new System.Windows.Forms.Panel();
@@ -84,6 +84,9 @@
             this.lblGlyphForm = new System.Windows.Forms.Label();
             this.lblTituloForm = new System.Windows.Forms.Label();
             this.pnlTituloGestion = new System.Windows.Forms.Panel();
+            this.bannerDegradado1 = new Presentacion.BannerDegradado();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.tpResumen = new System.Windows.Forms.TabPage();
             this.tlpResumenGraficos = new System.Windows.Forms.TableLayoutPanel();
             this.pnlCardEstado = new Presentacion.RoundedPanel();
@@ -99,13 +102,10 @@
             this.pnlTituloResumen = new System.Windows.Forms.Panel();
             this.lblTituloResumen = new System.Windows.Forms.Label();
             this.lblSubtituloResumen = new System.Windows.Forms.Label();
-            this.pnlCabecera = new System.Windows.Forms.Panel();
             this.btnTabConsultar = new Presentacion.BotonIcono();
             this.btnTabGestionar = new Presentacion.BotonIcono();
             this.btnTabResumen = new Presentacion.BotonIcono();
-            this.bannerDegradado1 = new Presentacion.BannerDegradado();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.pnlCabecera.SuspendLayout();
             this.tabModulo.SuspendLayout();
             this.tpConsultar.SuspendLayout();
             this.pnlLista.SuspendLayout();
@@ -127,6 +127,7 @@
             this.pnlTituloForm.SuspendLayout();
             this.pnlIconoForm.SuspendLayout();
             this.pnlTituloGestion.SuspendLayout();
+            this.bannerDegradado1.SuspendLayout();
             this.tpResumen.SuspendLayout();
             this.tlpResumenGraficos.SuspendLayout();
             this.pnlCardEstado.SuspendLayout();
@@ -134,9 +135,19 @@
             this.pnlCardCategoria.SuspendLayout();
             this.pnlTituloCategoria.SuspendLayout();
             this.pnlTituloResumen.SuspendLayout();
-            this.pnlCabecera.SuspendLayout();
-            this.bannerDegradado1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // pnlCabecera
+            // 
+            this.pnlCabecera.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
+            this.pnlCabecera.Controls.Add(this.btnTabConsultar);
+            this.pnlCabecera.Controls.Add(this.btnTabGestionar);
+            this.pnlCabecera.Controls.Add(this.btnTabResumen);
+            this.pnlCabecera.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlCabecera.Location = new System.Drawing.Point(20, 10);
+            this.pnlCabecera.Name = "pnlCabecera";
+            this.pnlCabecera.Size = new System.Drawing.Size(1050, 44);
+            this.pnlCabecera.TabIndex = 1;
             // 
             // tabModulo
             // 
@@ -304,7 +315,6 @@
             // 
             this.pnlToolbarFiltros.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
             this.pnlToolbarFiltros.Controls.Add(this.csBuscar);
-            this.pnlToolbarFiltros.Controls.Add(this.lblFiltroEstado);
             this.pnlToolbarFiltros.Controls.Add(this.pnlFiltroEstado);
             this.pnlToolbarFiltros.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlToolbarFiltros.Location = new System.Drawing.Point(0, 54);
@@ -316,28 +326,14 @@
             // csBuscar
             // 
             this.csBuscar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
-            this.csBuscar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.csBuscar.Dock = System.Windows.Forms.DockStyle.Left;
             this.csBuscar.Location = new System.Drawing.Point(0, 0);
             this.csBuscar.Name = "csBuscar";
             this.csBuscar.Placeholder = "Buscar por nombre, código, DPI o NIT...";
             this.csBuscar.Radio = 8;
-            this.csBuscar.Size = new System.Drawing.Size(807, 34);
+            this.csBuscar.Size = new System.Drawing.Size(864, 34);
             this.csBuscar.TabIndex = 0;
             this.csBuscar.EnterPresionado += new System.EventHandler(this.csBuscar_EnterPresionado);
-            // 
-            // lblFiltroEstado
-            // 
-            this.lblFiltroEstado.AutoSize = true;
-            this.lblFiltroEstado.BackColor = System.Drawing.Color.Transparent;
-            this.lblFiltroEstado.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblFiltroEstado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblFiltroEstado.Location = new System.Drawing.Point(807, 0);
-            this.lblFiltroEstado.Name = "lblFiltroEstado";
-            this.lblFiltroEstado.Padding = new System.Windows.Forms.Padding(14, 0, 6, 0);
-            this.lblFiltroEstado.Size = new System.Drawing.Size(73, 16);
-            this.lblFiltroEstado.TabIndex = 1;
-            this.lblFiltroEstado.Text = "Estado:";
-            this.lblFiltroEstado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // pnlFiltroEstado
             // 
@@ -360,7 +356,7 @@
             "Todos",
             "Activo",
             "Inactivo"});
-            this.cmbFiltroEstado.Location = new System.Drawing.Point(0, 5);
+            this.cmbFiltroEstado.Location = new System.Drawing.Point(0, 3);
             this.cmbFiltroEstado.Name = "cmbFiltroEstado";
             this.cmbFiltroEstado.Size = new System.Drawing.Size(130, 24);
             this.cmbFiltroEstado.TabIndex = 0;
@@ -1054,6 +1050,44 @@
             this.pnlTituloGestion.Size = new System.Drawing.Size(1042, 152);
             this.pnlTituloGestion.TabIndex = 3;
             // 
+            // bannerDegradado1
+            // 
+            this.bannerDegradado1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.bannerDegradado1.Controls.Add(this.label1);
+            this.bannerDegradado1.Controls.Add(this.label2);
+            this.bannerDegradado1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bannerDegradado1.Glyph = "";
+            this.bannerDegradado1.Location = new System.Drawing.Point(0, 0);
+            this.bannerDegradado1.MinimumSize = new System.Drawing.Size(0, 120);
+            this.bannerDegradado1.Name = "bannerDegradado1";
+            this.bannerDegradado1.Radio = 14;
+            this.bannerDegradado1.Size = new System.Drawing.Size(1042, 152);
+            this.bannerDegradado1.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            this.label1.Location = new System.Drawing.Point(18, 59);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(264, 21);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Registre o edite los datos de clientes.";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.label2.Location = new System.Drawing.Point(15, 18);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(283, 41);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Gestión de clientes";
+            // 
             // tpResumen
             // 
             this.tpResumen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
@@ -1061,7 +1095,7 @@
             this.tpResumen.Controls.Add(this.pnlTituloResumen);
             this.tpResumen.Location = new System.Drawing.Point(4, 25);
             this.tpResumen.Name = "tpResumen";
-            this.tpResumen.Size = new System.Drawing.Size(872, 531);
+            this.tpResumen.Size = new System.Drawing.Size(1042, 637);
             this.tpResumen.TabIndex = 2;
             this.tpResumen.Text = "Resumen";
             // 
@@ -1078,7 +1112,7 @@
             this.tlpResumenGraficos.Name = "tlpResumenGraficos";
             this.tlpResumenGraficos.RowCount = 1;
             this.tlpResumenGraficos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpResumenGraficos.Size = new System.Drawing.Size(872, 461);
+            this.tlpResumenGraficos.Size = new System.Drawing.Size(1042, 567);
             this.tlpResumenGraficos.TabIndex = 0;
             // 
             // pnlCardEstado
@@ -1091,7 +1125,7 @@
             this.pnlCardEstado.Margin = new System.Windows.Forms.Padding(0, 0, 14, 0);
             this.pnlCardEstado.Name = "pnlCardEstado";
             this.pnlCardEstado.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
-            this.pnlCardEstado.Size = new System.Drawing.Size(422, 461);
+            this.pnlCardEstado.Size = new System.Drawing.Size(507, 567);
             this.pnlCardEstado.TabIndex = 0;
             // 
             // graEstado
@@ -1101,7 +1135,7 @@
             this.graEstado.ForeColor = System.Drawing.Color.White;
             this.graEstado.Location = new System.Drawing.Point(14, 42);
             this.graEstado.Name = "graEstado";
-            this.graEstado.Size = new System.Drawing.Size(394, 409);
+            this.graEstado.Size = new System.Drawing.Size(479, 515);
             this.graEstado.TabIndex = 0;
             // 
             // pnlTituloEstado
@@ -1112,7 +1146,7 @@
             this.pnlTituloEstado.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTituloEstado.Location = new System.Drawing.Point(14, 10);
             this.pnlTituloEstado.Name = "pnlTituloEstado";
-            this.pnlTituloEstado.Size = new System.Drawing.Size(394, 32);
+            this.pnlTituloEstado.Size = new System.Drawing.Size(479, 32);
             this.pnlTituloEstado.TabIndex = 1;
             // 
             // lblIconoEstado
@@ -1145,11 +1179,11 @@
             this.pnlCardCategoria.Controls.Add(this.graCategoria);
             this.pnlCardCategoria.Controls.Add(this.pnlTituloCategoria);
             this.pnlCardCategoria.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCardCategoria.Location = new System.Drawing.Point(436, 0);
+            this.pnlCardCategoria.Location = new System.Drawing.Point(521, 0);
             this.pnlCardCategoria.Margin = new System.Windows.Forms.Padding(0);
             this.pnlCardCategoria.Name = "pnlCardCategoria";
             this.pnlCardCategoria.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
-            this.pnlCardCategoria.Size = new System.Drawing.Size(436, 461);
+            this.pnlCardCategoria.Size = new System.Drawing.Size(521, 567);
             this.pnlCardCategoria.TabIndex = 1;
             // 
             // graCategoria
@@ -1159,7 +1193,7 @@
             this.graCategoria.ForeColor = System.Drawing.Color.White;
             this.graCategoria.Location = new System.Drawing.Point(14, 42);
             this.graCategoria.Name = "graCategoria";
-            this.graCategoria.Size = new System.Drawing.Size(408, 409);
+            this.graCategoria.Size = new System.Drawing.Size(493, 515);
             this.graCategoria.TabIndex = 0;
             // 
             // pnlTituloCategoria
@@ -1170,7 +1204,7 @@
             this.pnlTituloCategoria.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTituloCategoria.Location = new System.Drawing.Point(14, 10);
             this.pnlTituloCategoria.Name = "pnlTituloCategoria";
-            this.pnlTituloCategoria.Size = new System.Drawing.Size(408, 32);
+            this.pnlTituloCategoria.Size = new System.Drawing.Size(493, 32);
             this.pnlTituloCategoria.TabIndex = 1;
             // 
             // lblIconoCategoria
@@ -1205,7 +1239,7 @@
             this.pnlTituloResumen.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTituloResumen.Location = new System.Drawing.Point(0, 0);
             this.pnlTituloResumen.Name = "pnlTituloResumen";
-            this.pnlTituloResumen.Size = new System.Drawing.Size(872, 70);
+            this.pnlTituloResumen.Size = new System.Drawing.Size(1042, 70);
             this.pnlTituloResumen.TabIndex = 1;
             // 
             // lblTituloResumen
@@ -1231,18 +1265,6 @@
             this.lblSubtituloResumen.Size = new System.Drawing.Size(267, 21);
             this.lblSubtituloResumen.TabIndex = 1;
             this.lblSubtituloResumen.Text = "Estadísticas y distribución de clientes.";
-            // 
-            // pnlCabecera
-            // 
-            this.pnlCabecera.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
-            this.pnlCabecera.Controls.Add(this.btnTabConsultar);
-            this.pnlCabecera.Controls.Add(this.btnTabGestionar);
-            this.pnlCabecera.Controls.Add(this.btnTabResumen);
-            this.pnlCabecera.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlCabecera.Location = new System.Drawing.Point(20, 10);
-            this.pnlCabecera.Name = "pnlCabecera";
-            this.pnlCabecera.Size = new System.Drawing.Size(1050, 44);
-            this.pnlCabecera.TabIndex = 1;
             // 
             // btnTabConsultar
             // 
@@ -1301,44 +1323,6 @@
             this.btnTabResumen.UseVisualStyleBackColor = false;
             this.btnTabResumen.Click += new System.EventHandler(this.btnTabResumen_Click);
             // 
-            // bannerDegradado1
-            // 
-            this.bannerDegradado1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.bannerDegradado1.Controls.Add(this.label1);
-            this.bannerDegradado1.Controls.Add(this.label2);
-            this.bannerDegradado1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bannerDegradado1.Glyph = "";
-            this.bannerDegradado1.Location = new System.Drawing.Point(0, 0);
-            this.bannerDegradado1.MinimumSize = new System.Drawing.Size(0, 120);
-            this.bannerDegradado1.Name = "bannerDegradado1";
-            this.bannerDegradado1.Radio = 14;
-            this.bannerDegradado1.Size = new System.Drawing.Size(1042, 152);
-            this.bannerDegradado1.TabIndex = 1;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.label1.Location = new System.Drawing.Point(18, 59);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(264, 21);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Registre o edite los datos de clientes.";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.label2.Location = new System.Drawing.Point(15, 18);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(283, 41);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Gestión de clientes";
-            // 
             // FrmClientes
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -1350,6 +1334,7 @@
             this.Name = "FrmClientes";
             this.Padding = new System.Windows.Forms.Padding(20, 10, 20, 8);
             this.Text = "Clientes";
+            this.pnlCabecera.ResumeLayout(false);
             this.tabModulo.ResumeLayout(false);
             this.tpConsultar.ResumeLayout(false);
             this.pnlLista.ResumeLayout(false);
@@ -1358,7 +1343,6 @@
             this.pnlPie.PerformLayout();
             this.pnlToolbar.ResumeLayout(false);
             this.pnlToolbarFiltros.ResumeLayout(false);
-            this.pnlToolbarFiltros.PerformLayout();
             this.pnlFiltroEstado.ResumeLayout(false);
             this.pnlToolbarTop.ResumeLayout(false);
             this.pnlToolbarTop.PerformLayout();
@@ -1378,6 +1362,8 @@
             this.pnlTituloForm.PerformLayout();
             this.pnlIconoForm.ResumeLayout(false);
             this.pnlTituloGestion.ResumeLayout(false);
+            this.bannerDegradado1.ResumeLayout(false);
+            this.bannerDegradado1.PerformLayout();
             this.tpResumen.ResumeLayout(false);
             this.tlpResumenGraficos.ResumeLayout(false);
             this.pnlCardEstado.ResumeLayout(false);
@@ -1388,9 +1374,6 @@
             this.pnlTituloCategoria.PerformLayout();
             this.pnlTituloResumen.ResumeLayout(false);
             this.pnlTituloResumen.PerformLayout();
-            this.pnlCabecera.ResumeLayout(false);
-            this.bannerDegradado1.ResumeLayout(false);
-            this.bannerDegradado1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1411,7 +1394,6 @@
         private System.Windows.Forms.Panel pnlToolbar;
         private System.Windows.Forms.Panel pnlToolbarFiltros;
         private Presentacion.CampoBusqueda csBuscar;
-        private System.Windows.Forms.Label lblFiltroEstado;
         private System.Windows.Forms.Panel pnlFiltroEstado;
         private System.Windows.Forms.ComboBox cmbFiltroEstado;
         private System.Windows.Forms.Panel pnlToolbarTop;

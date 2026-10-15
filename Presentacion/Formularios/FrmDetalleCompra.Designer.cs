@@ -124,7 +124,7 @@
             // colCodigo
             // 
             this.colCodigo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colCodigo.DataPropertyName = "Codigo";
+            this.colCodigo.DataPropertyName = "CodigoDetalleCompra";
             this.colCodigo.HeaderText = "Código";
             this.colCodigo.MinimumWidth = 6;
             this.colCodigo.Name = "colCodigo";
@@ -133,7 +133,7 @@
             // colCompra
             // 
             this.colCompra.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCompra.DataPropertyName = "Compra";
+            this.colCompra.DataPropertyName = "CodigoCompra";
             this.colCompra.FillWeight = 30F;
             this.colCompra.HeaderText = "Compra";
             this.colCompra.MinimumWidth = 6;
@@ -142,7 +142,7 @@
             // colMaterial
             // 
             this.colMaterial.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colMaterial.DataPropertyName = "Material";
+            this.colMaterial.DataPropertyName = "";
             this.colMaterial.FillWeight = 40F;
             this.colMaterial.HeaderText = "Material";
             this.colMaterial.MinimumWidth = 6;
@@ -151,7 +151,7 @@
             // colCantidad
             // 
             this.colCantidad.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colCantidad.DataPropertyName = "Cantidad";
+            this.colCantidad.DataPropertyName = "";
             this.colCantidad.HeaderText = "Cantidad";
             this.colCantidad.MinimumWidth = 6;
             this.colCantidad.Name = "colCantidad";
