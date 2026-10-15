@@ -1,56 +1,72 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Datos;
 using Entidad;
 
 namespace Negocio
 {
-    /// <summary>
-    /// Capa de negocio de clientes: validaciones y reglas; llama a la capa de datos.
-    /// </summary>
+    /// <summary>Coordina las consultas y prepara el resumen con todos los clientes.</summary>
     public class ClienteNegocio
     {
         private readonly ClienteDatos datos = new ClienteDatos();
-
-        public List<Cliente> Listar()
-        {
-            return datos.Listar();
-        }
 
         public List<Cliente> Buscar(string texto, string estado)
         {
             return datos.Buscar(texto, estado);
         }
 
-        public int Insertar(Cliente cliente)
+        public ResumenModulo ObtenerResumen()
         {
-            // TODO: validar los datos antes de guardar.
+            List<Cliente> lista = datos.Listar();
+            ResumenModulo resumen = new ResumenModulo();
+            resumen.Total = lista.Count;
+            resumen.TituloEstado = "Registros por estado";
+            resumen.PorEstado = ResumenHelper.Contar(
+                lista.Select(cliente => cliente.Estado ? "Activo" : "Inactivo"),
+                new string[] { "Activo", "Inactivo" }, 0);
+            resumen.TituloCategoria = resumen.TituloEstado;
+            resumen.PorCategoria = resumen.PorEstado;
+            return resumen;
+        }
+        // Se validan los campos antes de pedir a Datos que guarde el cliente.
+        public int Agregar(Cliente cliente)
+        {
+            if (cliente == null) throw new ArgumentNullException("cliente");
+            if (string.IsNullOrWhiteSpace(cliente.NombreCliente) || cliente.NombreCliente.Trim().Length > 45)
+                throw new ArgumentException("El nombre es obligatorio y admite máximo 45 caracteres.");
+            if (string.IsNullOrWhiteSpace(cliente.Direccion) || cliente.Direccion.Trim().Length > 150)
+                throw new ArgumentException("La dirección es obligatoria y admite máximo 150 caracteres.");
+            if (cliente.DPI <= 0 || cliente.Edad <= 0 || cliente.Telefono <= 0)
+                throw new ArgumentException("DPI, edad y teléfono deben ser enteros positivos.");
+            if (cliente.NIT.HasValue && cliente.NIT.Value <= 0)
+                throw new ArgumentException("El NIT debe ser positivo o dejarse vacío.");
             return datos.Insertar(cliente);
         }
 
-        public int Actualizar(Cliente cliente)
+        // La clave primaria se valida antes de enviar la actualización a Datos.
+        public int Editar(Cliente cliente)
         {
-            // TODO: validar los datos antes de guardar.
+            if (cliente == null) throw new ArgumentNullException("cliente");
+            if (cliente.CodigoCliente <= 0)
+                throw new ArgumentException("El código del cliente no es válido.");
+            if (string.IsNullOrWhiteSpace(cliente.NombreCliente) || cliente.NombreCliente.Trim().Length > 45)
+                throw new ArgumentException("El nombre es obligatorio y admite máximo 45 caracteres.");
+            if (string.IsNullOrWhiteSpace(cliente.Direccion) || cliente.Direccion.Trim().Length > 150)
+                throw new ArgumentException("La dirección es obligatoria y admite máximo 150 caracteres.");
+            if (cliente.DPI <= 0 || cliente.Edad <= 0 || cliente.Telefono <= 0)
+                throw new ArgumentException("DPI, edad y teléfono deben ser enteros positivos.");
+            if (cliente.NIT.HasValue && cliente.NIT.Value <= 0)
+                throw new ArgumentException("El NIT debe ser positivo o dejarse vacío.");
             return datos.Actualizar(cliente);
         }
 
-        public int Eliminar(int codigo)
+        public int Eliminar(int codigoCliente)
         {
-            // TODO: validar reglas antes de eliminar.
-            return datos.Eliminar(codigo);
+            if (codigoCliente <= 0)
+                throw new ArgumentException("Selecciona un cliente válido.");
+            return datos.Eliminar(codigoCliente);
         }
 
-        /// <summary>Resumen del módulo (se muestra en la pestaña Resumen).</summary>
-        public ResumenModulo ObtenerResumen()
-        {
-            List<Cliente> lista = datos.Listar() ?? new List<Cliente>();
-            ResumenModulo r = new ResumenModulo();
-            r.Total = lista.Count;
-            r.TituloEstado = "Registros por estado";
-            r.PorEstado = ResumenHelper.Contar(lista.Select(x => x.Estado ? "Activo" : "Inactivo"), new string[] { "Activo", "Inactivo" }, 0);
-            r.TituloCategoria = r.TituloEstado;
-            r.PorCategoria = r.PorEstado;
-            return r;
-        }
     }
 }
