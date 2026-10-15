@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using System.Linq;
 using Datos;
 using Entidad;
@@ -17,26 +18,55 @@ namespace Negocio
             return datos.Listar();
         }
 
-        public List<Sucursal> Buscar(string texto, string estado)
+        public List<Sucursal> Buscar(string texto, bool? estado)
         {
             return datos.Buscar(texto, estado);
         }
 
         public int Insertar(Sucursal sucursal)
         {
-            // TODO: validar los datos antes de guardar.
+            if (sucursal == null)
+                throw new ArgumentNullException("sucursal");
+
+            if (string.IsNullOrWhiteSpace(sucursal.NombreSucursal) || sucursal.NombreSucursal.Length > 45)
+                throw new ArgumentException("El nombre es obligatorio y admite hasta 45 caracteres.");
+            if (string.IsNullOrWhiteSpace(sucursal.Direccion) || sucursal.Direccion.Length > 150)
+                throw new ArgumentException("La dirección es obligatoria y admite hasta 150 caracteres.");
+            if (string.IsNullOrWhiteSpace(sucursal.Municipio) || sucursal.Municipio.Length > 100)
+                throw new ArgumentException("El municipio es obligatorio y admite hasta 100 caracteres.");
+            if (string.IsNullOrWhiteSpace(sucursal.Departamento) || sucursal.Departamento.Length > 100)
+                throw new ArgumentException("El departamento es obligatorio y admite hasta 100 caracteres.");
+            if (sucursal.HorarioDeAtencion < TimeSpan.Zero || sucursal.HorarioDeAtencion >= TimeSpan.FromDays(1))
+                throw new ArgumentException("El horario debe ser una hora válida del día.");
+
             return datos.Insertar(sucursal);
         }
 
         public int Actualizar(Sucursal sucursal)
         {
-            // TODO: validar los datos antes de guardar.
+            if (sucursal == null)
+                throw new ArgumentNullException("sucursal");
+            if (sucursal.CodigoSucursal <= 0)
+                throw new ArgumentException("Selecciona una sucursal válida para editar.");
+            if (string.IsNullOrWhiteSpace(sucursal.NombreSucursal) || sucursal.NombreSucursal.Length > 45)
+                throw new ArgumentException("El nombre es obligatorio y admite hasta 45 caracteres.");
+            if (string.IsNullOrWhiteSpace(sucursal.Direccion) || sucursal.Direccion.Length > 150)
+                throw new ArgumentException("La dirección es obligatoria y admite hasta 150 caracteres.");
+            if (string.IsNullOrWhiteSpace(sucursal.Municipio) || sucursal.Municipio.Length > 100)
+                throw new ArgumentException("El municipio es obligatorio y admite hasta 100 caracteres.");
+            if (string.IsNullOrWhiteSpace(sucursal.Departamento) || sucursal.Departamento.Length > 100)
+                throw new ArgumentException("El departamento es obligatorio y admite hasta 100 caracteres.");
+            if (sucursal.HorarioDeAtencion < TimeSpan.Zero || sucursal.HorarioDeAtencion >= TimeSpan.FromDays(1))
+                throw new ArgumentException("El horario debe ser una hora válida del día.");
+
             return datos.Actualizar(sucursal);
         }
 
         public int Eliminar(int codigo)
         {
-            // TODO: validar reglas antes de eliminar.
+            if (codigo <= 0)
+                throw new ArgumentException("Selecciona una sucursal válida para eliminar.");
+
             return datos.Eliminar(codigo);
         }
 
