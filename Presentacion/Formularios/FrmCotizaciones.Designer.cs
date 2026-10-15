@@ -80,13 +80,13 @@
             this.lblDescripcion = new System.Windows.Forms.Label();
             this.txtDescripcion = new System.Windows.Forms.TextBox();
             this.lblCantidad = new System.Windows.Forms.Label();
-            this.txtCantidad = new System.Windows.Forms.TextBox();
+            this.txtCantidad = new System.Windows.Forms.NumericUpDown();
             this.lblPrecio = new System.Windows.Forms.Label();
-            this.txtPrecio = new System.Windows.Forms.TextBox();
+            this.txtPrecio = new System.Windows.Forms.NumericUpDown();
             this.lblSubtotal = new System.Windows.Forms.Label();
-            this.txtSubtotal = new System.Windows.Forms.TextBox();
+            this.txtSubtotal = new System.Windows.Forms.NumericUpDown();
             this.lblTotal = new System.Windows.Forms.Label();
-            this.txtTotal = new System.Windows.Forms.TextBox();
+            this.txtTotal = new System.Windows.Forms.NumericUpDown();
             this.lblEstado = new System.Windows.Forms.Label();
             this.pnlEstado = new System.Windows.Forms.Panel();
             this.rdoActivo = new System.Windows.Forms.RadioButton();
@@ -122,6 +122,10 @@
             this.tpConsultar.SuspendLayout();
             this.pnlLista.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCotizaciones)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCantidad)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPrecio)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSubtotal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTotal)).BeginInit();
             this.pnlPie.SuspendLayout();
             this.pnlToolbar.SuspendLayout();
             this.pnlToolbarFiltros.SuspendLayout();
@@ -1039,17 +1043,21 @@
             this.lblCantidad.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // txtCantidad
-            // 
             this.txtCantidad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtCantidad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
             this.txtCantidad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCantidad.DecimalPlaces = 0;
             this.txtCantidad.ForeColor = System.Drawing.Color.White;
+            this.txtCantidad.Increment = 1;
             this.txtCantidad.Location = new System.Drawing.Point(610, 113);
             this.txtCantidad.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
-            this.txtCantidad.MaxLength = 10;
+            this.txtCantidad.Maximum = 2147483647;
+            this.txtCantidad.Minimum = 0;
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(600, 22);
             this.txtCantidad.TabIndex = 19;
+            this.txtCantidad.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtCantidad.ThousandsSeparator = true;
             // 
             // lblPrecio
             // 
@@ -1065,17 +1073,21 @@
             this.lblPrecio.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // txtPrecio
-            // 
             this.txtPrecio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPrecio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
             this.txtPrecio.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtPrecio.DecimalPlaces = 2;
             this.txtPrecio.ForeColor = System.Drawing.Color.White;
+            this.txtPrecio.Increment = 0.01M;
             this.txtPrecio.Location = new System.Drawing.Point(610, 159);
             this.txtPrecio.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
-            this.txtPrecio.MaxLength = 15;
+            this.txtPrecio.Maximum = 99999999.99M;
+            this.txtPrecio.Minimum = 0M;
             this.txtPrecio.Name = "txtPrecio";
             this.txtPrecio.Size = new System.Drawing.Size(600, 22);
             this.txtPrecio.TabIndex = 21;
+            this.txtPrecio.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtPrecio.ThousandsSeparator = true;
             // 
             // lblSubtotal
             // 
@@ -1091,17 +1103,23 @@
             this.lblSubtotal.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // txtSubtotal
-            // 
             this.txtSubtotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSubtotal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
             this.txtSubtotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtSubtotal.DecimalPlaces = 2;
             this.txtSubtotal.ForeColor = System.Drawing.Color.White;
+            this.txtSubtotal.Increment = 0.01M;
             this.txtSubtotal.Location = new System.Drawing.Point(610, 205);
             this.txtSubtotal.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
-            this.txtSubtotal.MaxLength = 15;
+            this.txtSubtotal.Maximum = 99999999.99M;
+            this.txtSubtotal.Minimum = 0M;
             this.txtSubtotal.Name = "txtSubtotal";
+            this.txtSubtotal.ReadOnly = true;
             this.txtSubtotal.Size = new System.Drawing.Size(600, 22);
             this.txtSubtotal.TabIndex = 23;
+            this.txtSubtotal.TabStop = false;
+            this.txtSubtotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtSubtotal.ThousandsSeparator = true;
             // 
             // lblTotal
             // 
@@ -1117,17 +1135,23 @@
             this.lblTotal.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // txtTotal
-            // 
             this.txtTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTotal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
             this.txtTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTotal.DecimalPlaces = 2;
             this.txtTotal.ForeColor = System.Drawing.Color.White;
+            this.txtTotal.Increment = 0.01M;
             this.txtTotal.Location = new System.Drawing.Point(610, 251);
             this.txtTotal.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
-            this.txtTotal.MaxLength = 15;
+            this.txtTotal.Maximum = 99999999.99M;
+            this.txtTotal.Minimum = 0M;
             this.txtTotal.Name = "txtTotal";
+            this.txtTotal.ReadOnly = true;
             this.txtTotal.Size = new System.Drawing.Size(600, 22);
             this.txtTotal.TabIndex = 25;
+            this.txtTotal.TabStop = false;
+            this.txtTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtTotal.ThousandsSeparator = true;
             // 
             // lblEstado
             // 
@@ -1535,6 +1559,10 @@
             this.tabModulo.ResumeLayout(false);
             this.tpConsultar.ResumeLayout(false);
             this.pnlLista.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtCantidad)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPrecio)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSubtotal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTotal)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCotizaciones)).EndInit();
             this.pnlPie.ResumeLayout(false);
             this.pnlPie.PerformLayout();
@@ -1642,13 +1670,13 @@
         private System.Windows.Forms.Label lblDescripcion;
         private System.Windows.Forms.TextBox txtDescripcion;
         private System.Windows.Forms.Label lblCantidad;
-        private System.Windows.Forms.TextBox txtCantidad;
+        private System.Windows.Forms.NumericUpDown txtCantidad;
         private System.Windows.Forms.Label lblPrecio;
-        private System.Windows.Forms.TextBox txtPrecio;
+        private System.Windows.Forms.NumericUpDown txtPrecio;
         private System.Windows.Forms.Label lblSubtotal;
-        private System.Windows.Forms.TextBox txtSubtotal;
+        private System.Windows.Forms.NumericUpDown txtSubtotal;
         private System.Windows.Forms.Label lblTotal;
-        private System.Windows.Forms.TextBox txtTotal;
+        private System.Windows.Forms.NumericUpDown txtTotal;
         private System.Windows.Forms.Label lblEstado;
         private System.Windows.Forms.Panel pnlEstado;
         private System.Windows.Forms.RadioButton rdoActivo;
