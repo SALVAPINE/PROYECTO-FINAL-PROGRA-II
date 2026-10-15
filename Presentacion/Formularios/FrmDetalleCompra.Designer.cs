@@ -142,7 +142,6 @@
             // colMaterial
             // 
             this.colMaterial.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colMaterial.DataPropertyName = "";
             this.colMaterial.FillWeight = 40F;
             this.colMaterial.HeaderText = "Material";
             this.colMaterial.MinimumWidth = 6;
@@ -151,7 +150,6 @@
             // colCantidad
             // 
             this.colCantidad.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colCantidad.DataPropertyName = "";
             this.colCantidad.HeaderText = "Cantidad";
             this.colCantidad.MinimumWidth = 6;
             this.colCantidad.Name = "colCantidad";

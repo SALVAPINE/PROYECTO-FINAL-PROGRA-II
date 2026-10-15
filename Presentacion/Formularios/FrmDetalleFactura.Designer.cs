@@ -139,7 +139,6 @@
             // colTipoServicio
             // 
             this.colTipoServicio.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colTipoServicio.DataPropertyName = "";
             this.colTipoServicio.FillWeight = 40F;
             this.colTipoServicio.HeaderText = "Tipo de servicio";
             this.colTipoServicio.MinimumWidth = 6;
@@ -166,7 +165,6 @@
             // colSubtotal
             // 
             this.colSubtotal.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colSubtotal.DataPropertyName = "";
             this.colSubtotal.HeaderText = "Subtotal";
             this.colSubtotal.MinimumWidth = 6;
             this.colSubtotal.Name = "colSubtotal";
