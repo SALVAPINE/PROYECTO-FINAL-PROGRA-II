@@ -119,5 +119,10 @@ namespace Presentacion
         {
             // TODO
         }
+
+        private void lblUsuario_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
