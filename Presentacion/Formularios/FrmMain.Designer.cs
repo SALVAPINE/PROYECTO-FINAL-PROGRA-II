@@ -92,11 +92,11 @@
             // 
             this.lblFooterDer.AutoSize = true;
             this.lblFooterDer.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblFooterDer.Font = new System.Drawing.Font("Segoe Script", 11F, System.Drawing.FontStyle.Italic);
-            this.lblFooterDer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(72)))), ((int)(((byte)(153)))));
-            this.lblFooterDer.Location = new System.Drawing.Point(651, 0);
+            this.lblFooterDer.Font = new System.Drawing.Font("Segoe Script", 14F, System.Drawing.FontStyle.Italic);
+            this.lblFooterDer.ForeColor = System.Drawing.Color.White;
+            this.lblFooterDer.Location = new System.Drawing.Point(582, 0);
             this.lblFooterDer.Name = "lblFooterDer";
-            this.lblFooterDer.Size = new System.Drawing.Size(245, 23);
+            this.lblFooterDer.Size = new System.Drawing.Size(314, 30);
             this.lblFooterDer.TabIndex = 1;
             this.lblFooterDer.Text = "Tu idea, nuestra inspiración";
             this.lblFooterDer.TextAlign = System.Drawing.ContentAlignment.MiddleRight;

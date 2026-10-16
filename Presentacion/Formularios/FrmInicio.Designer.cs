@@ -52,8 +52,6 @@
             this.lblEmoji = new System.Windows.Forms.Label();
             this.lblDescripcion = new System.Windows.Forms.Label();
             this.pnlLema = new System.Windows.Forms.Panel();
-            this.lblLemaPequeno = new System.Windows.Forms.Label();
-            this.lblLemaGrande = new System.Windows.Forms.Label();
             this.pnlFecha = new System.Windows.Forms.Panel();
             this.lblCalendario = new System.Windows.Forms.Label();
             this.lblFecha = new System.Windows.Forms.Label();
@@ -72,7 +70,6 @@
             this.pnlCabecera.SuspendLayout();
             this.tlpCabecera.SuspendLayout();
             this.pnlSaludo.SuspendLayout();
-            this.pnlLema.SuspendLayout();
             this.pnlFecha.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -505,37 +502,11 @@
             // pnlLema
             // 
             this.pnlLema.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
-            this.pnlLema.Controls.Add(this.lblLemaPequeno);
-            this.pnlLema.Controls.Add(this.lblLemaGrande);
             this.pnlLema.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlLema.Location = new System.Drawing.Point(390, 3);
             this.pnlLema.Name = "pnlLema";
             this.pnlLema.Size = new System.Drawing.Size(205, 86);
             this.pnlLema.TabIndex = 1;
-            // 
-            // lblLemaPequeno
-            // 
-            this.lblLemaPequeno.AutoSize = true;
-            this.lblLemaPequeno.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
-            this.lblLemaPequeno.Font = new System.Drawing.Font("Segoe Script", 12F, System.Drawing.FontStyle.Italic);
-            this.lblLemaPequeno.ForeColor = System.Drawing.Color.White;
-            this.lblLemaPequeno.Location = new System.Drawing.Point(30, 6);
-            this.lblLemaPequeno.Name = "lblLemaPequeno";
-            this.lblLemaPequeno.Size = new System.Drawing.Size(89, 25);
-            this.lblLemaPequeno.TabIndex = 0;
-            this.lblLemaPequeno.Text = "Ideas que";
-            // 
-            // lblLemaGrande
-            // 
-            this.lblLemaGrande.AutoSize = true;
-            this.lblLemaGrande.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(18)))), ((int)(((byte)(52)))));
-            this.lblLemaGrande.Font = new System.Drawing.Font("Segoe Script", 24F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
-            this.lblLemaGrande.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(72)))), ((int)(((byte)(153)))));
-            this.lblLemaGrande.Location = new System.Drawing.Point(26, 27);
-            this.lblLemaGrande.Name = "lblLemaGrande";
-            this.lblLemaGrande.Size = new System.Drawing.Size(172, 53);
-            this.lblLemaGrande.TabIndex = 1;
-            this.lblLemaGrande.Text = "conectan";
             // 
             // pnlFecha
             // 
@@ -609,8 +580,6 @@
             this.tlpCabecera.ResumeLayout(false);
             this.pnlSaludo.ResumeLayout(false);
             this.pnlSaludo.PerformLayout();
-            this.pnlLema.ResumeLayout(false);
-            this.pnlLema.PerformLayout();
             this.pnlFecha.ResumeLayout(false);
             this.pnlFecha.PerformLayout();
             this.ResumeLayout(false);
@@ -654,8 +623,6 @@
         private System.Windows.Forms.Label lblEmoji;
         private System.Windows.Forms.Label lblDescripcion;
         private System.Windows.Forms.Panel pnlLema;
-        private System.Windows.Forms.Label lblLemaPequeno;
-        private System.Windows.Forms.Label lblLemaGrande;
         private System.Windows.Forms.Panel pnlFecha;
         private System.Windows.Forms.Label lblCalendario;
         private System.Windows.Forms.Label lblFecha;
