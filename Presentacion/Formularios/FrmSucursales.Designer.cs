@@ -787,6 +787,7 @@
             this.txtCodigoSucursal.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoSucursal.Name = "txtCodigoSucursal";
             this.txtCodigoSucursal.ReadOnly = true;
+            this.txtCodigoSucursal.Enabled = false;
             this.txtCodigoSucursal.Size = new System.Drawing.Size(470, 22);
             this.txtCodigoSucursal.TabIndex = 1;
             // 

@@ -42,9 +42,13 @@ namespace Presentacion
             statMonto.Valor = r.MontoTotalCotizado.ToString("C2");
 
             graCotizaciones.SetDatos(Resumenes.PuntosEstado(r.CotizacionesPorEstado));
-            graClientes.SetDatos(Resumenes.PuntosEstado(r.ClientesPorEstado));
-            graUsuarios.SetDatos(Resumenes.PuntosPaleta(r.UsuariosPorRol));
-            graMonto.SetDatos(r.MontoPorMes.Select(i => new PuntoGrafico(i.Etiqueta, i.Valor, Color.Empty)).ToList());
+            graficoDona1.SetDatos(Resumenes.PuntosEstado(r.ClientesPorEstado));
+            graficoColumnas1.SetDatos(r.MontoPorMes.Select(i => new PuntoGrafico(i.Etiqueta, i.Valor, Color.Empty)).ToList());
+        }
+
+        private void roundedPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

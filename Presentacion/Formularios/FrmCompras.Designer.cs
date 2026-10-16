@@ -645,6 +645,7 @@
             this.txtCodigoDetalleCompra.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoDetalleCompra.Name = "txtCodigoDetalleCompra";
             this.txtCodigoDetalleCompra.ReadOnly = true;
+            this.txtCodigoDetalleCompra.Enabled = false;
             this.txtCodigoDetalleCompra.Size = new System.Drawing.Size(200, 23);
             // 
             // lblTipoDeCompra
@@ -1023,6 +1024,7 @@
             this.txtCodigoCompra.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoCompra.Name = "txtCodigoCompra";
             this.txtCodigoCompra.ReadOnly = true;
+            this.txtCodigoCompra.Enabled = false;
             this.txtCodigoCompra.Size = new System.Drawing.Size(200, 23);
             // 
             // lblCodigoProveedor

@@ -783,6 +783,7 @@
             this.txtCodgioProveedor.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodgioProveedor.Name = "txtCodgioProveedor";
             this.txtCodgioProveedor.ReadOnly = true;
+            this.txtCodgioProveedor.Enabled = false;
             this.txtCodgioProveedor.Size = new System.Drawing.Size(467, 22);
             this.txtCodgioProveedor.TabIndex = 1;
             // 

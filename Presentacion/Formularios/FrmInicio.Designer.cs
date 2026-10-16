@@ -19,26 +19,21 @@
         {
             this.pnlGraficos = new System.Windows.Forms.Panel();
             this.tlpGraficos = new System.Windows.Forms.TableLayoutPanel();
+            this.roundedPanel2 = new Presentacion.RoundedPanel();
+            this.graficoDona1 = new Presentacion.GraficoDona();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.pnlCardCotizaciones = new Presentacion.RoundedPanel();
             this.graCotizaciones = new Presentacion.GraficoDona();
             this.pnlTituloCotizaciones = new System.Windows.Forms.Panel();
             this.lblIconoCotizaciones = new System.Windows.Forms.Label();
             this.lblTituloCotizaciones = new System.Windows.Forms.Label();
-            this.pnlCardMonto = new Presentacion.RoundedPanel();
-            this.graMonto = new Presentacion.GraficoColumnas();
-            this.pnlTituloMonto = new System.Windows.Forms.Panel();
-            this.lblIconoMonto = new System.Windows.Forms.Label();
-            this.lblTituloMonto = new System.Windows.Forms.Label();
-            this.pnlCardUsuarios = new Presentacion.RoundedPanel();
-            this.graUsuarios = new Presentacion.GraficoBarras();
-            this.pnlTituloUsuarios = new System.Windows.Forms.Panel();
-            this.lblIconoUsuarios = new System.Windows.Forms.Label();
-            this.lblTituloUsuarios = new System.Windows.Forms.Label();
-            this.pnlCardClientes = new Presentacion.RoundedPanel();
-            this.graClientes = new Presentacion.GraficoDona();
-            this.pnlTituloClientes = new System.Windows.Forms.Panel();
-            this.lblIconoClientes = new System.Windows.Forms.Label();
-            this.lblTituloClientes = new System.Windows.Forms.Label();
+            this.roundedPanel1 = new Presentacion.RoundedPanel();
+            this.graficoColumnas1 = new Presentacion.GraficoColumnas();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.pnlKpi = new System.Windows.Forms.Panel();
             this.tlpKpi = new System.Windows.Forms.TableLayoutPanel();
             this.statUsuarios = new Presentacion.StatCard();
@@ -57,14 +52,12 @@
             this.lblFecha = new System.Windows.Forms.Label();
             this.pnlGraficos.SuspendLayout();
             this.tlpGraficos.SuspendLayout();
+            this.roundedPanel2.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.pnlCardCotizaciones.SuspendLayout();
             this.pnlTituloCotizaciones.SuspendLayout();
-            this.pnlCardMonto.SuspendLayout();
-            this.pnlTituloMonto.SuspendLayout();
-            this.pnlCardUsuarios.SuspendLayout();
-            this.pnlTituloUsuarios.SuspendLayout();
-            this.pnlCardClientes.SuspendLayout();
-            this.pnlTituloClientes.SuspendLayout();
+            this.roundedPanel1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.pnlKpi.SuspendLayout();
             this.tlpKpi.SuspendLayout();
             this.pnlCabecera.SuspendLayout();
@@ -89,18 +82,78 @@
             this.tlpGraficos.ColumnCount = 2;
             this.tlpGraficos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpGraficos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpGraficos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpGraficos.Controls.Add(this.roundedPanel2, 1, 0);
             this.tlpGraficos.Controls.Add(this.pnlCardCotizaciones, 0, 0);
-            this.tlpGraficos.Controls.Add(this.pnlCardMonto, 1, 0);
-            this.tlpGraficos.Controls.Add(this.pnlCardUsuarios, 0, 1);
-            this.tlpGraficos.Controls.Add(this.pnlCardClientes, 1, 1);
+            this.tlpGraficos.Controls.Add(this.roundedPanel1, 0, 1);
             this.tlpGraficos.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpGraficos.Location = new System.Drawing.Point(0, 0);
             this.tlpGraficos.Name = "tlpGraficos";
             this.tlpGraficos.RowCount = 2;
             this.tlpGraficos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpGraficos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpGraficos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpGraficos.Size = new System.Drawing.Size(880, 400);
             this.tlpGraficos.TabIndex = 0;
+            // 
+            // roundedPanel2
+            // 
+            this.roundedPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.roundedPanel2.Controls.Add(this.graficoDona1);
+            this.roundedPanel2.Controls.Add(this.panel2);
+            this.roundedPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.roundedPanel2.Location = new System.Drawing.Point(447, 7);
+            this.roundedPanel2.Margin = new System.Windows.Forms.Padding(7);
+            this.roundedPanel2.Name = "roundedPanel2";
+            this.roundedPanel2.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
+            this.roundedPanel2.Size = new System.Drawing.Size(426, 186);
+            this.roundedPanel2.TabIndex = 5;
+            this.roundedPanel2.Paint += new System.Windows.Forms.PaintEventHandler(this.roundedPanel2_Paint);
+            // 
+            // graficoDona1
+            // 
+            this.graficoDona1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.graficoDona1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.graficoDona1.ForeColor = System.Drawing.Color.White;
+            this.graficoDona1.Location = new System.Drawing.Point(14, 42);
+            this.graficoDona1.Name = "graficoDona1";
+            this.graficoDona1.Size = new System.Drawing.Size(398, 134);
+            this.graficoDona1.TabIndex = 0;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.panel2.Controls.Add(this.label3);
+            this.panel2.Controls.Add(this.label4);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(14, 10);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(398, 32);
+            this.panel2.TabIndex = 1;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.label3.Font = new System.Drawing.Font("Segoe MDL2 Assets", 13F);
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(85)))), ((int)(((byte)(247)))));
+            this.label3.Location = new System.Drawing.Point(0, 3);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(32, 22);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(28, 4);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(164, 23);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Clientes por estado";
             // 
             // pnlCardCotizaciones
             // 
@@ -108,8 +161,8 @@
             this.pnlCardCotizaciones.Controls.Add(this.graCotizaciones);
             this.pnlCardCotizaciones.Controls.Add(this.pnlTituloCotizaciones);
             this.pnlCardCotizaciones.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCardCotizaciones.Location = new System.Drawing.Point(0, 0);
-            this.pnlCardCotizaciones.Margin = new System.Windows.Forms.Padding(0, 0, 14, 14);
+            this.pnlCardCotizaciones.Location = new System.Drawing.Point(7, 7);
+            this.pnlCardCotizaciones.Margin = new System.Windows.Forms.Padding(7);
             this.pnlCardCotizaciones.Name = "pnlCardCotizaciones";
             this.pnlCardCotizaciones.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
             this.pnlCardCotizaciones.Size = new System.Drawing.Size(426, 186);
@@ -144,7 +197,7 @@
             this.lblIconoCotizaciones.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(165)))), ((int)(((byte)(250)))));
             this.lblIconoCotizaciones.Location = new System.Drawing.Point(0, 3);
             this.lblIconoCotizaciones.Name = "lblIconoCotizaciones";
-            this.lblIconoCotizaciones.Size = new System.Drawing.Size(26, 18);
+            this.lblIconoCotizaciones.Size = new System.Drawing.Size(32, 22);
             this.lblIconoCotizaciones.TabIndex = 0;
             this.lblIconoCotizaciones.Text = "";
             // 
@@ -156,183 +209,68 @@
             this.lblTituloCotizaciones.ForeColor = System.Drawing.Color.White;
             this.lblTituloCotizaciones.Location = new System.Drawing.Point(28, 4);
             this.lblTituloCotizaciones.Name = "lblTituloCotizaciones";
-            this.lblTituloCotizaciones.Size = new System.Drawing.Size(170, 19);
+            this.lblTituloCotizaciones.Size = new System.Drawing.Size(200, 23);
             this.lblTituloCotizaciones.TabIndex = 1;
             this.lblTituloCotizaciones.Text = "Cotizaciones por estado";
             // 
-            // pnlCardMonto
+            // roundedPanel1
             // 
-            this.pnlCardMonto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.pnlCardMonto.Controls.Add(this.graMonto);
-            this.pnlCardMonto.Controls.Add(this.pnlTituloMonto);
-            this.pnlCardMonto.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCardMonto.Location = new System.Drawing.Point(440, 0);
-            this.pnlCardMonto.Margin = new System.Windows.Forms.Padding(0, 0, 0, 14);
-            this.pnlCardMonto.Name = "pnlCardMonto";
-            this.pnlCardMonto.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
-            this.pnlCardMonto.Size = new System.Drawing.Size(440, 186);
-            this.pnlCardMonto.TabIndex = 1;
+            this.roundedPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.tlpGraficos.SetColumnSpan(this.roundedPanel1, 2);
+            this.roundedPanel1.Controls.Add(this.graficoColumnas1);
+            this.roundedPanel1.Controls.Add(this.panel1);
+            this.roundedPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.roundedPanel1.Location = new System.Drawing.Point(7, 207);
+            this.roundedPanel1.Margin = new System.Windows.Forms.Padding(7);
+            this.roundedPanel1.Name = "roundedPanel1";
+            this.roundedPanel1.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
+            this.roundedPanel1.Size = new System.Drawing.Size(866, 186);
+            this.roundedPanel1.TabIndex = 4;
             // 
-            // graMonto
+            // graficoColumnas1
             // 
-            this.graMonto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.graMonto.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.graMonto.ForeColor = System.Drawing.Color.White;
-            this.graMonto.Location = new System.Drawing.Point(14, 42);
-            this.graMonto.Name = "graMonto";
-            this.graMonto.Size = new System.Drawing.Size(412, 134);
-            this.graMonto.TabIndex = 0;
+            this.graficoColumnas1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.graficoColumnas1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.graficoColumnas1.ForeColor = System.Drawing.Color.White;
+            this.graficoColumnas1.Location = new System.Drawing.Point(14, 42);
+            this.graficoColumnas1.Name = "graficoColumnas1";
+            this.graficoColumnas1.Size = new System.Drawing.Size(838, 134);
+            this.graficoColumnas1.TabIndex = 0;
             // 
-            // pnlTituloMonto
+            // panel1
             // 
-            this.pnlTituloMonto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.pnlTituloMonto.Controls.Add(this.lblIconoMonto);
-            this.pnlTituloMonto.Controls.Add(this.lblTituloMonto);
-            this.pnlTituloMonto.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTituloMonto.Location = new System.Drawing.Point(14, 10);
-            this.pnlTituloMonto.Name = "pnlTituloMonto";
-            this.pnlTituloMonto.Size = new System.Drawing.Size(412, 32);
-            this.pnlTituloMonto.TabIndex = 1;
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(14, 10);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(838, 32);
+            this.panel1.TabIndex = 1;
             // 
-            // lblIconoMonto
+            // label1
             // 
-            this.lblIconoMonto.AutoSize = true;
-            this.lblIconoMonto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.lblIconoMonto.Font = new System.Drawing.Font("Segoe MDL2 Assets", 13F);
-            this.lblIconoMonto.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(85)))), ((int)(((byte)(247)))));
-            this.lblIconoMonto.Location = new System.Drawing.Point(0, 3);
-            this.lblIconoMonto.Name = "lblIconoMonto";
-            this.lblIconoMonto.Size = new System.Drawing.Size(26, 18);
-            this.lblIconoMonto.TabIndex = 0;
-            this.lblIconoMonto.Text = "";
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.label1.Font = new System.Drawing.Font("Segoe MDL2 Assets", 13F);
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(85)))), ((int)(((byte)(247)))));
+            this.label1.Location = new System.Drawing.Point(0, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 22);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "";
             // 
-            // lblTituloMonto
+            // label2
             // 
-            this.lblTituloMonto.AutoSize = true;
-            this.lblTituloMonto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.lblTituloMonto.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblTituloMonto.ForeColor = System.Drawing.Color.White;
-            this.lblTituloMonto.Location = new System.Drawing.Point(28, 4);
-            this.lblTituloMonto.Name = "lblTituloMonto";
-            this.lblTituloMonto.Size = new System.Drawing.Size(174, 19);
-            this.lblTituloMonto.TabIndex = 1;
-            this.lblTituloMonto.Text = "Monto cotizado por mes";
-            // 
-            // pnlCardUsuarios
-            // 
-            this.pnlCardUsuarios.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.pnlCardUsuarios.Controls.Add(this.graUsuarios);
-            this.pnlCardUsuarios.Controls.Add(this.pnlTituloUsuarios);
-            this.pnlCardUsuarios.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCardUsuarios.Location = new System.Drawing.Point(0, 200);
-            this.pnlCardUsuarios.Margin = new System.Windows.Forms.Padding(0, 0, 14, 0);
-            this.pnlCardUsuarios.Name = "pnlCardUsuarios";
-            this.pnlCardUsuarios.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
-            this.pnlCardUsuarios.Size = new System.Drawing.Size(426, 200);
-            this.pnlCardUsuarios.TabIndex = 2;
-            // 
-            // graUsuarios
-            // 
-            this.graUsuarios.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.graUsuarios.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.graUsuarios.ForeColor = System.Drawing.Color.White;
-            this.graUsuarios.Location = new System.Drawing.Point(14, 42);
-            this.graUsuarios.Name = "graUsuarios";
-            this.graUsuarios.Size = new System.Drawing.Size(398, 148);
-            this.graUsuarios.TabIndex = 0;
-            // 
-            // pnlTituloUsuarios
-            // 
-            this.pnlTituloUsuarios.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.pnlTituloUsuarios.Controls.Add(this.lblIconoUsuarios);
-            this.pnlTituloUsuarios.Controls.Add(this.lblTituloUsuarios);
-            this.pnlTituloUsuarios.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTituloUsuarios.Location = new System.Drawing.Point(14, 10);
-            this.pnlTituloUsuarios.Name = "pnlTituloUsuarios";
-            this.pnlTituloUsuarios.Size = new System.Drawing.Size(398, 32);
-            this.pnlTituloUsuarios.TabIndex = 1;
-            // 
-            // lblIconoUsuarios
-            // 
-            this.lblIconoUsuarios.AutoSize = true;
-            this.lblIconoUsuarios.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.lblIconoUsuarios.Font = new System.Drawing.Font("Segoe MDL2 Assets", 13F);
-            this.lblIconoUsuarios.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(85)))), ((int)(((byte)(247)))));
-            this.lblIconoUsuarios.Location = new System.Drawing.Point(0, 3);
-            this.lblIconoUsuarios.Name = "lblIconoUsuarios";
-            this.lblIconoUsuarios.Size = new System.Drawing.Size(26, 18);
-            this.lblIconoUsuarios.TabIndex = 0;
-            this.lblIconoUsuarios.Text = "";
-            // 
-            // lblTituloUsuarios
-            // 
-            this.lblTituloUsuarios.AutoSize = true;
-            this.lblTituloUsuarios.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.lblTituloUsuarios.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblTituloUsuarios.ForeColor = System.Drawing.Color.White;
-            this.lblTituloUsuarios.Location = new System.Drawing.Point(28, 4);
-            this.lblTituloUsuarios.Name = "lblTituloUsuarios";
-            this.lblTituloUsuarios.Size = new System.Drawing.Size(117, 19);
-            this.lblTituloUsuarios.TabIndex = 1;
-            this.lblTituloUsuarios.Text = "Usuarios por rol";
-            // 
-            // pnlCardClientes
-            // 
-            this.pnlCardClientes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.pnlCardClientes.Controls.Add(this.graClientes);
-            this.pnlCardClientes.Controls.Add(this.pnlTituloClientes);
-            this.pnlCardClientes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCardClientes.Location = new System.Drawing.Point(440, 200);
-            this.pnlCardClientes.Margin = new System.Windows.Forms.Padding(0);
-            this.pnlCardClientes.Name = "pnlCardClientes";
-            this.pnlCardClientes.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
-            this.pnlCardClientes.Size = new System.Drawing.Size(440, 200);
-            this.pnlCardClientes.TabIndex = 3;
-            // 
-            // graClientes
-            // 
-            this.graClientes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.graClientes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.graClientes.ForeColor = System.Drawing.Color.White;
-            this.graClientes.Location = new System.Drawing.Point(14, 42);
-            this.graClientes.Name = "graClientes";
-            this.graClientes.Size = new System.Drawing.Size(412, 148);
-            this.graClientes.TabIndex = 0;
-            // 
-            // pnlTituloClientes
-            // 
-            this.pnlTituloClientes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.pnlTituloClientes.Controls.Add(this.lblIconoClientes);
-            this.pnlTituloClientes.Controls.Add(this.lblTituloClientes);
-            this.pnlTituloClientes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTituloClientes.Location = new System.Drawing.Point(14, 10);
-            this.pnlTituloClientes.Name = "pnlTituloClientes";
-            this.pnlTituloClientes.Size = new System.Drawing.Size(412, 32);
-            this.pnlTituloClientes.TabIndex = 1;
-            // 
-            // lblIconoClientes
-            // 
-            this.lblIconoClientes.AutoSize = true;
-            this.lblIconoClientes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.lblIconoClientes.Font = new System.Drawing.Font("Segoe MDL2 Assets", 13F);
-            this.lblIconoClientes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(85)))), ((int)(((byte)(247)))));
-            this.lblIconoClientes.Location = new System.Drawing.Point(0, 3);
-            this.lblIconoClientes.Name = "lblIconoClientes";
-            this.lblIconoClientes.Size = new System.Drawing.Size(26, 18);
-            this.lblIconoClientes.TabIndex = 0;
-            this.lblIconoClientes.Text = "";
-            // 
-            // lblTituloClientes
-            // 
-            this.lblTituloClientes.AutoSize = true;
-            this.lblTituloClientes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
-            this.lblTituloClientes.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblTituloClientes.ForeColor = System.Drawing.Color.White;
-            this.lblTituloClientes.Location = new System.Drawing.Point(28, 4);
-            this.lblTituloClientes.Name = "lblTituloClientes";
-            this.lblTituloClientes.Size = new System.Drawing.Size(138, 19);
-            this.lblTituloClientes.TabIndex = 1;
-            this.lblTituloClientes.Text = "Clientes por estado";
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(28, 4);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(206, 23);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Monto cotizado por mes";
             // 
             // pnlKpi
             // 
@@ -370,9 +308,9 @@
             this.statUsuarios.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(84)))));
             this.statUsuarios.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statUsuarios.Location = new System.Drawing.Point(0, 0);
-            this.statUsuarios.Margin = new System.Windows.Forms.Padding(0, 0, 14, 0);
+            this.statUsuarios.Margin = new System.Windows.Forms.Padding(0, 0, 12, 0);
             this.statUsuarios.Name = "statUsuarios";
-            this.statUsuarios.Size = new System.Drawing.Size(206, 114);
+            this.statUsuarios.Size = new System.Drawing.Size(208, 114);
             this.statUsuarios.Subtitulo = "Activos: 0";
             this.statUsuarios.TabIndex = 0;
             this.statUsuarios.Titulo = "Usuarios";
@@ -385,9 +323,9 @@
             this.statClientes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statClientes.Glyph = "";
             this.statClientes.Location = new System.Drawing.Point(220, 0);
-            this.statClientes.Margin = new System.Windows.Forms.Padding(0, 0, 14, 0);
+            this.statClientes.Margin = new System.Windows.Forms.Padding(0, 0, 12, 0);
             this.statClientes.Name = "statClientes";
-            this.statClientes.Size = new System.Drawing.Size(206, 114);
+            this.statClientes.Size = new System.Drawing.Size(208, 114);
             this.statClientes.Subtitulo = "Registrados";
             this.statClientes.TabIndex = 1;
             this.statClientes.Titulo = "Clientes";
@@ -400,9 +338,9 @@
             this.statCotizaciones.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statCotizaciones.Glyph = "";
             this.statCotizaciones.Location = new System.Drawing.Point(440, 0);
-            this.statCotizaciones.Margin = new System.Windows.Forms.Padding(0, 0, 14, 0);
+            this.statCotizaciones.Margin = new System.Windows.Forms.Padding(0, 0, 12, 0);
             this.statCotizaciones.Name = "statCotizaciones";
-            this.statCotizaciones.Size = new System.Drawing.Size(206, 114);
+            this.statCotizaciones.Size = new System.Drawing.Size(208, 114);
             this.statCotizaciones.Subtitulo = "Totales";
             this.statCotizaciones.TabIndex = 2;
             this.statCotizaciones.Titulo = "Cotizaciones";
@@ -471,7 +409,7 @@
             this.lblBienvenida.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.lblBienvenida.Location = new System.Drawing.Point(0, 4);
             this.lblBienvenida.Name = "lblBienvenida";
-            this.lblBienvenida.Size = new System.Drawing.Size(179, 37);
+            this.lblBienvenida.Size = new System.Drawing.Size(222, 46);
             this.lblBienvenida.TabIndex = 0;
             this.lblBienvenida.Text = "¡Bienvenido!";
             // 
@@ -483,7 +421,7 @@
             this.lblEmoji.ForeColor = System.Drawing.Color.White;
             this.lblEmoji.Location = new System.Drawing.Point(173, 8);
             this.lblEmoji.Name = "lblEmoji";
-            this.lblEmoji.Size = new System.Drawing.Size(47, 32);
+            this.lblEmoji.Size = new System.Drawing.Size(58, 40);
             this.lblEmoji.TabIndex = 1;
             this.lblEmoji.Text = "👋";
             // 
@@ -495,7 +433,7 @@
             this.lblDescripcion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(220)))), ((int)(((byte)(245)))));
             this.lblDescripcion.Location = new System.Drawing.Point(0, 50);
             this.lblDescripcion.Name = "lblDescripcion";
-            this.lblDescripcion.Size = new System.Drawing.Size(297, 19);
+            this.lblDescripcion.Size = new System.Drawing.Size(371, 23);
             this.lblDescripcion.TabIndex = 2;
             this.lblDescripcion.Text = "Sistema de gestión de Publicidad Multisucursal.";
             // 
@@ -526,10 +464,10 @@
             this.lblCalendario.Dock = System.Windows.Forms.DockStyle.Right;
             this.lblCalendario.Font = new System.Drawing.Font("Segoe MDL2 Assets", 12F);
             this.lblCalendario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            this.lblCalendario.Location = new System.Drawing.Point(204, 0);
+            this.lblCalendario.Location = new System.Drawing.Point(189, 0);
             this.lblCalendario.Name = "lblCalendario";
             this.lblCalendario.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
-            this.lblCalendario.Size = new System.Drawing.Size(31, 16);
+            this.lblCalendario.Size = new System.Drawing.Size(37, 20);
             this.lblCalendario.TabIndex = 0;
             this.lblCalendario.Text = "";
             this.lblCalendario.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -541,9 +479,9 @@
             this.lblFecha.Dock = System.Windows.Forms.DockStyle.Right;
             this.lblFecha.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.lblFecha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(220)))), ((int)(((byte)(245)))));
-            this.lblFecha.Location = new System.Drawing.Point(235, 0);
+            this.lblFecha.Location = new System.Drawing.Point(226, 0);
             this.lblFecha.Name = "lblFecha";
-            this.lblFecha.Size = new System.Drawing.Size(41, 17);
+            this.lblFecha.Size = new System.Drawing.Size(50, 21);
             this.lblFecha.TabIndex = 1;
             this.lblFecha.Text = "Fecha";
             this.lblFecha.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -562,18 +500,15 @@
             this.Text = "Inicio";
             this.pnlGraficos.ResumeLayout(false);
             this.tlpGraficos.ResumeLayout(false);
+            this.roundedPanel2.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.pnlCardCotizaciones.ResumeLayout(false);
             this.pnlTituloCotizaciones.ResumeLayout(false);
             this.pnlTituloCotizaciones.PerformLayout();
-            this.pnlCardMonto.ResumeLayout(false);
-            this.pnlTituloMonto.ResumeLayout(false);
-            this.pnlTituloMonto.PerformLayout();
-            this.pnlCardUsuarios.ResumeLayout(false);
-            this.pnlTituloUsuarios.ResumeLayout(false);
-            this.pnlTituloUsuarios.PerformLayout();
-            this.pnlCardClientes.ResumeLayout(false);
-            this.pnlTituloClientes.ResumeLayout(false);
-            this.pnlTituloClientes.PerformLayout();
+            this.roundedPanel1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.pnlKpi.ResumeLayout(false);
             this.tlpKpi.ResumeLayout(false);
             this.pnlCabecera.ResumeLayout(false);
@@ -595,21 +530,6 @@
         private System.Windows.Forms.Panel pnlTituloCotizaciones;
         private System.Windows.Forms.Label lblIconoCotizaciones;
         private System.Windows.Forms.Label lblTituloCotizaciones;
-        private Presentacion.RoundedPanel pnlCardMonto;
-        private Presentacion.GraficoColumnas graMonto;
-        private System.Windows.Forms.Panel pnlTituloMonto;
-        private System.Windows.Forms.Label lblIconoMonto;
-        private System.Windows.Forms.Label lblTituloMonto;
-        private Presentacion.RoundedPanel pnlCardUsuarios;
-        private Presentacion.GraficoBarras graUsuarios;
-        private System.Windows.Forms.Panel pnlTituloUsuarios;
-        private System.Windows.Forms.Label lblIconoUsuarios;
-        private System.Windows.Forms.Label lblTituloUsuarios;
-        private Presentacion.RoundedPanel pnlCardClientes;
-        private Presentacion.GraficoDona graClientes;
-        private System.Windows.Forms.Panel pnlTituloClientes;
-        private System.Windows.Forms.Label lblIconoClientes;
-        private System.Windows.Forms.Label lblTituloClientes;
         private System.Windows.Forms.Panel pnlKpi;
         private System.Windows.Forms.TableLayoutPanel tlpKpi;
         private Presentacion.StatCard statUsuarios;
@@ -626,5 +546,15 @@
         private System.Windows.Forms.Panel pnlFecha;
         private System.Windows.Forms.Label lblCalendario;
         private System.Windows.Forms.Label lblFecha;
+        private RoundedPanel roundedPanel2;
+        private GraficoDona graficoDona1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private RoundedPanel roundedPanel1;
+        private GraficoColumnas graficoColumnas1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }

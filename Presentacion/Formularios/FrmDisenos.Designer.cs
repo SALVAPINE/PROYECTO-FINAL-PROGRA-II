@@ -793,6 +793,7 @@
             this.txtCodigoDiseno.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoDiseno.Name = "txtCodigoDiseno";
             this.txtCodigoDiseno.ReadOnly = true;
+            this.txtCodigoDiseno.Enabled = false;
             this.txtCodigoDiseno.Size = new System.Drawing.Size(531, 22);
             this.txtCodigoDiseno.TabIndex = 1;
             // 

@@ -793,6 +793,7 @@
             this.txtCodigoInventario.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoInventario.Name = "txtCodigoInventario";
             this.txtCodigoInventario.ReadOnly = true;
+            this.txtCodigoInventario.Enabled = false;
             this.txtCodigoInventario.Size = new System.Drawing.Size(501, 22);
             this.txtCodigoInventario.TabIndex = 1;
             // 

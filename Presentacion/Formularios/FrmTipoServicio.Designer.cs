@@ -783,6 +783,7 @@
             this.txtCodigoTipoServicio.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoTipoServicio.Name = "txtCodigoTipoServicio";
             this.txtCodigoTipoServicio.ReadOnly = true;
+            this.txtCodigoTipoServicio.Enabled = false;
             this.txtCodigoTipoServicio.Size = new System.Drawing.Size(437, 22);
             this.txtCodigoTipoServicio.TabIndex = 1;
             // 
