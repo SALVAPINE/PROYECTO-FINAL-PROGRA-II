@@ -783,6 +783,7 @@
             this.txtCodigoCliente.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoCliente.Name = "txtCodigoCliente";
             this.txtCodigoCliente.ReadOnly = true;
+            this.txtCodigoCliente.Enabled = false;
             this.txtCodigoCliente.Size = new System.Drawing.Size(493, 22);
             this.txtCodigoCliente.TabIndex = 1;
             // 

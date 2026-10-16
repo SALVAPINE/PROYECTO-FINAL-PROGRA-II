@@ -803,6 +803,7 @@
             this.txtCodigoOrdenTrabajo.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoOrdenTrabajo.Name = "txtCodigoOrdenTrabajo";
             this.txtCodigoOrdenTrabajo.ReadOnly = true;
+            this.txtCodigoOrdenTrabajo.Enabled = false;
             this.txtCodigoOrdenTrabajo.Size = new System.Drawing.Size(464, 22);
             this.txtCodigoOrdenTrabajo.TabIndex = 1;
             // 

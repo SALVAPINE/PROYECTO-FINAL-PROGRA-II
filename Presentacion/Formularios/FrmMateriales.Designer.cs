@@ -787,6 +787,7 @@
             this.txtCodigoMaterial.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoMaterial.Name = "txtCodigoMaterial";
             this.txtCodigoMaterial.ReadOnly = true;
+            this.txtCodigoMaterial.Enabled = false;
             this.txtCodigoMaterial.Size = new System.Drawing.Size(466, 22);
             this.txtCodigoMaterial.TabIndex = 1;
             // 

@@ -783,6 +783,7 @@
             this.txtCodigoDisenador.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoDisenador.Name = "txtCodigoDisenador";
             this.txtCodigoDisenador.ReadOnly = true;
+            this.txtCodigoDisenador.Enabled = false;
             this.txtCodigoDisenador.Size = new System.Drawing.Size(495, 22);
             this.txtCodigoDisenador.TabIndex = 1;
             // 

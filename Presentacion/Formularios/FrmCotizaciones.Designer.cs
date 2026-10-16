@@ -821,6 +821,7 @@
             this.txtCodigoCotizacion.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoCotizacion.Name = "txtCodigoCotizacion";
             this.txtCodigoCotizacion.ReadOnly = true;
+            this.txtCodigoCotizacion.Enabled = false;
             this.txtCodigoCotizacion.Size = new System.Drawing.Size(600, 22);
             this.txtCodigoCotizacion.TabIndex = 1;
             // 

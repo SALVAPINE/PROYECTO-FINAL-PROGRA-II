@@ -357,6 +357,7 @@
             this.txtCodigo.Margin = new System.Windows.Forms.Padding(0, 3, 16, 3);
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.ReadOnly = true;
+            this.txtCodigo.Enabled = false;
             this.txtCodigo.Size = new System.Drawing.Size(369, 22);
             this.txtCodigo.TabIndex = 1;
             // 

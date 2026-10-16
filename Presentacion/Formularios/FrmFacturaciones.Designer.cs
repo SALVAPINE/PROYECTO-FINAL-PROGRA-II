@@ -736,6 +736,7 @@
             this.txtCodigoDetalleFactura.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoDetalleFactura.Name = "txtCodigoDetalleFactura";
             this.txtCodigoDetalleFactura.ReadOnly = true;
+            this.txtCodigoDetalleFactura.Enabled = false;
             this.txtCodigoDetalleFactura.Size = new System.Drawing.Size(199, 22);
             this.txtCodigoDetalleFactura.TabIndex = 1;
             // 
@@ -1168,6 +1169,7 @@
             this.txtCodigoFacturacion.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoFacturacion.Name = "txtCodigoFacturacion";
             this.txtCodigoFacturacion.ReadOnly = true;
+            this.txtCodigoFacturacion.Enabled = false;
             this.txtCodigoFacturacion.Size = new System.Drawing.Size(199, 22);
             this.txtCodigoFacturacion.TabIndex = 1;
             // 

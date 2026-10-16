@@ -830,6 +830,7 @@
             this.txtCodigoUsuario.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoUsuario.Name = "txtCodigoUsuario";
             this.txtCodigoUsuario.ReadOnly = true;
+            this.txtCodigoUsuario.Enabled = false;
             this.txtCodigoUsuario.Size = new System.Drawing.Size(548, 22);
             this.txtCodigoUsuario.TabIndex = 1;
             // 
