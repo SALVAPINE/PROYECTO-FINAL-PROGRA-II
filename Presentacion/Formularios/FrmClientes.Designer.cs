@@ -18,6 +18,9 @@
         private void InitializeComponent()
         {
             this.pnlCabecera = new System.Windows.Forms.Panel();
+            this.btnTabConsultar = new Presentacion.BotonIcono();
+            this.btnTabGestionar = new Presentacion.BotonIcono();
+            this.btnTabResumen = new Presentacion.BotonIcono();
             this.tabModulo = new Presentacion.TabControlSinEncabezado();
             this.tpConsultar = new System.Windows.Forms.TabPage();
             this.pnlLista = new Presentacion.RoundedPanel();
@@ -102,9 +105,6 @@
             this.pnlTituloResumen = new System.Windows.Forms.Panel();
             this.lblTituloResumen = new System.Windows.Forms.Label();
             this.lblSubtituloResumen = new System.Windows.Forms.Label();
-            this.btnTabConsultar = new Presentacion.BotonIcono();
-            this.btnTabGestionar = new Presentacion.BotonIcono();
-            this.btnTabResumen = new Presentacion.BotonIcono();
             this.pnlCabecera.SuspendLayout();
             this.tabModulo.SuspendLayout();
             this.tpConsultar.SuspendLayout();
@@ -148,6 +148,63 @@
             this.pnlCabecera.Name = "pnlCabecera";
             this.pnlCabecera.Size = new System.Drawing.Size(1050, 44);
             this.pnlCabecera.TabIndex = 1;
+            // 
+            // btnTabConsultar
+            // 
+            this.btnTabConsultar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(76)))));
+            this.btnTabConsultar.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(42)))), ((int)(((byte)(110)))));
+            this.btnTabConsultar.ColorSeleccionado = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(70)))), ((int)(((byte)(229)))));
+            this.btnTabConsultar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTabConsultar.Degradado = true;
+            this.btnTabConsultar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTabConsultar.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnTabConsultar.ForeColor = System.Drawing.Color.White;
+            this.btnTabConsultar.Location = new System.Drawing.Point(0, 6);
+            this.btnTabConsultar.Name = "btnTabConsultar";
+            this.btnTabConsultar.Radio = 6;
+            this.btnTabConsultar.Size = new System.Drawing.Size(104, 30);
+            this.btnTabConsultar.TabIndex = 0;
+            this.btnTabConsultar.Text = "Consultar";
+            this.btnTabConsultar.UseVisualStyleBackColor = false;
+            this.btnTabConsultar.Click += new System.EventHandler(this.btnTabConsultar_Click);
+            // 
+            // btnTabGestionar
+            // 
+            this.btnTabGestionar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(76)))));
+            this.btnTabGestionar.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(42)))), ((int)(((byte)(110)))));
+            this.btnTabGestionar.ColorSeleccionado = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(70)))), ((int)(((byte)(229)))));
+            this.btnTabGestionar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTabGestionar.Degradado = true;
+            this.btnTabGestionar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTabGestionar.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnTabGestionar.ForeColor = System.Drawing.Color.White;
+            this.btnTabGestionar.Location = new System.Drawing.Point(108, 6);
+            this.btnTabGestionar.Name = "btnTabGestionar";
+            this.btnTabGestionar.Radio = 6;
+            this.btnTabGestionar.Size = new System.Drawing.Size(104, 30);
+            this.btnTabGestionar.TabIndex = 1;
+            this.btnTabGestionar.Text = "Gestionar";
+            this.btnTabGestionar.UseVisualStyleBackColor = false;
+            this.btnTabGestionar.Click += new System.EventHandler(this.btnTabGestionar_Click);
+            // 
+            // btnTabResumen
+            // 
+            this.btnTabResumen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(76)))));
+            this.btnTabResumen.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(42)))), ((int)(((byte)(110)))));
+            this.btnTabResumen.ColorSeleccionado = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(70)))), ((int)(((byte)(229)))));
+            this.btnTabResumen.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTabResumen.Degradado = true;
+            this.btnTabResumen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTabResumen.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnTabResumen.ForeColor = System.Drawing.Color.White;
+            this.btnTabResumen.Location = new System.Drawing.Point(216, 6);
+            this.btnTabResumen.Name = "btnTabResumen";
+            this.btnTabResumen.Radio = 6;
+            this.btnTabResumen.Size = new System.Drawing.Size(104, 30);
+            this.btnTabResumen.TabIndex = 2;
+            this.btnTabResumen.Text = "Resumen";
+            this.btnTabResumen.UseVisualStyleBackColor = false;
+            this.btnTabResumen.Click += new System.EventHandler(this.btnTabResumen_Click);
             // 
             // tabModulo
             // 
@@ -778,12 +835,12 @@
             this.txtCodigoCliente.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtCodigoCliente.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(37)))), ((int)(((byte)(92)))));
             this.txtCodigoCliente.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCodigoCliente.Enabled = false;
             this.txtCodigoCliente.ForeColor = System.Drawing.Color.White;
             this.txtCodigoCliente.Location = new System.Drawing.Point(0, 21);
             this.txtCodigoCliente.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.txtCodigoCliente.Name = "txtCodigoCliente";
             this.txtCodigoCliente.ReadOnly = true;
-            this.txtCodigoCliente.Enabled = false;
             this.txtCodigoCliente.Size = new System.Drawing.Size(493, 22);
             this.txtCodigoCliente.TabIndex = 1;
             // 
@@ -849,7 +906,7 @@
             this.lblDPI.Name = "lblDPI";
             this.lblDPI.Size = new System.Drawing.Size(503, 18);
             this.lblDPI.TabIndex = 6;
-            this.lblDPI.Text = "DPI:";
+            this.lblDPI.Text = "DpiCliente:";
             this.lblDPI.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // txtDPI
@@ -1266,63 +1323,6 @@
             this.lblSubtituloResumen.Size = new System.Drawing.Size(267, 21);
             this.lblSubtituloResumen.TabIndex = 1;
             this.lblSubtituloResumen.Text = "Estadísticas y distribución de clientes.";
-            // 
-            // btnTabConsultar
-            // 
-            this.btnTabConsultar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(76)))));
-            this.btnTabConsultar.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(42)))), ((int)(((byte)(110)))));
-            this.btnTabConsultar.ColorSeleccionado = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(70)))), ((int)(((byte)(229)))));
-            this.btnTabConsultar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnTabConsultar.Degradado = true;
-            this.btnTabConsultar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTabConsultar.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnTabConsultar.ForeColor = System.Drawing.Color.White;
-            this.btnTabConsultar.Location = new System.Drawing.Point(0, 6);
-            this.btnTabConsultar.Name = "btnTabConsultar";
-            this.btnTabConsultar.Radio = 6;
-            this.btnTabConsultar.Size = new System.Drawing.Size(104, 30);
-            this.btnTabConsultar.TabIndex = 0;
-            this.btnTabConsultar.Text = "Consultar";
-            this.btnTabConsultar.UseVisualStyleBackColor = false;
-            this.btnTabConsultar.Click += new System.EventHandler(this.btnTabConsultar_Click);
-            // 
-            // btnTabGestionar
-            // 
-            this.btnTabGestionar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(76)))));
-            this.btnTabGestionar.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(42)))), ((int)(((byte)(110)))));
-            this.btnTabGestionar.ColorSeleccionado = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(70)))), ((int)(((byte)(229)))));
-            this.btnTabGestionar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnTabGestionar.Degradado = true;
-            this.btnTabGestionar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTabGestionar.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnTabGestionar.ForeColor = System.Drawing.Color.White;
-            this.btnTabGestionar.Location = new System.Drawing.Point(108, 6);
-            this.btnTabGestionar.Name = "btnTabGestionar";
-            this.btnTabGestionar.Radio = 6;
-            this.btnTabGestionar.Size = new System.Drawing.Size(104, 30);
-            this.btnTabGestionar.TabIndex = 1;
-            this.btnTabGestionar.Text = "Gestionar";
-            this.btnTabGestionar.UseVisualStyleBackColor = false;
-            this.btnTabGestionar.Click += new System.EventHandler(this.btnTabGestionar_Click);
-            // 
-            // btnTabResumen
-            // 
-            this.btnTabResumen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(76)))));
-            this.btnTabResumen.ColorHover = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(42)))), ((int)(((byte)(110)))));
-            this.btnTabResumen.ColorSeleccionado = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(70)))), ((int)(((byte)(229)))));
-            this.btnTabResumen.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnTabResumen.Degradado = true;
-            this.btnTabResumen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTabResumen.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnTabResumen.ForeColor = System.Drawing.Color.White;
-            this.btnTabResumen.Location = new System.Drawing.Point(216, 6);
-            this.btnTabResumen.Name = "btnTabResumen";
-            this.btnTabResumen.Radio = 6;
-            this.btnTabResumen.Size = new System.Drawing.Size(104, 30);
-            this.btnTabResumen.TabIndex = 2;
-            this.btnTabResumen.Text = "Resumen";
-            this.btnTabResumen.UseVisualStyleBackColor = false;
-            this.btnTabResumen.Click += new System.EventHandler(this.btnTabResumen_Click);
             // 
             // FrmClientes
             // 
