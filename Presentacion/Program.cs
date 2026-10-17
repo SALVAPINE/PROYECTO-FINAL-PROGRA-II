@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Entidad;
 
 namespace Presentacion
 {
@@ -10,7 +11,18 @@ namespace Presentacion
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmMain());
+            Usuario usuario;
+            using (var login = new CAPAZ.Presentacion.FrmLogin())
+            {
+                if (login.ShowDialog() != DialogResult.OK) return;
+                usuario = login.UsuarioAutenticado;
+            }
+
+            Form menu;
+            if (usuario.TipoUsuario == "Diseñador") menu = new FrmMenuDisenador(usuario);
+            else if (usuario.TipoUsuario == "Operador") menu = new FrmMenuOperador(usuario);
+            else menu = new FrmMain(usuario);
+            Application.Run(menu);
         }
     }
 }

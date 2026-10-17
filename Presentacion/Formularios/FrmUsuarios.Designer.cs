@@ -363,8 +363,8 @@
             this.cmbFiltroTipo.Items.AddRange(new object[] {
             "Todos",
             "Administrador",
-            "Supervisor",
-            "Usuario"});
+            "Diseñador",
+            "Operador"});
             this.cmbFiltroTipo.Location = new System.Drawing.Point(0, 5);
             this.cmbFiltroTipo.Name = "cmbFiltroTipo";
             this.cmbFiltroTipo.Size = new System.Drawing.Size(130, 24);
@@ -958,8 +958,8 @@
             this.cmbTipoUsuario.ForeColor = System.Drawing.Color.White;
             this.cmbTipoUsuario.Items.AddRange(new object[] {
             "Administrador",
-            "Supervisor",
-            "Usuario"});
+            "Diseñador",
+            "Operador"});
             this.cmbTipoUsuario.Location = new System.Drawing.Point(558, 66);
             this.cmbTipoUsuario.Margin = new System.Windows.Forms.Padding(0, 2, 10, 2);
             this.cmbTipoUsuario.Name = "cmbTipoUsuario";

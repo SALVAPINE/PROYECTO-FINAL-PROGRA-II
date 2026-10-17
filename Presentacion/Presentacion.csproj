@@ -49,6 +49,36 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
+    <Compile Include="Controles\BotonDegradadoLogin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\BotonVentanaLogin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\CampoTextoLogin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\CasillaFinaLogin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\GraficosUiLogin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\LogoMarcaLogin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\PanelDegradadoLogin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\ItemCreativoLogin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\LienzoCreativoLogin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\TrazoPincelLogin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Tema.cs" />
     <Compile Include="Resumenes.cs" />
     <Compile Include="Controles\PuntoGrafico.cs" />
@@ -88,6 +118,13 @@
     <Compile Include="Formularios\FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Formularios\FrmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\FrmLogin.Designer.cs">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\ServicioLogin.cs" />
     <Compile Include="Formularios\FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>

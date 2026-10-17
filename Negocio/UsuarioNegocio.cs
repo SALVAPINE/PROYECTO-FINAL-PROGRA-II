@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Datos;
@@ -10,6 +10,16 @@ namespace Negocio
     public class UsuarioNegocio
     {
         private readonly UsuarioDatos datos = new UsuarioDatos();
+
+        public Usuario Autenticar(string nombreUsuario, string clave)
+        {
+            if (string.IsNullOrWhiteSpace(nombreUsuario) || string.IsNullOrEmpty(clave)) return null;
+            Usuario usuario = datos.Autenticar(nombreUsuario.Trim(), clave);
+            if (usuario == null) return null;
+            if (usuario.TipoUsuario != "Administrador" &&
+                usuario.TipoUsuario != "Diseñador" && usuario.TipoUsuario != "Operador") return null;
+            return usuario;
+        }
 
         public List<Usuario> Listar() { return datos.Listar(); }
 
@@ -68,7 +78,7 @@ namespace Negocio
             resumen.TituloCategoria = "Usuarios por tipo";
             resumen.PorCategoria = ResumenHelper.Contar(
                 lista.Select(x => x.TipoUsuario),
-                new string[] { "Administrador", "Supervisor", "Usuario" }, 0);
+                new string[] { "Administrador", "Diseñador", "Operador" }, 0);
             return resumen;
         }
     }

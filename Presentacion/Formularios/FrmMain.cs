@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
+using Entidad;
 
 namespace Presentacion
 {
@@ -21,7 +23,9 @@ namespace Presentacion
         private FrmInventarios frmInventarios;
         private FrmCompras frmCompras;
 
-        public FrmMain()
+        public FrmMain() : this(null) { }
+
+        public FrmMain(Usuario usuario)
         {
             InitializeComponent();
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
@@ -57,6 +61,27 @@ namespace Presentacion
             Incrustar(frmCompras);
 
             Mostrar(frmInicio, btnInicio);
+            if (usuario != null) AplicarPerfil(usuario);
+        }
+
+        private void AplicarPerfil(Usuario usuario)
+        {
+            lblUsuario.Text = usuario.NombreUsuario;
+            lblRol.Text = usuario.TipoUsuario;
+            bool admin = usuario.TipoUsuario == "Administrador";
+            string[] permitidos = admin
+                ? new string[] { "btnInicio", "btnUsuarios", "btnClientes", "btnCotizaciones", "btnTipoServicio", "btnMateriales", "btnDisenos", "btnDisenadores", "btnOrdenesTrabajo", "btnFacturaciones", "btnSucursales", "btnProveedores", "btnInventarios", "btnCompras" }
+                : usuario.TipoUsuario == "Diseñador"
+                    ? new string[] { "btnInicio", "btnClientes", "btnCotizaciones", "btnMateriales", "btnDisenos", "btnDisenadores", "btnOrdenesTrabajo", "btnSucursales" }
+                    : new string[] { "btnInicio", "btnClientes", "btnCotizaciones", "btnTipoServicio", "btnMateriales", "btnDisenos", "btnOrdenesTrabajo", "btnFacturaciones", "btnInventarios", "btnCompras" };
+            BotonIcono[] botones = { btnInicio, btnUsuarios, btnClientes, btnCotizaciones, btnTipoServicio, btnMateriales, btnDisenos, btnDisenadores, btnOrdenesTrabajo, btnFacturaciones, btnSucursales, btnProveedores, btnInventarios, btnCompras };
+            int y = 127;
+            foreach (BotonIcono boton in botones)
+            {
+                boton.Visible = Array.IndexOf(permitidos, boton.Name) >= 0;
+                if (boton.Visible) { boton.Location = new Point(boton.Left, y); y += 37; }
+            }
+            btnConfiguracion.Visible = admin;
         }
 
         /// <summary>Muestra un formulario dentro del panel de contenido (como una pantalla más de la ventana principal).</summary>
@@ -124,5 +149,15 @@ namespace Presentacion
         {
 
         }
+    }
+
+    public sealed class FrmMenuDisenador : FrmMain
+    {
+        public FrmMenuDisenador(Usuario usuario) : base(usuario) { }
+    }
+
+    public sealed class FrmMenuOperador : FrmMain
+    {
+        public FrmMenuOperador(Usuario usuario) : base(usuario) { }
     }
 }

@@ -22,6 +22,15 @@ namespace Negocio
             return datos.Buscar(texto, estado);
         }
 
+        /// <summary>Consulta solo los detalles cuyo encabezado es la factura indicada.</summary>
+        public List<DetalleFactura> ListarPorFactura(int codigoFacturacion)
+        {
+            if (codigoFacturacion <= 0)
+                return new List<DetalleFactura>();
+
+            return datos.ListarPorFactura(codigoFacturacion);
+        }
+
         public int Insertar(DetalleFactura detalleFactura)
         {
             // TODO: validar los datos antes de guardar.
