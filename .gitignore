@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Archivos locales de índice y respaldo
+*.vsidx
+*.bak
+
+# Configuración local que puede contener credenciales
+.env
+.env.*
+!.env.example
+*.local.config
+appsettings.local.json
