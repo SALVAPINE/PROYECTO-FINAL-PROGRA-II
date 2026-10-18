@@ -16,6 +16,14 @@ namespace Datos
             string baseDatos = ConfigurationManager.AppSettings["BaseDatosSql"];
             string usuario = ConfigurationManager.AppSettings["UsuarioSql"];
             string nombreVariable = ConfigurationManager.AppSettings["VariableEntornoPasswordSql"];
+
+            // Validar el nombre antes de consultar el entorno evita un error poco claro.
+            if (string.IsNullOrWhiteSpace(nombreVariable))
+            {
+                throw new InvalidOperationException(
+                    "Falta configurar el nombre de la variable de entorno SQL en App.config.");
+            }
+
             string contrasena = Environment.GetEnvironmentVariable(nombreVariable);
 
             if (string.IsNullOrWhiteSpace(servidor) ||
