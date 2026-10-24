@@ -18,6 +18,13 @@ namespace Negocio
             return datos.Listar();
         }
 
+        public FacturaDocumento ObtenerDocumento(int codigoFacturacion)
+        {
+            if (codigoFacturacion <= 0)
+                throw new ArgumentException("Selecciona una factura válida para generar el documento.");
+            return datos.ObtenerDocumento(codigoFacturacion);
+        }
+
         public List<Factura> Buscar(string texto, string estado)
         {
             return datos.Buscar(texto, estado);

@@ -369,7 +369,10 @@ namespace SistemaPublicidad.Formularios
             bool det = false; // El detalle de compras se consulta y gestiona dentro de Gestionar.
             var card = Card();
             var wrap = P(DockStyle.Fill, 0, new Padding(12, 0, 12, 0));
-            Tabla = new Tabla { Dock = DockStyle.Fill }; Tabla.Columnas.AddRange(cfg.Cols); wrap.Controls.Add(Tabla);
+            Tabla = new Tabla { Dock = DockStyle.Fill }; Tabla.Columnas.AddRange(cfg.Cols);
+            if (cfg.Nombre == "Facturaciones" || cfg.Nombre == "Compras" || cfg.Nombre == "Inventarios")
+                Tabla.ImprimirClick += ImprimirRegistro;
+            wrap.Controls.Add(Tabla);
 
             var pie = P(DockStyle.Bottom, det ? 48 : 56, new Padding(18, 0, 14, 6));
             Pie = new Label { Dock = DockStyle.Fill, ForeColor = Tema.Sub, Font = Tema.F(9.5f), TextAlign = ContentAlignment.MiddleLeft, BackColor = Color.Transparent };
@@ -458,6 +461,258 @@ namespace SistemaPublicidad.Formularios
             };
         }
 
+        async void ImprimirRegistro(int indice)
+        {
+            if (Tabla == null || indice < 0 || indice >= Tabla.Filas.Count)
+            {
+                return;
+            }
+
+            string[] fila = (string[])Tabla.Filas[indice].Clone();
+            var datos = new List<KeyValuePair<string, string>>();
+            for (int columna = 1; columna < Tabla.Columnas.Count; columna++)
+            {
+                Tabla.Col columnaTabla = Tabla.Columnas[columna];
+                if (columnaTabla.Tipo == "print") continue;
+                datos.Add(new KeyValuePair<string, string>(columnaTabla.Titulo,
+                    columna < fila.Length ? fila[columna] ?? string.Empty : string.Empty));
+            }
+
+            string codigoRegistro = fila.Length > 1 ? fila[1] : string.Empty;
+            if (!int.TryParse(codigoRegistro, NumberStyles.Integer, CultureInfo.CurrentCulture, out int codigo))
+            {
+                AppDialog.Error(this, "No se pudo preparar la impresión",
+                    "No fue posible identificar el registro. Actualiza la lista y vuelve a intentarlo.");
+                return;
+            }
+
+            if (cfg.Nombre == "Inventarios")
+            {
+                await ImprimirFichaInventario(codigo);
+                return;
+            }
+            if (cfg.Nombre == "Facturaciones")
+            {
+                await ImprimirFactura(codigo);
+                return;
+            }
+            if (cfg.Nombre == "Compras")
+            {
+                await ImprimirCompra(codigo);
+                return;
+            }
+
+            string tituloDocumento = cfg.Nombre == "Compras"
+                ? "Comprobante de compra " + codigoRegistro
+                : "Ficha de inventario " + codigoRegistro;
+            string[] columnasDetalle = new string[0];
+            List<string[]> filasDetalle = new List<string[]>();
+
+            try
+            {
+                if (cfg.Nombre == "Compras")
+                {
+                    List<object> detalles = await Task.Run(() => ModuloCrud.ListarDetalles(cfg.Nombre));
+                    if (IsDisposed || Disposing) return;
+                    string propiedadPadre = "CodigoCompra";
+                    List<object> detallesDelRegistro = detalles.Where(detalle =>
+                        Convert.ToInt32(LeerPropiedad(detalle, propiedadPadre), CultureInfo.InvariantCulture) == codigo).ToList();
+                    PrepararDetalleImpresion(detallesDelRegistro, out columnasDetalle, out filasDetalle);
+                }
+
+                using (var vistaPrevia = new VistaPreviaDocumento(tituloDocumento, datos, columnasDetalle, filasDetalle))
+                {
+                    if (vistaPrevia.ShowDialog(this) != DialogResult.OK) return;
+                }
+
+                string prefijoArchivo = "Compra";
+                using (var dialogo = new SaveFileDialog())
+                {
+                    dialogo.Title = "Guardar documento PDF";
+                    dialogo.Filter = "Documento PDF (*.pdf)|*.pdf";
+                    dialogo.DefaultExt = "pdf";
+                    dialogo.AddExtension = true;
+                    dialogo.FileName = prefijoArchivo + "_" + codigoRegistro + "_" +
+                        DateTime.Now.ToString("yyyyMMdd_HHmm", CultureInfo.InvariantCulture) + ".pdf";
+                    if (dialogo.ShowDialog(this) != DialogResult.OK) return;
+
+                    ExportadorPdf.GuardarDocumento(tituloDocumento, cfg.Nombre, datos,
+                        columnasDetalle, filasDetalle, dialogo.FileName);
+                    AppDialog.Success(this, "Documento guardado",
+                        "El archivo PDF se guardó correctamente.");
+                }
+            }
+            catch (Exception ex)
+            {
+                AppDialog.Error(this, "No se pudo guardar el PDF",
+                    "No se pudo generar o guardar el documento. Revisa la ubicación e inténtalo nuevamente.", ex);
+            }
+        }
+
+        async Task ImprimirFactura(int codigoFacturacion)
+        {
+            try
+            {
+                FacturaDocumento factura = await Task.Run(
+                    () => ModuloCrud.ObtenerDocumentoFactura(codigoFacturacion));
+                if (IsDisposed || Disposing) return;
+                if (factura == null)
+                    throw new InvalidOperationException("La factura seleccionada ya no existe.");
+
+                using (var vistaPrevia = new VistaPreviaDocumento(factura))
+                {
+                    if (vistaPrevia.ShowDialog(this) != DialogResult.OK) return;
+                }
+
+                using (var dialogo = new SaveFileDialog())
+                {
+                    dialogo.Title = "Guardar factura";
+                    dialogo.Filter = "Documento PDF (*.pdf)|*.pdf";
+                    dialogo.DefaultExt = "pdf";
+                    dialogo.AddExtension = true;
+                    dialogo.FileName = "Factura_" +
+                        factura.NoFactura.ToString(CultureInfo.InvariantCulture) + "_" +
+                        DateTime.Now.ToString("yyyyMMdd_HHmm", CultureInfo.InvariantCulture) + ".pdf";
+                    if (dialogo.ShowDialog(this) != DialogResult.OK) return;
+
+                    ExportadorPdf.GuardarFactura(factura, dialogo.FileName);
+                    AppDialog.Success(this, "Factura guardada",
+                        "El archivo PDF se guardó correctamente.");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!IsDisposed && !Disposing)
+                    AppDialog.Error(this, "No se pudo guardar la factura",
+                        "No se pudo generar o guardar el archivo. Revisa la ubicación e inténtalo nuevamente.", ex);
+            }
+        }
+
+        async Task ImprimirCompra(int codigoCompra)
+        {
+            try
+            {
+                CompraDocumento compra = await Task.Run(
+                    () => ModuloCrud.ObtenerDocumentoCompra(codigoCompra));
+                if (IsDisposed || Disposing) return;
+                if (compra == null)
+                    throw new InvalidOperationException("La compra seleccionada ya no existe.");
+
+                using (var vistaPrevia = new VistaPreviaDocumento(compra))
+                {
+                    if (vistaPrevia.ShowDialog(this) != DialogResult.OK) return;
+                }
+
+                string numeroCompra = "COM-" + compra.CodigoCompra.ToString("D6", CultureInfo.InvariantCulture);
+                using (var dialogo = new SaveFileDialog())
+                {
+                    dialogo.Title = "Guardar comprobante de compra";
+                    dialogo.Filter = "Documento PDF (*.pdf)|*.pdf";
+                    dialogo.DefaultExt = "pdf";
+                    dialogo.AddExtension = true;
+                    dialogo.FileName = numeroCompra + ".pdf";
+                    if (dialogo.ShowDialog(this) != DialogResult.OK) return;
+
+                    ExportadorPdf.GuardarCompra(compra, dialogo.FileName);
+                    AppDialog.Success(this, "Comprobante de compra guardado",
+                        "El archivo PDF se guardó correctamente.");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!IsDisposed && !Disposing)
+                    AppDialog.Error(this, "No se pudo guardar el comprobante",
+                        "No se pudo generar o guardar el archivo. Revisa la ubicación e inténtalo nuevamente.", ex);
+            }
+        }
+
+        async Task ImprimirFichaInventario(int codigoInventario)
+        {
+            try
+            {
+                FichaInventario ficha = await Task.Run(() => ModuloCrud.ObtenerFichaInventario(codigoInventario));
+                if (IsDisposed || Disposing) return;
+                if (ficha == null)
+                    throw new InvalidOperationException("El registro de inventario ya no existe.");
+
+                using (var vistaPrevia = new VistaPreviaDocumento(ficha))
+                {
+                    if (vistaPrevia.ShowDialog(this) != DialogResult.OK) return;
+                }
+
+                string codigoVisible = "INV-" + ficha.CodigoInventario.ToString("D6", CultureInfo.InvariantCulture);
+                using (var dialogo = new SaveFileDialog())
+                {
+                    dialogo.Title = "Guardar ficha de inventario";
+                    dialogo.Filter = "Documento PDF (*.pdf)|*.pdf";
+                    dialogo.DefaultExt = "pdf";
+                    dialogo.AddExtension = true;
+                    dialogo.FileName = codigoVisible + ".pdf";
+                    if (dialogo.ShowDialog(this) != DialogResult.OK) return;
+
+                    ExportadorPdf.GuardarFichaInventario(ficha, dialogo.FileName);
+                    AppDialog.Success(this, "Ficha de inventario guardada",
+                        "El archivo PDF se guardó correctamente.");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!IsDisposed && !Disposing)
+                    AppDialog.Error(this, "No se pudo guardar la ficha de inventario",
+                        "No se pudo generar o guardar el archivo. Revisa la ubicación e inténtalo nuevamente.", ex);
+            }
+        }
+
+        void PrepararDetalleImpresion(List<object> detalles, out string[] columnas, out List<string[]> filas)
+        {
+            filas = new List<string[]>();
+            if (cfg.Nombre == "Facturaciones")
+            {
+                columnas = new[] { "Cantidad", "Descripción", "Precio unitario", "Descuento", "Importe" };
+                foreach (object detalle in detalles)
+                {
+                    int cantidad = Convert.ToInt32(LeerPropiedad(detalle, "Cantidad"), CultureInfo.InvariantCulture);
+                    decimal precio = Convert.ToDecimal(LeerPropiedad(detalle, "Precio"), CultureInfo.InvariantCulture);
+                    decimal descuento = Convert.ToDecimal(LeerPropiedad(detalle, "DescuentoAplicado"), CultureInfo.InvariantCulture);
+                    filas.Add(new[]
+                    {
+                        cantidad.ToString(CultureInfo.CurrentCulture),
+                        Convert.ToString(LeerPropiedad(detalle, "Descripcion"), CultureInfo.CurrentCulture) ?? string.Empty,
+                        FormatearMoneda(precio),
+                        FormatearMoneda(descuento),
+                        FormatearMoneda(cantidad * precio - descuento)
+                    });
+                }
+                return;
+            }
+
+            columnas = new[] { "Tipo", "Descripción", "Precio unitario", "Subtotal", "Descuento" };
+            foreach (object detalle in detalles)
+            {
+                filas.Add(new[]
+                {
+                    Convert.ToString(LeerPropiedad(detalle, "TipoDeCompra"), CultureInfo.CurrentCulture) ?? string.Empty,
+                    Convert.ToString(LeerPropiedad(detalle, "Descripcion"), CultureInfo.CurrentCulture) ?? string.Empty,
+                    FormatearMoneda(Convert.ToDecimal(LeerPropiedad(detalle, "PrecioUnitario"), CultureInfo.InvariantCulture)),
+                    FormatearMoneda(Convert.ToDecimal(LeerPropiedad(detalle, "Subtotal"), CultureInfo.InvariantCulture)),
+                    FormatearMoneda(Convert.ToDecimal(LeerPropiedad(detalle, "DescuentoCompra"), CultureInfo.InvariantCulture))
+                });
+            }
+        }
+
+        static object LeerPropiedad(object instancia, string nombre)
+        {
+            var propiedad = instancia.GetType().GetProperty(nombre);
+            if (propiedad == null)
+                throw new InvalidOperationException("No se encontró la propiedad " + nombre + " del detalle.");
+            return propiedad.GetValue(instancia, null);
+        }
+
+        static string FormatearMoneda(decimal valor)
+        {
+            return "Q " + valor.ToString("N2", CultureInfo.GetCultureInfo("es-GT"));
+        }
+
         async Task BuscarCoincidenciasDetalleAsync(string texto, int solicitud)
         {
             if (cfg.Nombre != "Compras" && cfg.Nombre != "Facturaciones") return;
@@ -484,8 +739,8 @@ namespace SistemaPublicidad.Formularios
             catch (Exception ex)
             {
                 if (IsDisposed || Disposing || solicitud != solicitudBusquedaDetalle) return;
-                MessageBox.Show("No se pudo buscar en el detalle:\n" + ex.Message, Text,
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AppDialog.Error(this, "No se pudo buscar en el detalle",
+                    "Revisa la conexión e inténtalo nuevamente.", ex);
             }
         }
 
@@ -572,8 +827,8 @@ namespace SistemaPublicidad.Formularios
             catch (Exception ex)
             {
                 if (!IsDisposed && !Disposing && solicitud == solicitudFiltro)
-                    MessageBox.Show("No se pudo buscar la información:\n" + ex.Message, Text,
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    AppDialog.Error(this, "No se pudo completar la búsqueda",
+                        "Revisa los filtros y la conexión, y vuelve a intentarlo.", ex);
             }
         }
 
@@ -682,8 +937,8 @@ namespace SistemaPublicidad.Formularios
                 Tabla.TituloVacio = "No se pudieron cargar los datos";
                 Tabla.TextoVacio = "Revisa la conexión y vuelve a intentarlo.";
                 Aplicar();
-                MessageBox.Show("No se pudieron cargar " + cfg.Plural + ":\n" + ex.Message,
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AppDialog.Error(this, "No se pudieron cargar los datos",
+                    "Revisa la conexión e inténtalo nuevamente.", ex);
             }
             finally
             {
@@ -838,8 +1093,8 @@ namespace SistemaPublicidad.Formularios
             catch (Exception ex)
             {
                 if (IsDisposed || Disposing) return;
-                MessageBox.Show("No se pudo actualizar el detalle:\n" + ex.Message,
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AppDialog.Error(this, "No se pudo actualizar el detalle",
+                    "Revisa la conexión e inténtalo nuevamente.", ex);
             }
         }
 
@@ -936,14 +1191,23 @@ namespace SistemaPublicidad.Formularios
             {
                 if (!datosCargados) { EnsureLoaded(); return; }
                 object entidad = BuscarEntidadSeleccionada();
-                if (entidad == null) { MessageBox.Show("Selecciona un registro para editar.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+                if (entidad == null)
+                {
+                    AppDialog.Warning(this, "Selecciona un registro",
+                        "Elige una fila de la tabla antes de editar.");
+                    return;
+                }
                 nuevoRegistroSolicitado = false;
                 codigoEnEdicion = Convert.ToInt32(entidad.GetType().GetProperty(cfg.Clave).GetValue(entidad, null));
                 Tabs.Seleccion = 1;
                 CargarCampos(entidad);
                 if (cfg.Nombre != "Compras") MostrarDetalle();
             }
-            catch (Exception ex) { MessageBox.Show("No se pudo cargar el registro: " + ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            catch (Exception ex)
+            {
+                AppDialog.Error(this, "No se pudo abrir el registro",
+                    "Actualiza la lista e inténtalo nuevamente.", ex);
+            }
         }
 
         void CargarCampos(object entidad)
@@ -1062,9 +1326,14 @@ namespace SistemaPublicidad.Formularios
                 EnsureLoaded();
                 LimpiarFormulario();
                 Tabs.Seleccion = 0;
-                MessageBox.Show("Los datos se guardaron correctamente.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                AppDialog.Success(this, "Cambios guardados",
+                    "La información de " + cfg.Nombre + " se guardó correctamente.");
             }
-            catch (Exception ex) { MessageBox.Show("No se pudieron guardar los datos:\n" + ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            catch (Exception ex)
+            {
+                AppDialog.Error(this, "No se pudieron guardar los datos",
+                    "Revisa los campos obligatorios y la conexión. Corrige los datos e inténtalo nuevamente.", ex);
+            }
         }
 
         void EliminarSeleccionado()
@@ -1073,14 +1342,25 @@ namespace SistemaPublicidad.Formularios
             {
                 if (!datosCargados) { EnsureLoaded(); return; }
                 object entidad = BuscarEntidadSeleccionada();
-                if (entidad == null) { MessageBox.Show("Selecciona un registro para eliminar.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+                if (entidad == null)
+                {
+                    AppDialog.Warning(this, "Selecciona un registro",
+                        "Elige una fila de la tabla antes de eliminar.");
+                    return;
+                }
                 int codigo = Convert.ToInt32(entidad.GetType().GetProperty(cfg.Clave).GetValue(entidad, null));
-                if (MessageBox.Show("¿Deseas eliminar el registro " + codigo + "?", Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                if (!AppDialog.Confirm(this, "Confirmar eliminación",
+                    "¿Deseas eliminar el registro " + codigo + "? Esta acción no se puede deshacer.",
+                    "Eliminar", true)) return;
                 ModuloCrud.Eliminar(cfg.Nombre, codigo);
                 datosCargados = false;
                 EnsureLoaded();
             }
-            catch (Exception ex) { MessageBox.Show("No se pudo eliminar el registro:\n" + ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            catch (Exception ex)
+            {
+                AppDialog.Error(this, "No se pudo eliminar el registro",
+                    "Verifica que el registro no esté relacionado con otros datos e inténtalo nuevamente.", ex);
+            }
         }
 
         void LimpiarFormulario()
@@ -1360,12 +1640,17 @@ namespace SistemaPublicidad.Formularios
             {
                 if (codigoEnEdicion <= 0)
                 {
-                    MessageBox.Show("Selecciona el registro y pulsa Editar antes de gestionar su detalle.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    AppDialog.Warning(this, "Selecciona un registro",
+                        "Selecciona una fila y pulsa Editar antes de gestionar su detalle.");
                     return;
                 }
                 editorDetalle.CambiarPadre(codigoEnEdicion);
             }
-            catch (Exception ex) { MessageBox.Show("No se pudo abrir el detalle:\n" + ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            catch (Exception ex)
+            {
+                AppDialog.Error(this, "No se pudo abrir el detalle",
+                    "Actualiza el registro e inténtalo nuevamente.", ex);
+            }
         }
 
         // Campos calculados: Subtotal = suma de las líneas; Total = Subtotal - Descuento (sin IVA)

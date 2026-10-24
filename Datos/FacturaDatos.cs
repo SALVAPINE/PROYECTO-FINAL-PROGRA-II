@@ -14,6 +14,87 @@ namespace Datos
             return Buscar(string.Empty, "Todos");
         }
 
+        public FacturaDocumento ObtenerDocumento(int codigoFacturacion)
+        {
+            const string sql = @"SELECT f.CodigoFacturacion, f.NoFactura, f.FechaDeEntrega,
+                    f.Subtotal, f.Impuesto, f.TotalPagar, ot.NombreOrdenTrabajo,
+                    c.NombreCliente, c.NIT, c.DPI, c.Direccion,
+                    d.Cantidad, d.Descripcion, d.Precio, d.DescuentoAplicado
+                FROM dbo.Tbl_Facturacion AS f
+                INNER JOIN dbo.Tbl_OrdenesDeTrabajo AS ot
+                    ON ot.CodigoOrdenTrabajo = f.CodigoOrdenTrabajo
+                INNER JOIN dbo.Tbl_Cotizaciones AS q
+                    ON q.CodigoCotizacion = ot.CodigoCotizacion
+                INNER JOIN dbo.Tbl_Clientes AS c
+                    ON c.CodigoCliente = q.CodigoCliente
+                LEFT JOIN dbo.Tbl_DetalleFactura AS d
+                    ON d.CodigoFacturacion = f.CodigoFacturacion
+                WHERE f.CodigoFacturacion = @codigoFacturacion
+                ORDER BY d.CodigoDetalleFactura";
+
+            try
+            {
+                FacturaDocumento factura = null;
+                using (SqlConnection conexion = ConexionDatos.CrearConexion())
+                using (SqlCommand comando = new SqlCommand(sql, conexion))
+                {
+                    comando.Parameters.Add("@codigoFacturacion", SqlDbType.Int).Value = codigoFacturacion;
+                    conexion.Open();
+                    using (SqlDataReader lector = comando.ExecuteReader())
+                    {
+                        while (lector.Read())
+                        {
+                            if (factura == null)
+                            {
+                                factura = new FacturaDocumento
+                                {
+                                    CodigoFacturacion = Convert.ToInt32(lector["CodigoFacturacion"]),
+                                    NoFactura = Convert.ToInt32(lector["NoFactura"]),
+                                    FechaDeEntrega = Convert.ToDateTime(lector["FechaDeEntrega"]),
+                                    Subtotal = Convert.ToDecimal(lector["Subtotal"]),
+                                    Impuesto = Convert.ToDecimal(lector["Impuesto"]),
+                                    TotalPagar = Convert.ToDecimal(lector["TotalPagar"]),
+                                    NombreOrdenTrabajo = Convert.ToString(lector["NombreOrdenTrabajo"]),
+                                    NombreCliente = Convert.ToString(lector["NombreCliente"]),
+                                    IdentificacionCliente = ObtenerIdentificacion(
+                                        lector["NIT"], lector["DPI"]),
+                                    DireccionCliente = Convert.ToString(lector["Direccion"]),
+                                    Detalles = new List<DetalleFacturaDocumento>()
+                                };
+                            }
+
+                            if (lector["Cantidad"] != DBNull.Value)
+                            {
+                                factura.Detalles.Add(new DetalleFacturaDocumento
+                                {
+                                    Cantidad = Convert.ToInt32(lector["Cantidad"]),
+                                    Descripcion = Convert.ToString(lector["Descripcion"]),
+                                    PrecioUnitario = Convert.ToDecimal(lector["Precio"]),
+                                    Descuento = Convert.ToDecimal(lector["DescuentoAplicado"])
+                                });
+                            }
+                        }
+                    }
+                }
+
+                return factura;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo consultar el documento de la factura: " + ex.Message, ex);
+            }
+        }
+
+        static string ObtenerIdentificacion(object nitValor, object dpiValor)
+        {
+            string nit = nitValor == DBNull.Value ? string.Empty : Convert.ToString(nitValor).Trim();
+            if (!string.IsNullOrWhiteSpace(nit))
+                return "NIT: " + nit;
+
+            string dpi = dpiValor == DBNull.Value ? string.Empty : Convert.ToString(dpiValor).Trim();
+            return string.IsNullOrWhiteSpace(dpi) ? string.Empty : "DPI: " + dpi;
+        }
+
         public List<Factura> Buscar(string texto, string estado)
         {
             const string sql = @"SELECT CodigoFacturacion, CodigoOrdenTrabajo, NoFactura,

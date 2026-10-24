@@ -267,9 +267,9 @@ namespace SistemaPublicidad.Formularios
                 filasDetalle.Clear();
                 filasTablaCompleta.Clear();
                 tabla.TituloVacio = esCompra ? "No se pudieron cargar los detalles de esta compra" : "No se pudieron cargar los detalles de esta factura";
-                tabla.TextoVacio = ex.Message;
-                MessageBox.Show("No se pudieron consultar los detalles:\n" + ex.Message,
-                    esCompra ? "Compras" : "Facturaciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tabla.TextoVacio = "Revisa la conexión e inténtalo nuevamente.";
+                AppDialog.Error(FindForm(), "No se pudieron consultar los detalles",
+                    "Revisa la conexión e inténtalo nuevamente.", ex);
             }
             finally
             {
@@ -302,10 +302,10 @@ namespace SistemaPublicidad.Formularios
                 ? ((DetalleCompra)filasDetalle[indice]).CodigoDetalleCompra
                 : ((DetalleFactura)filasDetalle[indice]).CodigoDetalleFactura;
             string nombreRegistro = esCompra ? "detalle" : "concepto";
-            DialogResult respuesta = MessageBox.Show(
-                "¿Deseas eliminar el " + nombreRegistro + " " + codigoDetalle + " de este registro?",
-                esCompra ? "Compras" : "Facturaciones", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (respuesta != DialogResult.Yes) return;
+            if (!AppDialog.Confirm(FindForm(), "Eliminar " + nombreRegistro,
+                "¿Deseas eliminar el " + nombreRegistro + " " + codigoDetalle +
+                " de este registro? Esta acción no se puede deshacer.",
+                "Eliminar", true)) return;
 
             try
             {
@@ -315,8 +315,8 @@ namespace SistemaPublicidad.Formularios
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo eliminar el " + nombreRegistro + ":\n" + ex.Message,
-                    esCompra ? "Compras" : "Facturaciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AppDialog.Error(FindForm(), "No se pudo eliminar " + nombreRegistro,
+                    "Verifica que no existan restricciones y vuelve a intentarlo.", ex);
             }
         }
 

@@ -19,6 +19,7 @@ namespace SistemaPublicidad.Formularios
         public bool MensajeVacioEnCuerpo;
         public HashSet<int> Marcadas = new HashSet<int>();
         public event Action<int> EditarClick, EliminarClick;
+        public event Action<int> ImprimirClick;
         int hover = -1, scroll, scrollHorizontal, seleccion = -1; const int Enc = 46;
         float[] anchosColumnasCache;
         readonly BarraDeslizamiento barraHorizontal;
@@ -75,6 +76,7 @@ namespace SistemaPublicidad.Formularios
                     var c = Columnas[i];
                     if (c.Tipo == "chk") { anchos[i] = 46; continue; }
                     if (c.Tipo == "acc") { anchos[i] = 96; continue; }
+                    if (c.Tipo == "print") { anchos[i] = 96; continue; }
                     int max = TextRenderer.MeasureText(c.Titulo ?? "", f).Width + 24;
                     // Mide una muestra acotada; la tabla usa elipsis para texto más largo.
                     int filasAMedir = Math.Min(Filas.Count, 100);
@@ -214,6 +216,17 @@ namespace SistemaPublicidad.Formularios
                         Iconos.Dibujar(g, "\U0001F5D1", new RectangleF(r2.X + 7, r2.Y + 7, 16, 16), Color.White, 1.6f);
                         break;
                     }
+                case "print":
+                    {
+                        var boton = new RectangleF(x0 + 6, y + (h - 28) / 2f, Math.Min(84, x1 - x0 - 12), 28);
+                        using (var p = Tema.Ruta(boton, 8))
+                        using (var b = new LinearGradientBrush(boton, Color.FromArgb(20, 145, 190), Color.FromArgb(0, 190, 190), 0f))
+                            g.FillPath(b, p);
+                        using (var f = Tema.F(8.5f, true))
+                        using (var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center, FormatFlags = StringFormatFlags.NoWrap })
+                            g.DrawString("Imprimir", f, Brushes.White, boton, sf);
+                        break;
+                    }
                 default:
                     using (var f = Tema.F(9f)) using (var b = new SolidBrush(Color.FromArgb(205, 215, 250))) using (var sf = Fmt()) { if (c.Centrar) sf.Alignment = StringAlignment.Center; g.DrawString(v, f, b, rc, sf); } break;
             }
@@ -241,7 +254,7 @@ namespace SistemaPublicidad.Formularios
                 using (var f = Tema.F(9.5f, true))
                 {
                     var rc = new RectangleF(x + 6, 0, Math.Max(10, xs[i + 1] - x - 6 - (c.Orden ? 14 : 0)), Enc - 8);
-                    using (var sf = Fmt()) { if (c.Centrar) sf.Alignment = StringAlignment.Center; else if (c.Tipo == "num") sf.Alignment = StringAlignment.Far; g.DrawString(c.Titulo, f, Brushes.White, c.Tipo == "num" ? new RectangleF(rc.X, rc.Y, rc.Width - 4, rc.Height) : rc, sf); }
+                    using (var sf = Fmt()) { if (c.Centrar || c.Tipo == "print") sf.Alignment = StringAlignment.Center; else if (c.Tipo == "num") sf.Alignment = StringAlignment.Far; g.DrawString(c.Titulo, f, Brushes.White, c.Tipo == "num" ? new RectangleF(rc.X, rc.Y, rc.Width - 4, rc.Height) : rc, sf); }
                     if (c.Orden && c.Tipo != "num")
                     {
                         float cx = Math.Min(x + 6 + g.MeasureString(c.Titulo, f).Width, xs[i + 1] - 16), cy = (Enc - 8) / 2f;
@@ -328,6 +341,10 @@ namespace SistemaPublicidad.Formularios
                         float o = e.X - xs[i];
                         if (o >= 6 && o <= 36) { if (EditarClick != null) EditarClick(r); }
                         else if (o >= 44 && o <= 74) { if (EliminarClick != null) EliminarClick(r); }
+                    }
+                    else if (Columnas[i].Tipo == "print")
+                    {
+                        if (ImprimirClick != null) ImprimirClick(r);
                     }
                     else if (r != seleccion) Seleccion = r;
                 }
