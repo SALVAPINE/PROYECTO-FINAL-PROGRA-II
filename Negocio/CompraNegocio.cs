@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Datos;
 using Entidad;
@@ -24,20 +25,64 @@ namespace Negocio
 
         public int Insertar(Compra compra)
         {
-            // TODO: validar los datos antes de guardar.
+            Validar(compra);
             return datos.Insertar(compra);
+        }
+
+        /// <summary>Inserta y devuelve el código generado para enlazar el detalle.</summary>
+        public int InsertarYObtenerCodigo(Compra compra)
+        {
+            Validar(compra);
+            return datos.InsertarYObtenerCodigo(compra);
+        }
+
+        /// <summary>Valida y guarda el encabezado con su detalle como una unidad.</summary>
+        public int InsertarConDetalle(Compra compra, DetalleCompra detalle)
+        {
+            Validar(compra);
+            if (detalle == null)
+                throw new ArgumentException("Completa los datos del detalle de la compra.");
+            if (string.IsNullOrWhiteSpace(detalle.TipoDeCompra) || detalle.TipoDeCompra.Trim().Length > 45)
+                throw new ArgumentException("El tipo de compra es obligatorio y admite hasta 45 caracteres.");
+            if (string.IsNullOrWhiteSpace(detalle.Descripcion) || detalle.Descripcion.Trim().Length > 150)
+                throw new ArgumentException("La descripción del detalle es obligatoria y admite hasta 150 caracteres.");
+            if (detalle.PrecioUnitario < 0 || detalle.Subtotal < 0 || detalle.DescuentoCompra < 0)
+                throw new ArgumentException("Los montos del detalle no pueden ser negativos.");
+
+            detalle.TipoDeCompra = detalle.TipoDeCompra.Trim();
+            detalle.Descripcion = detalle.Descripcion.Trim();
+            return datos.InsertarConDetalle(compra, detalle);
         }
 
         public int Actualizar(Compra compra)
         {
-            // TODO: validar los datos antes de guardar.
+            Validar(compra);
+            if (compra.CodigoCompra <= 0)
+                throw new ArgumentException("Selecciona una compra válida para editar.");
             return datos.Actualizar(compra);
         }
 
         public int Eliminar(int codigo)
         {
-            // TODO: validar reglas antes de eliminar.
+            if (codigo <= 0)
+                throw new ArgumentException("Selecciona una compra válida para eliminar.");
             return datos.Eliminar(codigo);
+        }
+
+        private static void Validar(Compra compra)
+        {
+            if (compra == null)
+                throw new ArgumentException("No se recibieron los datos de la compra.");
+            if (compra.CodigoProveedor <= 0)
+                throw new ArgumentException("Selecciona un proveedor.");
+            if (compra.CodigoMaterial <= 0)
+                throw new ArgumentException("Selecciona un material.");
+            if (compra.CantidadComprada <= 0)
+                throw new ArgumentException("La cantidad comprada debe ser mayor que cero.");
+            if (compra.TotalCompra < 0)
+                throw new ArgumentException("El total de la compra no puede ser negativo.");
+            if (compra.FechaEntrega.Date < compra.FechaCompra.Date)
+                throw new ArgumentException("La fecha de entrega no puede ser anterior a la fecha de compra.");
         }
 
         /// <summary>Resumen del módulo (se muestra en la pestaña Resumen).</summary>

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
-using Entidad;
+using SistemaPublicidad.Formularios;
+using Login.Formularios;
 
-namespace Presentacion
+namespace SistemaPublicidad
 {
     static class Program
     {
@@ -11,18 +12,23 @@ namespace Presentacion
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Usuario usuario;
-            using (var login = new CAPAZ.Presentacion.FrmLogin())
+            bool cerrarSesion;
+            do
             {
-                if (login.ShowDialog() != DialogResult.OK) return;
-                usuario = login.UsuarioAutenticado;
-            }
+                using (var login = new FrmLogin())
+                {
+                    if (login.ShowDialog() != DialogResult.OK)
+                        return;
 
-            Form menu;
-            if (usuario.TipoUsuario == "Diseñador") menu = new FrmMenuDisenador(usuario);
-            else if (usuario.TipoUsuario == "Operador") menu = new FrmMenuOperador(usuario);
-            else menu = new FrmMain(usuario);
-            Application.Run(menu);
+                    using (var principal = new FrmPrincipal(login.UsuarioAutenticado, login.RolAutenticado))
+                    {
+                        cerrarSesion = false;
+                        principal.FormClosed += (s, e) => cerrarSesion = principal.CerrarSesionSolicitado;
+                        Application.Run(principal);
+                    }
+                }
+            }
+            while (cerrarSesion);
         }
     }
 }

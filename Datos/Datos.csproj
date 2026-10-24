@@ -60,6 +60,7 @@
     <Compile Include="InventarioDatos.cs" />
     <Compile Include="CompraDatos.cs" />
     <Compile Include="DetalleCompraDatos.cs" />
+    <Compile Include="EsquemaDatos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

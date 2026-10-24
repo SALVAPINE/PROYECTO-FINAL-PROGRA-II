@@ -14,11 +14,7 @@ namespace Negocio
         public Usuario Autenticar(string nombreUsuario, string clave)
         {
             if (string.IsNullOrWhiteSpace(nombreUsuario) || string.IsNullOrEmpty(clave)) return null;
-            Usuario usuario = datos.Autenticar(nombreUsuario.Trim(), clave);
-            if (usuario == null) return null;
-            if (usuario.TipoUsuario != "Administrador" &&
-                usuario.TipoUsuario != "Diseñador" && usuario.TipoUsuario != "Operador") return null;
-            return usuario;
+            return datos.Autenticar(nombreUsuario.Trim(), clave);
         }
 
         public List<Usuario> Listar() { return datos.Listar(); }

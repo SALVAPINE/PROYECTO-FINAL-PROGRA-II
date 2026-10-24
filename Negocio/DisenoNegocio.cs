@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Datos;
 using Entidad;
@@ -24,20 +25,41 @@ namespace Negocio
 
         public int Insertar(Diseno diseno)
         {
-            // TODO: validar los datos antes de guardar.
+            Validar(diseno);
             return datos.Insertar(diseno);
         }
 
         public int Actualizar(Diseno diseno)
         {
-            // TODO: validar los datos antes de guardar.
+            Validar(diseno);
+            if (diseno.CodigoDiseño <= 0)
+                throw new ArgumentException("Selecciona un diseño válido para editar.");
             return datos.Actualizar(diseno);
         }
 
         public int Eliminar(int codigo)
         {
-            // TODO: validar reglas antes de eliminar.
+            if (codigo <= 0)
+                throw new ArgumentException("Selecciona un diseño válido para eliminar.");
             return datos.Eliminar(codigo);
+        }
+
+        private static void Validar(Diseno diseno)
+        {
+            if (diseno == null)
+                throw new ArgumentException("No se recibieron los datos del diseño.");
+            if (diseno.CodigoCliente <= 0)
+                throw new ArgumentException("Selecciona un cliente.");
+            if (diseno.CodigoDiseñador <= 0)
+                throw new ArgumentException("Selecciona un diseñador.");
+            if (string.IsNullOrWhiteSpace(diseno.NombreDiseño) || diseno.NombreDiseño.Length > 45)
+                throw new ArgumentException("El nombre del diseño es obligatorio y admite hasta 45 caracteres.");
+            if (string.IsNullOrWhiteSpace(diseno.TipoDiseño) || diseno.TipoDiseño.Length > 45)
+                throw new ArgumentException("El tipo de diseño es obligatorio y admite hasta 45 caracteres.");
+            if (diseno.Descripcion != null && diseno.Descripcion.Length > 150)
+                throw new ArgumentException("La descripción admite hasta 150 caracteres.");
+            if (diseno.RangoDiseño != null && diseno.RangoDiseño.Length > 45)
+                throw new ArgumentException("El rango admite hasta 45 caracteres.");
         }
 
         /// <summary>Resumen del módulo (se muestra en la pestaña Resumen).</summary>

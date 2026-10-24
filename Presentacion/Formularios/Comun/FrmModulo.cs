@@ -1,0 +1,1297 @@
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Entidad;
+
+namespace SistemaPublicidad.Formularios
+{
+    public class ModuloCfg
+    {
+        public string Nombre = "", Plural = "", Icono = "", TituloDet = "Detalle", TileImg;
+        public string[] StatTit, StatVal, StatTend, StatIco, StatImg, Campos, ColumnasPropiedades, ColumnasDetallePropiedades, Filtros = { "Estado=", "Tipo=", "Orden=" };
+        public string Clave;
+        public bool DetalleSoloLectura;
+        public string[] Tabs = { "Consultar", "Gestionar", "Resumen" };
+        public Tabla.Col[] Cols, ColsDet; public string[][] Filas; public Dictionary<string, string[][]> Detalle; public int Total; public int Tab;
+    }
+
+    public class CampoTexto : Tarjeta
+    {
+        public TextBox Caja;
+        public CampoTexto(string rotulo, string valor)
+        {
+            Radio = 12; C1 = C2 = Tema.Campo; Vidrio = false; Height = 52;
+            Caja = new TextBox { BorderStyle = BorderStyle.None, BackColor = Tema.Campo, ForeColor = Color.White, Font = Tema.F(10.5f), Left = 12, Top = 24, Width = Width - 24, Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top, Text = valor };
+            Controls.Add(Caja); Controls.Add(Tema.L(rotulo, 8, Tema.Sub, 12, 4));
+        }
+    }
+
+    // Campo numérico (NumericUpDown) con el estilo del sistema; puede ser calculado (solo lectura)
+    public class CampoNumero : Tarjeta
+    {
+        public NumericUpDown Num;
+        public bool EstaVacio { get { return string.IsNullOrWhiteSpace(Num.Text); } }
+        public decimal Valor { get { return Num.Value; } set { Num.Value = Math.Max(Num.Minimum, Math.Min(Num.Maximum, value)); } }
+        public void Limpiar() { Num.Value = Num.Minimum; Num.Text = string.Empty; }
+        public CampoNumero(string rotulo, int decimales, bool moneda, bool soloLectura)
+        {
+            Radio = 12; C1 = C2 = Tema.Campo; Vidrio = false; Height = 52;
+            Num = new NumericUpDown { BorderStyle = BorderStyle.None, BackColor = Tema.Campo, ForeColor = Color.White, Font = Tema.F(10.5f), DecimalPlaces = decimales, Minimum = 0, Maximum = decimales == 0 ? 2147483647m : 99999999.99m, ThousandsSeparator = true,
+                Left = moneda ? 30 : 12, Top = 23, Width = Width - (moneda ? 42 : 24), Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top, ReadOnly = soloLectura };
+            if (soloLectura) { try { Num.Controls[0].Visible = false; } catch (Exception) { } Num.TabStop = false; }
+            Controls.Add(Num); Controls.Add(Tema.L(rotulo, 8, Tema.Sub, 12, 4)); if (moneda) Controls.Add(Tema.L("Q", 10.5f, Tema.Sub, 12, 24));
+        }
+        public void Color2(Color c) { C1 = C2 = c; Num.BackColor = c; }
+    }
+
+    // Campo de fecha con selector de calendario para evitar capturar fechas como texto.
+    public class CampoFecha : Tarjeta
+    {
+        public DateTimePicker Fecha;
+        public CampoFecha(string rotulo)
+        {
+            Radio = 12; C1 = C2 = Tema.Campo; Vidrio = false; Height = 52;
+            Fecha = new DateTimePicker { Format = DateTimePickerFormat.Short, Value = DateTime.Today,
+                CalendarMonthBackground = Tema.Campo, CalendarForeColor = Color.White,
+                Font = Tema.F(10.5f), Left = 10, Top = 22, Width = Width - 20,
+                Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top };
+            Controls.Add(Fecha); Controls.Add(Tema.L(rotulo, 8, Tema.Sub, 12, 4));
+        }
+    }
+
+    public class Totales : Tarjeta
+    {
+        public string Sub = "Q 0.00", Iva = "Q 0.00", Total = "Q 0.00";
+        public string EtiquetaIva = "IVA (12 %)";
+        public Totales() { Radio = 14; C1 = Color.FromArgb(14, 30, 108); C2 = Color.FromArgb(24, 24, 124); }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e); var g = e.Graphics; if (Width < 120) return;
+            if (Width > 420)
+            {
+                using (var far = new StringFormat { Alignment = StringAlignment.Far })
+                {
+                    using (var f = Tema.F(10)) using (var b = new SolidBrush(Tema.Sub)) { g.DrawString("Subtotal", f, b, 16, 12); g.DrawString(Sub, f, Brushes.White, 190, 12, far); g.DrawString(EtiquetaIva, f, b, 215, 12); g.DrawString(Iva, f, Brushes.White, 375, 12, far); }
+                    var pl = new RectangleF(395, 3, Width - 405, Height - 7);
+                    using (var p = Tema.Ruta(pl, 12)) using (var b = new LinearGradientBrush(pl, Color.FromArgb(150, 70, 255), Color.FromArgb(255, 70, 200), 0f)) g.FillPath(b, p);
+                    using (var f = Tema.F(11, true)) { g.DrawString("Total", f, Brushes.White, pl.X + 12, pl.Y + 8); g.DrawString(Total, f, Brushes.White, pl.Right - 12, pl.Y + 8, far); }
+                }
+                return;
+            }
+            string[] n = { "Subtotal", EtiquetaIva }, v = { Sub, Iva };
+            using (var far = new StringFormat { Alignment = StringAlignment.Far })
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    using (var f = Tema.F(10)) using (var b = new SolidBrush(Tema.Sub)) { g.DrawString(n[i], f, b, 16, 14 + i * 28); g.DrawString(v[i], f, Brushes.White, Width - 16, 14 + i * 28, far); }
+                }
+                var pill = new RectangleF(10, 74, Width - 20, Math.Min(44, Height - 84));
+                if (pill.Height > 20)
+                {
+                    using (var p = Tema.Ruta(pill, 12)) using (var b = new LinearGradientBrush(pill, Color.FromArgb(150, 70, 255), Color.FromArgb(255, 70, 200), 0f)) g.FillPath(b, p);
+                    using (var f = Tema.F(11, true)) { g.DrawString("Total", f, Brushes.White, pill.X + 10, pill.Y + pill.Height / 2 - 10); g.DrawString(Total, f, Brushes.White, pill.Right - 10, pill.Y + pill.Height / 2 - 10, far); }
+                }
+            }
+        }
+    }
+
+    public class BarrasEstado : Tarjeta
+    {
+        public List<string[]> Filas = new List<string[]>(); public List<Tabla.Col> Cols = new List<Tabla.Col>();
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e); var g = e.Graphics; int y = 18; bool algo = false;
+            foreach (string tipo in new[] { "estado", "badge" })
+            {
+                int ci = Cols.FindIndex(c => c.Tipo == tipo); if (ci < 0) continue;
+                var grupos = Filas.Where(f => ci < f.Length).GroupBy(f => f[ci]).OrderByDescending(x => x.Count()).ToList(); if (grupos.Count == 0) continue;
+                algo = true;
+                using (var f = Tema.F(12, true)) g.DrawString("Distribución por " + Cols[ci].Titulo.ToLower(), f, Brushes.White, 22, y); y += 40;
+                int max = grupos.Max(x => x.Count()), tot = Filas.Count;
+                foreach (var gr in grupos)
+                {
+                    if (y + 30 > Height) return;
+                    var col = Tabla.ColBadge(gr.Key); int n = gr.Count();
+                    using (var f = Tema.F(10)) g.DrawString(gr.Key, f, Brushes.White, 26, y + 3);
+                    var track = new RectangleF(190, y + 5, Math.Max(40, Width - 190 - 160), 16);
+                    using (var p = Tema.Ruta(track, 8)) using (var b = new SolidBrush(Color.FromArgb(40, 255, 255, 255))) g.FillPath(b, p);
+                    var bar = new RectangleF(track.X, track.Y, Math.Max(16, track.Width * n / max), track.Height);
+                    using (var p = Tema.Ruta(bar, 8)) using (var b = new LinearGradientBrush(bar, col[0], col[1], 0f)) g.FillPath(b, p);
+                    using (var f = Tema.F(10)) using (var b = new SolidBrush(Tema.Sub)) g.DrawString(n + "  (" + (tot == 0 ? 0 : n * 100 / tot) + " %)", f, b, Width - 145, y + 3);
+                    y += 34;
+                }
+                y += 16;
+            }
+            if (!algo) using (var f = Tema.F(11)) using (var b = new SolidBrush(Tema.Sub)) g.DrawString("Aún no hay datos para resumir.", f, b, 24, 24);
+        }
+    }
+
+    // Pantalla de módulo: encabezado, pestañas, 4 resúmenes y tres vistas (Consultar / Gestionar / Resumen).
+    public class FrmModulo : Form
+    {
+        sealed class CargaModulo
+        {
+            public List<object> Registros;
+            public Dictionary<string, List<ModuloCrud.Opcion>> Opciones = new Dictionary<string, List<ModuloCrud.Opcion>>();
+            public List<string> Columnas;
+            public List<string> ColumnasDetalle;
+            public List<object> Detalles;
+        }
+
+        public Tabla Tabla, TablaDet, TablaGes; public Pestanas Tabs; public TextBox Buscar; public List<Selector> Combos = new List<Selector>();
+        public Boton Anadir, Editar, Eliminar; public TarjetaStat[] Stats = new TarjetaStat[4]; public Label Pie;
+        Label lblTit, lblSub, lblDet; Totales totDet; BarrasEstado barraResumen; Panel vC, vG, vR, filaStats; readonly List<Control> inputs = new List<Control>(); readonly Dictionary<Selector, List<string>> opcionesFijas = new Dictionary<Selector, List<string>>(); CampoTexto eDesc; CampoNumero eCant, ePrecio, eSubLin, eSubt, eDescto, eTot; readonly ModuloCfg cfg;
+        int codigoEnEdicion; bool datosCargados, datosCargando, nuevoRegistroSolicitado;
+        int solicitudBusquedaDetalle;
+        string terminoCoincidenciasDetalle = "";
+        HashSet<int> coincidenciasDetalle = new HashSet<int>();
+        List<object> registros = new List<object>();
+        const int RegistrosPorPagina = 10;
+        int paginaActual = 1;
+        Boton botonPaginaAnterior, botonPaginaSiguiente;
+        readonly List<Boton> botonesPagina = new List<Boton>();
+        int paginaDetalleActual = 1;
+        string[][] filasDetalleVista = new string[0][];
+        Boton botonDetalleAnterior, botonDetalleSiguiente;
+        Label textoPaginacionDetalle;
+        FormularioDetalleCrud editorDetalle;
+        static readonly Color[][] Cs = {
+            new[] { Color.FromArgb(40, 80, 255), Color.FromArgb(0, 200, 255) }, new[] { Color.FromArgb(255, 40, 190), Color.FromArgb(190, 40, 235) },
+            new[] { Color.FromArgb(0, 190, 150), Color.FromArgb(0, 225, 200) }, new[] { Color.FromArgb(255, 165, 30), Color.FromArgb(240, 85, 45) } };
+
+        static Panel P(DockStyle d, int tam, Padding pad)
+        {
+            var p = new Tarjeta { Dock = d, C1 = Color.Transparent, C2 = Color.Transparent, ColorBorde = Color.Transparent, Radio = 0, Padding = pad };
+            if (d == DockStyle.Top || d == DockStyle.Bottom) p.Height = tam; else if (d != DockStyle.Fill) p.Width = tam;
+            return p;
+        }
+        static Tarjeta Card() { return new Tarjeta { Dock = DockStyle.Fill, Radio = 18, Opacidad = 225, C1 = Color.FromArgb(10, 24, 98), C2 = Color.FromArgb(24, 22, 118), Brillo = Color.FromArgb(60, 150, 60, 255), Brillo2 = Color.FromArgb(30, 0, 200, 255) }; }
+
+        public FrmModulo(ModuloCfg c)
+        {
+            cfg = c; cfg.Filas = new string[0][]; cfg.Total = 0;
+            TopLevel = false; FormBorderStyle = FormBorderStyle.None; Dock = DockStyle.Fill; BackColor = Tema.Fondo; DoubleBuffered = true;
+            SetStyle(ControlStyles.ResizeRedraw | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+
+            var head = P(DockStyle.Top, 86, new Padding(0));
+            var tl2 = c.TileImg == null ? null : Recursos.Img(c.TileImg);
+            if (tl2 != null) head.Controls.Add(new ImgBox { Imagen = tl2, Left = 0, Top = 4, Width = 88, Height = 84 });
+            else head.Controls.Add(new IconoBox { Emoji = c.Icono, Left = 0, Top = 6, Width = 80, Height = 80, A = Color.FromArgb(150, 70, 255), B = Color.FromArgb(255, 70, 210) });
+            head.Controls.Add(Tema.L(c.Nombre.ToUpper(), 10, Tema.Cian, 98, 6, true));
+            lblTit = Tema.L("", 24, Color.White, 96, 22, true); lblSub = Tema.L("", 11.5f, Tema.Cian, 104, 62);
+            head.Controls.Add(lblTit); head.Controls.Add(lblSub);
+
+            var tabs = P(DockStyle.Top, 56, new Padding(0));
+            Tabs = new Pestanas { Left = 0, Top = 4, Width = 214 * c.Tabs.Length, Height = 48, Textos = c.Tabs, Claves = new[] { "\U0001F50D", "\u2699", "\U0001F4CA" }.Take(c.Tabs.Length).ToArray() };
+            Tabs.Seleccion = c.Tab; tabs.Controls.Add(Tabs);
+
+            bool det = c.Detalle != null;
+            var fila = P(DockStyle.Top, 118, new Padding(0)); filaStats = fila;
+            var tl = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 4, RowCount = 1, BackColor = Color.Transparent };
+            for (int i = 0; i < 4; i++) tl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            for (int i = 0; i < 4; i++)
+            {
+                Stats[i] = new TarjetaStat { Dock = DockStyle.Fill, Margin = new Padding(0, 4, i < 3 ? 12 : 0, 6), Titulo = c.StatTit[i], Icono = c.StatIco[i], Valor = c.StatVal[i], Tendencia = c.StatTend[i],
+                    Glifo = c.StatImg == null ? null : Recursos.Img(c.StatImg[i]), Sub = "vs. mes anterior", Circulo = true, C1 = Cs[i][0], C2 = Cs[i][1], Radio = 18, Opacidad = 255, ColorBorde = Color.FromArgb(120, 255, 255, 255) };
+                tl.Controls.Add(Stats[i], i, 0);
+            }
+            fila.Controls.Add(tl);
+
+            var host = P(DockStyle.Fill, 0, new Padding(0, 2, 0, 0));
+            vC = P(DockStyle.Fill, 0, new Padding(0)); vG = P(DockStyle.Fill, 0, new Padding(0)); vR = P(DockStyle.Fill, 0, new Padding(0));
+            ConstruirConsultar(vC); ConstruirGestionar(vG); ConstruirResumen(vR);
+            host.Controls.Add(vC); host.Controls.Add(vG); host.Controls.Add(vR);
+
+            Controls.Add(host); Controls.Add(fila); Controls.Add(tabs); Controls.Add(head);
+            Tabs.Cambio += (s, e) =>
+            {
+                Vistas();
+                if (Tabs.Seleccion == 1 && !string.IsNullOrEmpty(cfg.Clave))
+                {
+                    EnsureLoaded();
+                    if (datosCargando || !datosCargados) return;
+                    if (codigoEnEdicion <= 0 && !nuevoRegistroSolicitado)
+                    {
+                        if (Tabla.Seleccion < 0 && Tabla.Filas.Count > 0)
+                            Tabla.Seleccion = 0;
+                        object entidad = BuscarEntidadSeleccionada();
+                        if (entidad == null)
+                        {
+                            LimpiarCamposEncabezado();
+                        }
+                        else
+                        {
+                            codigoEnEdicion = Convert.ToInt32(
+                                entidad.GetType().GetProperty(cfg.Clave).GetValue(entidad, null));
+                            CargarCampos(entidad);
+                        }
+                    }
+                    if (editorDetalle != null)
+                    {
+                        int codigoPadre = 0;
+                        object entidad = BuscarEntidadSeleccionada();
+                        if (!nuevoRegistroSolicitado && entidad != null)
+                            codigoPadre = Convert.ToInt32(entidad.GetType().GetProperty(cfg.Clave).GetValue(entidad, null));
+                        if (editorDetalle.CodigoPadre != codigoPadre) editorDetalle.CambiarPadre(codigoPadre);
+                        if (codigoEnEdicion <= 0) editorDetalle.LimpiarCampos();
+                    }
+                }
+            };
+            Vistas(); Aplicar();
+        }
+
+        void Vistas()
+        {
+            int t = Tabs.Seleccion; if (cfg.Detalle != null && filaStats != null) filaStats.Visible = t != 1; vC.Visible = t == 0; vG.Visible = t == 1; vR.Visible = t == 2;
+            string n = cfg.Nombre, p = cfg.Plural;
+            switch (t)
+            {
+                case 0: lblTit.Text = "Consultar " + n; lblSub.Text = "Visualiza y administra la información de " + p + " del sistema."; break;
+                case 1: lblTit.Text = "Gestionar " + n; lblSub.Text = "Agrega, edita y elimina " + p + " del sistema."; break;
+                default: lblTit.Text = "Resumen de " + n; lblSub.Text = "Consulta estadísticas y actividad de " + p + "."; break;
+            }
+            if (t == 2) vR.Invalidate(true);
+        }
+
+        // ---------------- Consultar ----------------
+        void ConstruirConsultar(Panel host)
+        {
+            bool det = false; // El detalle de compras se consulta y gestiona dentro de Gestionar.
+            var card = Card();
+            var wrap = P(DockStyle.Fill, 0, new Padding(12, 0, 12, 0));
+            Tabla = new Tabla { Dock = DockStyle.Fill }; Tabla.Columnas.AddRange(cfg.Cols); wrap.Controls.Add(Tabla);
+
+            var pie = P(DockStyle.Bottom, det ? 48 : 56, new Padding(18, 0, 14, 6));
+            Pie = new Label { Dock = DockStyle.Fill, ForeColor = Tema.Sub, Font = Tema.F(9.5f), TextAlign = ContentAlignment.MiddleLeft, BackColor = Color.Transparent };
+            var pag = new FlowLayoutPanel { Dock = DockStyle.Right, Width = 390, BackColor = Color.Transparent, Padding = new Padding(0, det ? 4 : 8, 0, 0) };
+            botonPaginaAnterior = Pag("‹", false, 34);
+            botonPaginaAnterior.Click += (s, e) => CambiarPagina(paginaActual - 1);
+            pag.Controls.Add(botonPaginaAnterior);
+            for (int i = 1; i <= 5; i++)
+            {
+                Boton boton = Pag(i.ToString(), i == 1, 34);
+                boton.Click += (s, e) =>
+                {
+                    Boton seleccionado = s as Boton;
+                    if (seleccionado != null && seleccionado.Tag is int)
+                        CambiarPagina((int)seleccionado.Tag);
+                };
+                botonesPagina.Add(boton);
+                pag.Controls.Add(boton);
+            }
+            botonPaginaSiguiente = Pag("›", false, 34);
+            botonPaginaSiguiente.Click += (s, e) => CambiarPagina(paginaActual + 1);
+            pag.Controls.Add(botonPaginaSiguiente);
+            var tamPagina = Pag(RegistrosPorPagina + " / página", false, 96);
+            pag.Controls.Add(tamPagina);
+            ActualizarPaginador(0);
+            pie.Controls.Add(Pie); pie.Controls.Add(pag);
+
+            var fil = P(DockStyle.Top, 68, new Padding(14, 10, 14, 6));
+            var ts = new Tarjeta { Dock = DockStyle.Fill, Radio = 12, C1 = Tema.Campo, C2 = Tema.Campo, Vidrio = false, Padding = new Padding(44, 12, 12, 4) };
+            Buscar = new TextBox { Dock = DockStyle.Fill, BorderStyle = BorderStyle.None, BackColor = Tema.Campo, ForeColor = Color.White, Font = Tema.F(10.5f) };
+            Tema.Cue(Buscar, "Buscar en " + cfg.Plural + "...");
+            Buscar.TextChanged += (s, e) =>
+            {
+                AplicarFiltro();
+                int solicitud = ++solicitudBusquedaDetalle;
+                _ = BuscarCoincidenciasDetalleAsync(Buscar.Text.Trim(), solicitud);
+            };
+            ts.Controls.Add(Buscar); ts.Controls.Add(new IconoLinea { Key = "\U0001F50D", Color = Color.White, Left = 14, Top = 10, Width = 22, Height = 22 });
+            fil.Controls.Add(ts);
+            foreach (var spec in cfg.Filtros) fil.Controls.Add(Combo(spec));
+            var bg = P(DockStyle.Right, 372, new Padding(12, 0, 0, 0));
+            var bf = new FlowLayoutPanel { Dock = DockStyle.Fill, BackColor = Color.Transparent };
+            Anadir = Acc(cfg.Detalle != null ? "Nueva" : "Añadir", "\u2795", Color.FromArgb(0, 190, 150), Color.FromArgb(0, 215, 125));
+            Editar = Acc("Editar", "\u270F", Color.FromArgb(130, 60, 255), Color.FromArgb(60, 110, 255));
+            Eliminar = Acc("Eliminar", "\U0001F5D1", Color.FromArgb(255, 50, 170), Color.FromArgb(225, 40, 130));
+            Anadir.Click += (s, e) =>
+            {
+                nuevoRegistroSolicitado = true;
+                LimpiarFormulario();
+                if (cfg.Nombre == "Compras" && editorDetalle != null) editorDetalle.CambiarPadre(0);
+                Tabs.Seleccion = 1;
+            };
+            Editar.Click += (s, e) => CargarSeleccionado();
+            Eliminar.Click += (s, e) => EliminarSeleccionado();
+            bf.Controls.AddRange(new Control[] { Anadir, Editar, Eliminar }); bg.Controls.Add(bf); fil.Controls.Add(bg);
+            card.Controls.Add(wrap); card.Controls.Add(pie); card.Controls.Add(fil);
+
+            if (!det) { host.Controls.Add(card); return; }
+            var split = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 2, BackColor = Color.Transparent };
+            split.RowStyles.Add(new RowStyle(SizeType.Percent, 60)); split.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
+            card.Dock = DockStyle.Fill; card.Margin = new Padding(0, 0, 0, 8);
+            var dcard = Card(); dcard.Margin = new Padding(0);
+            var dw = P(DockStyle.Fill, 0, new Padding(12, 46, 0, 8));
+            TablaDet = new Tabla { Dock = DockStyle.Fill }; TablaDet.Columnas.AddRange(cfg.ColsDet);
+            var pieDetalle = new Panel { Dock = DockStyle.Bottom, Height = 34, BackColor = Color.Transparent };
+            textoPaginacionDetalle = new Label { Dock = DockStyle.Fill, ForeColor = Tema.Sub, Font = Tema.F(8.5f), TextAlign = ContentAlignment.MiddleLeft };
+            var botonesDetalle = new FlowLayoutPanel { Dock = DockStyle.Right, Width = 142, BackColor = Color.Transparent, FlowDirection = FlowDirection.RightToLeft, WrapContents = false };
+            botonDetalleSiguiente = Pag("Siguiente", false, 72); botonDetalleAnterior = Pag("Anterior", false, 64);
+            botonDetalleSiguiente.Height = botonDetalleAnterior.Height = 28;
+            botonDetalleSiguiente.Click += (s, e) => CambiarPaginaDetalle(paginaDetalleActual + 1);
+            botonDetalleAnterior.Click += (s, e) => CambiarPaginaDetalle(paginaDetalleActual - 1);
+            botonesDetalle.Controls.Add(botonDetalleSiguiente); botonesDetalle.Controls.Add(botonDetalleAnterior);
+            pieDetalle.Controls.Add(textoPaginacionDetalle); pieDetalle.Controls.Add(botonesDetalle);
+            pieDetalle.Visible = cfg.Nombre == "Compras";
+            dw.Controls.Add(TablaDet); dw.Controls.Add(pieDetalle);
+            var tp = P(DockStyle.Right, 262, new Padding(12, 46, 14, 10));
+            totDet = new Totales { Dock = DockStyle.Fill };
+            if (cfg.Nombre == "Compras") totDet.EtiquetaIva = "Descuento";
+            tp.Controls.Add(totDet);
+            lblDet = Tema.L(cfg.TituloDet, 12, Color.White, 18, 14, true);
+            dcard.Controls.Add(lblDet); dcard.Controls.Add(dw); dcard.Controls.Add(tp);
+            split.Controls.Add(card, 0, 0); split.Controls.Add(dcard, 0, 1); host.Controls.Add(split);
+            Tabla.SeleccionCambio += i =>
+            {
+                MostrarDetalle();
+            };
+        }
+
+        async Task BuscarCoincidenciasDetalleAsync(string texto, int solicitud)
+        {
+            if (cfg.Nombre != "Compras" && cfg.Nombre != "Facturaciones") return;
+            try
+            {
+                await Task.Delay(350);
+                if (IsDisposed || Disposing || solicitud != solicitudBusquedaDetalle ||
+                    !string.Equals(texto, Buscar.Text.Trim(), StringComparison.Ordinal)) return;
+
+                HashSet<int> coincidencias = await Task.Run(() =>
+                {
+                    if (texto.Length == 0) return new HashSet<int>();
+                    return cfg.Nombre == "Compras"
+                        ? new HashSet<int>(ModuloCrud.BuscarDetallesCompra(texto).Select(x => x.CodigoCompra))
+                        : new HashSet<int>(ModuloCrud.BuscarDetallesFactura(texto).Select(x => x.CodigoFacturacion));
+                });
+
+                if (IsDisposed || Disposing || solicitud != solicitudBusquedaDetalle ||
+                    !string.Equals(texto, Buscar.Text.Trim(), StringComparison.Ordinal)) return;
+                coincidenciasDetalle = coincidencias;
+                terminoCoincidenciasDetalle = texto;
+                Aplicar();
+            }
+            catch (Exception ex)
+            {
+                if (IsDisposed || Disposing || solicitud != solicitudBusquedaDetalle) return;
+                MessageBox.Show("No se pudo buscar en el detalle:\n" + ex.Message, Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void Aplicar()
+        {
+            IEnumerable<string[]> q = cfg.Filas ?? new string[0][];
+            string t = (Buscar == null ? "" : Buscar.Text ?? "").Trim().ToLower();
+            if (t.Length > 0)
+            {
+                if (cfg.Nombre == "Compras")
+                {
+                    HashSet<int> comprasPorDetalle = terminoCoincidenciasDetalle == t
+                        ? coincidenciasDetalle : new HashSet<int>();
+                    q = q.Where(r => r.Any(x => x != null && x.ToLower().Contains(t))
+                        || (r.Length > 1 && comprasPorDetalle.Contains(Convert.ToInt32(r[1]))));
+                }
+                else if (cfg.Nombre == "Facturaciones")
+                {
+                    HashSet<int> facturasPorDetalle = terminoCoincidenciasDetalle == t
+                        ? coincidenciasDetalle : new HashSet<int>();
+                    q = q.Where(r => r.Any(x => x != null && x.ToLower().Contains(t))
+                        || (r.Length > 1 && facturasPorDetalle.Contains(Convert.ToInt32(r[1]))));
+                }
+                else q = q.Where(r => r.Any(x => x != null && x.ToLower().Contains(t)));
+            }
+            foreach (var sel in Combos) if (sel.Seleccion > 0) { string o = sel.Texto; q = q.Where(r => r.Any(x => x == o)); }
+            var lista = q.ToList();
+            int total = lista.Count;
+            int paginas = Math.Max(1, (int)Math.Ceiling(total / (double)RegistrosPorPagina));
+            paginaActual = Math.Max(1, Math.Min(paginaActual, paginas));
+            List<string[]> visibles = lista.Skip((paginaActual - 1) * RegistrosPorPagina)
+                .Take(RegistrosPorPagina).ToList();
+            int desde = total == 0 ? 0 : (paginaActual - 1) * RegistrosPorPagina + 1;
+            int hasta = total == 0 ? 0 : desde + visibles.Count - 1;
+            Pie.Text = string.Format("Mostrando {0} - {1} de {2} {3}", desde, hasta, total, cfg.Plural);
+            ActualizarPaginador(total);
+
+            int seleccionAnterior = Tabla.Seleccion;
+            Tabla.Filas.Clear(); Tabla.Filas.AddRange(visibles); Tabla.Marcadas.Clear();
+            Tabla.InvalidarAnchosColumnas();
+            // Al abrir o actualizar una consulta, el usuario elige explícitamente la fila.
+            Tabla.Seleccion = -1; Tabla.Invalidate();
+            if ((cfg.Nombre == "Compras" || cfg.Nombre == "Facturaciones") && seleccionAnterior == Tabla.Seleccion)
+                MostrarDetalle();
+        }
+
+        void CambiarPagina(int pagina)
+        {
+            paginaActual = Math.Max(1, pagina);
+            Aplicar();
+        }
+
+        void AplicarFiltro()
+        {
+            try
+            {
+                paginaActual = 1;
+                Aplicar();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo buscar la información:\n" + ex.Message, Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void ActualizarPaginador(int totalRegistros)
+        {
+            if (botonesPagina.Count == 0) return;
+
+            int totalPaginas = Math.Max(1, (int)Math.Ceiling(totalRegistros / (double)RegistrosPorPagina));
+            paginaActual = Math.Max(1, Math.Min(paginaActual, totalPaginas));
+            botonPaginaAnterior.Enabled = paginaActual > 1;
+            botonPaginaSiguiente.Enabled = paginaActual < totalPaginas;
+
+            int primeraPagina = Math.Max(1, paginaActual - 2);
+            if (primeraPagina + botonesPagina.Count - 1 > totalPaginas)
+                primeraPagina = Math.Max(1, totalPaginas - botonesPagina.Count + 1);
+
+            for (int i = 0; i < botonesPagina.Count; i++)
+            {
+                int numeroPagina = primeraPagina + i;
+                Boton boton = botonesPagina[i];
+                boton.Visible = numeroPagina <= totalPaginas;
+                if (!boton.Visible) continue;
+
+                boton.Texto = numeroPagina.ToString(CultureInfo.CurrentCulture);
+                boton.Tag = numeroPagina;
+                bool activa = numeroPagina == paginaActual;
+                boton.C1 = activa ? Tema.Morado : Tema.Campo;
+                boton.C2 = activa ? Tema.Rosa : Tema.Campo;
+                boton.Invalidate();
+            }
+        }
+
+        // Se consulta Negocio al abrir por primera vez el módulo, no al construir todos los menús.
+        public async void EnsureLoaded()
+        {
+            if (datosCargados || datosCargando || string.IsNullOrEmpty(cfg.Clave)) return;
+            datosCargando = true;
+            Pie.Text = "Cargando " + cfg.Plural + "...";
+            try
+            {
+                // Las consultas lentas se ejecutan fuera del hilo de Windows Forms.
+                CargaModulo carga = await Task.Run((System.Func<CargaModulo>)LeerDatos);
+                if (IsDisposed || Disposing) return;
+
+                registros = carga.Registros;
+                ActualizarRelaciones(carga.Opciones);
+                ActualizarTitulosDesdeBaseDatos(carga.Columnas, carga.ColumnasDetalle);
+                CargarDetalles(carga.Detalles);
+                cfg.Filas = new string[registros.Count][];
+                for (int i = 0; i < registros.Count; i++)
+                {
+                    string[] fila = new string[cfg.ColumnasPropiedades.Length + 2];
+                    fila[0] = string.Empty;
+                    for (int j = 0; j < cfg.ColumnasPropiedades.Length; j++)
+                        fila[j + 1] = Formatear(registros[i], cfg.ColumnasPropiedades[j]);
+                    fila[fila.Length - 1] = string.Empty;
+                    cfg.Filas[i] = fila;
+                }
+                cfg.Total = registros.Count;
+                datosCargados = true;
+                ActualizarIndicadores(registros);
+                if (barraResumen != null)
+                {
+                    barraResumen.Filas.Clear();
+                    barraResumen.Filas.AddRange(cfg.Filas);
+                    barraResumen.Invalidate();
+                }
+                Aplicar();
+
+                // Si la persona abrió Gestionar mientras se consultaban los datos, cargar la selección ahora.
+                if (Tabs.Seleccion == 1 && !nuevoRegistroSolicitado)
+                {
+                    if (Tabla.Seleccion < 0 && Tabla.Filas.Count > 0)
+                        Tabla.Seleccion = 0;
+                    object entidad = BuscarEntidadSeleccionada();
+                    if (entidad == null) LimpiarCamposEncabezado();
+                    else
+                    {
+                        codigoEnEdicion = Convert.ToInt32(entidad.GetType().GetProperty(cfg.Clave).GetValue(entidad, null));
+                        CargarCampos(entidad);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                datosCargados = false;
+                if (IsDisposed || Disposing) return;
+                cfg.Filas = new string[0][];
+                cfg.Total = 0;
+                Aplicar();
+                MessageBox.Show("No se pudieron cargar " + cfg.Plural + ":\n" + ex.Message,
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                datosCargando = false;
+                // Evita dejar el mensaje inicial si la carga terminó antes de actualizar la tabla.
+                if (!IsDisposed && !Disposing && datosCargados && Pie != null &&
+                    Pie.Text.StartsWith("Cargando ", StringComparison.Ordinal))
+                {
+                    int cantidad = Tabla == null ? 0 : Tabla.Filas.Count;
+                    int total = Math.Max(cfg.Total, cantidad);
+                    Pie.Text = string.Format("Mostrando {0} - {1} de {2} {3}",
+                        cantidad == 0 ? 0 : 1, cantidad, total, cfg.Plural);
+                }
+            }
+        }
+
+        CargaModulo LeerDatos()
+        {
+            var carga = new CargaModulo();
+            carga.Registros = ModuloCrud.Listar(cfg.Nombre);
+            carga.Columnas = ModuloCrud.ListarColumnasBaseDatos(cfg.Nombre, false);
+
+            if (cfg.Detalle != null)
+            {
+                carga.ColumnasDetalle = ModuloCrud.ListarColumnasBaseDatos(cfg.Nombre, true);
+                if (cfg.Nombre != "Compras") carga.Detalles = ModuloCrud.ListarDetalles(cfg.Nombre);
+            }
+
+            foreach (string campo in cfg.Campos)
+            {
+                string propiedad = PropiedadCampo(campo);
+                if (ModuloCrud.EsRelacion(propiedad) && !carga.Opciones.ContainsKey(propiedad))
+                    carga.Opciones.Add(propiedad, ModuloCrud.Opciones(propiedad));
+            }
+            return carga;
+        }
+
+        static string Formatear(object entidad, string propiedad)
+        {
+            var p = entidad.GetType().GetProperty(propiedad);
+            if (p == null) return string.Empty;
+            object valor = p.GetValue(entidad, null);
+            if (valor == null) return string.Empty;
+            if (valor is bool) return (bool)valor ? "Activo" : "Inactivo";
+            if (valor is DateTime) return ((DateTime)valor).ToString("dd/MM/yyyy");
+            if (valor is TimeSpan) return ((TimeSpan)valor).ToString(@"hh\:mm");
+            if (valor is decimal) return ((decimal)valor).ToString("N2", CultureInfo.GetCultureInfo("es-GT"));
+            return Convert.ToString(valor, CultureInfo.CurrentCulture);
+        }
+
+        void ActualizarRelaciones(Dictionary<string, List<ModuloCrud.Opcion>> opciones)
+        {
+            for (int i = 0; i < cfg.Campos.Length; i++)
+            {
+                var selector = inputs[i] as Selector;
+                string propiedad = PropiedadCampo(cfg.Campos[i]);
+                if (selector == null || !ModuloCrud.EsRelacion(propiedad)) continue;
+
+                List<ModuloCrud.Opcion> lista;
+                if (!opciones.TryGetValue(propiedad, out lista)) continue;
+                selector.Items.Clear();
+                selector.Codigos.Clear();
+                foreach (var opcion in lista)
+                {
+                    selector.Items.Add(opcion.Codigo + " - " + opcion.Texto);
+                    selector.Codigos.Add(opcion.Codigo);
+                }
+                opcionesFijas[selector] = selector.Items.ToList();
+                selector.Seleccion = lista.Count > 0 ? 0 : -1;
+            }
+        }
+
+        void CargarDetalles(List<object> detalles)
+        {
+            // En Compras, el detalle se consulta al seleccionar su encabezado;
+            // no se cargan todas las líneas de todas las compras al abrir el módulo.
+            if (cfg.Detalle == null || cfg.Nombre == "Compras") return;
+            cfg.Detalle.Clear();
+            string propiedadPadre = cfg.Nombre == "Compras" ? "CodigoCompra" : "CodigoFacturacion";
+            foreach (object detalle in detalles ?? new List<object>())
+            {
+                object valorPadre = detalle.GetType().GetProperty(propiedadPadre).GetValue(detalle, null);
+                string llave = Convert.ToString(valorPadre, CultureInfo.InvariantCulture);
+                string[] fila = new string[cfg.ColumnasDetallePropiedades.Length];
+                for (int i = 0; i < cfg.ColumnasDetallePropiedades.Length; i++)
+                    fila[i] = Formatear(detalle, cfg.ColumnasDetallePropiedades[i]);
+                if (!cfg.Detalle.ContainsKey(llave)) cfg.Detalle.Add(llave, new string[0][]);
+                cfg.Detalle[llave] = cfg.Detalle[llave].Concat(new[] { fila }).ToArray();
+            }
+        }
+
+        async void CargarDetalles()
+        {
+            try
+            {
+                List<object> detalles = await Task.Run(() => ModuloCrud.ListarDetalles(cfg.Nombre));
+                if (IsDisposed || Disposing) return;
+                CargarDetalles(detalles);
+                MostrarDetalle();
+            }
+            catch (Exception ex)
+            {
+                if (IsDisposed || Disposing) return;
+                MessageBox.Show("No se pudo actualizar el detalle:\n" + ex.Message,
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Los encabezados visibles se toman del nombre real de cada columna en SQL Server.
+        void ActualizarTitulosDesdeBaseDatos(List<string> columnas, List<string> columnasDetalle)
+        {
+            AplicarTitulosDeBaseDatos(cfg.ColumnasPropiedades, cfg.Cols, columnas, 1);
+            Tabla.Columnas.Clear();
+            Tabla.Columnas.AddRange(cfg.Cols);
+            Tabla.InvalidarAnchosColumnas();
+            Tabla.Invalidate();
+
+            if (cfg.Detalle == null) return;
+            AplicarTitulosDeBaseDatos(cfg.ColumnasDetallePropiedades, cfg.ColsDet, columnasDetalle, 0);
+            if (TablaDet != null)
+            {
+                TablaDet.Columnas.Clear();
+                TablaDet.Columnas.AddRange(cfg.ColsDet);
+                TablaDet.InvalidarAnchosColumnas();
+                TablaDet.Invalidate();
+            }
+            if (editorDetalle != null) editorDetalle.ActualizarTitulos(columnasDetalle);
+        }
+
+        static void AplicarTitulosDeBaseDatos(string[] propiedades, Tabla.Col[] columnasVisibles,
+            List<string> columnasBaseDatos, int desplazamiento)
+        {
+            if (propiedades == null || columnasVisibles == null) return;
+            for (int i = 0; i < propiedades.Length; i++)
+            {
+                string nombreDb = columnasBaseDatos.FirstOrDefault(x =>
+                    string.Equals(x, propiedades[i], StringComparison.OrdinalIgnoreCase));
+                if (nombreDb == null)
+                    throw new InvalidOperationException("La columna " + propiedades[i] + " no existe en la tabla de SQL Server.");
+                int indice = i + desplazamiento;
+                if (indice >= columnasVisibles.Length)
+                    throw new InvalidOperationException("La tabla visible no tiene una columna para " + nombreDb + ".");
+                // Se valida la columna, pero se conserva el encabezado legible del diseño.
+            }
+        }
+
+        void ActualizarIndicadores(List<object> registros)
+        {
+            int activos = registros.Count(x => (bool)x.GetType().GetProperty("Estado").GetValue(x, null));
+            Stats[0].Valor = registros.Count.ToString();
+            Stats[1].Valor = activos.ToString();
+            Stats[2].Valor = (registros.Count - activos).ToString();
+            Stats[3].Valor = registros.Count.ToString();
+            for (int i = 0; i < Stats.Length; i++) Stats[i].Invalidate();
+        }
+
+        string PropiedadCampo(string especificacion)
+        {
+            int dosPuntos = especificacion.IndexOf(':');
+            string rotuloYPropiedad = dosPuntos < 0 ? especificacion : especificacion.Substring(0, dosPuntos);
+            int separador = rotuloYPropiedad.IndexOf('|');
+            return separador < 0 ? rotuloYPropiedad : rotuloYPropiedad.Substring(separador + 1);
+        }
+
+        object CrearEntidad()
+        {
+            object entidad = Activator.CreateInstance(ModuloCrud.TipoEntidad(cfg.Nombre));
+            for (int i = 0; i < cfg.Campos.Length; i++)
+            {
+                string especificacion = cfg.Campos[i];
+                int dosPuntos = especificacion.IndexOf(':');
+                string tipo = especificacion.Substring(dosPuntos + 1);
+                string propiedad = PropiedadCampo(especificacion);
+                var p = entidad.GetType().GetProperty(propiedad);
+                if (p == null) throw new InvalidOperationException("No existe el campo " + propiedad + " en la entidad.");
+
+                Control control = inputs[i];
+                string texto = control is CampoTexto ? ((CampoTexto)control).Caja.Text.Trim() :
+                    control is Selector ? ((Selector)control).Texto : string.Empty;
+                object valor;
+                var numerico = control as CampoNumero;
+                if (numerico != null)
+                {
+                    if (numerico.EstaVacio) throw new ArgumentException("Completa el campo " + especificacion.Substring(0, dosPuntos) + ".");
+                    valor = Convert.ChangeType(numerico.Valor, Nullable.GetUnderlyingType(p.PropertyType) ?? p.PropertyType, CultureInfo.InvariantCulture);
+                }
+                else if (control is Selector && p.PropertyType == typeof(int))
+                {
+                    var seleccion = (Selector)control;
+                    if (seleccion.Seleccion < 0 || seleccion.Seleccion >= seleccion.Codigos.Count)
+                        throw new ArgumentException("Selecciona un valor para " + especificacion.Substring(0, dosPuntos) + ".");
+                    valor = seleccion.Codigos[seleccion.Seleccion];
+                }
+                else if (control is Selector && p.PropertyType == typeof(string))
+                {
+                    var seleccion = (Selector)control;
+                    if (seleccion.Seleccion < 0 || seleccion.Seleccion >= seleccion.Items.Count)
+                        throw new ArgumentException("Selecciona un valor para " + especificacion.Substring(0, dosPuntos) + ".");
+                    valor = seleccion.Texto;
+                }
+                else if (p.PropertyType == typeof(bool))
+                {
+                    var seleccion = control as Selector;
+                    if (seleccion == null || seleccion.Seleccion < 0 || seleccion.Seleccion >= seleccion.Items.Count)
+                        throw new ArgumentException("Selecciona un valor para " + especificacion.Substring(0, dosPuntos) + ".");
+                    valor = texto == "Activo";
+                }
+                else if (p.PropertyType == typeof(int?)) valor = string.IsNullOrWhiteSpace(texto) ? null : (object)int.Parse(texto, CultureInfo.CurrentCulture);
+                else if (p.PropertyType == typeof(int)) valor = int.Parse(texto, CultureInfo.CurrentCulture);
+                else if (p.PropertyType == typeof(decimal)) valor = decimal.Parse(texto, CultureInfo.CurrentCulture);
+                else if (control is CampoFecha) valor = ((CampoFecha)control).Fecha.Value.Date;
+                else if (p.PropertyType == typeof(DateTime)) valor = DateTime.Parse(texto, CultureInfo.CurrentCulture);
+                else if (p.PropertyType == typeof(TimeSpan)) valor = TimeSpan.Parse(texto, CultureInfo.CurrentCulture);
+                else valor = texto;
+                p.SetValue(entidad, valor, null);
+            }
+            var clave = entidad.GetType().GetProperty(cfg.Clave);
+            if (clave != null) clave.SetValue(entidad, codigoEnEdicion, null);
+            return entidad;
+        }
+
+        object BuscarEntidadSeleccionada()
+        {
+            if (Tabla.Seleccion < 0 || Tabla.Seleccion >= Tabla.Filas.Count) return null;
+            int codigo;
+            if (!int.TryParse(Tabla.Filas[Tabla.Seleccion][1], out codigo)) return null;
+            return registros.FirstOrDefault(x => Convert.ToInt32(x.GetType().GetProperty(cfg.Clave).GetValue(x, null)) == codigo);
+        }
+
+        void CargarSeleccionado()
+        {
+            try
+            {
+                if (!datosCargados) { EnsureLoaded(); return; }
+                object entidad = BuscarEntidadSeleccionada();
+                if (entidad == null) { MessageBox.Show("Selecciona un registro para editar.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+                nuevoRegistroSolicitado = false;
+                codigoEnEdicion = Convert.ToInt32(entidad.GetType().GetProperty(cfg.Clave).GetValue(entidad, null));
+                CargarCampos(entidad);
+                Tabs.Seleccion = 1;
+                if (cfg.Nombre != "Compras") MostrarDetalle();
+            }
+            catch (Exception ex) { MessageBox.Show("No se pudo cargar el registro: " + ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }
+        }
+
+        void CargarCampos(object entidad)
+        {
+            for (int i = 0; i < cfg.Campos.Length; i++)
+            {
+                string propiedad = PropiedadCampo(cfg.Campos[i]);
+                var propiedadInfo = entidad.GetType().GetProperty(propiedad);
+                if (propiedadInfo == null)
+                    throw new InvalidOperationException("No existe el campo " + propiedad + " en el registro seleccionado.");
+                object valor = propiedadInfo.GetValue(entidad, null);
+                var texto = inputs[i] as CampoTexto;
+                var numero = inputs[i] as CampoNumero;
+                var fecha = inputs[i] as CampoFecha;
+                var selector = inputs[i] as Selector;
+                if (texto != null) texto.Caja.Text = valor == null ? string.Empty : Convert.ToString(valor, CultureInfo.CurrentCulture);
+                if (numero != null) numero.Valor = valor == null ? 0 : Convert.ToDecimal(valor, CultureInfo.CurrentCulture);
+                if (fecha != null && valor != null) fecha.Fecha.Value = Convert.ToDateTime(valor, CultureInfo.CurrentCulture);
+                if (selector != null)
+                {
+                    if (valor == null)
+                    {
+                        selector.Seleccion = -1;
+                    }
+                    else if (propiedadInfo.PropertyType == typeof(bool))
+                    {
+                        selector.Seleccion = selector.Items.IndexOf((bool)valor ? "Activo" : "Inactivo");
+                    }
+                    else if (propiedadInfo.PropertyType == typeof(string))
+                    {
+                        string opcionActual = Convert.ToString(valor, CultureInfo.CurrentCulture);
+                        int indice = selector.Items.FindIndex(x => string.Equals(x, opcionActual, StringComparison.CurrentCultureIgnoreCase));
+                        // Conserva valores existentes que ya no aparecen en las opciones para crear registros.
+                        if (indice < 0 && opcionActual.Length > 0)
+                        {
+                            selector.Items.Add(opcionActual);
+                            indice = selector.Items.Count - 1;
+                        }
+                        selector.Seleccion = indice;
+                    }
+                    else
+                    {
+                        int codigo = Convert.ToInt32(valor, CultureInfo.CurrentCulture);
+                        int indice = selector.Codigos.IndexOf(codigo);
+                        // Permite ver y conservar una relación existente aunque su opción ya no esté disponible.
+                        if (indice < 0)
+                        {
+                            selector.Items.Add(codigo.ToString(CultureInfo.CurrentCulture) + " - relación no disponible");
+                            selector.Codigos.Add(codigo);
+                            indice = selector.Codigos.Count - 1;
+                        }
+                        selector.Seleccion = indice;
+                    }
+                }
+            }
+            if (TablaGes != null) { TablaGes.Filas.Clear(); TablaGes.InvalidarAnchosColumnas(); TablaGes.Invalidate(); }
+            // En Compras, MostrarCompraSeleccionada carga encabezado y detalle
+            // juntos para evitar consultar dos veces el mismo detalle.
+            if (editorDetalle != null && cfg.Nombre != "Compras") editorDetalle.CambiarPadre(codigoEnEdicion);
+        }
+
+        void GuardarFormulario()
+        {
+            try
+            {
+                if (!datosCargados) { EnsureLoaded(); return; }
+                object entidad = CrearEntidad();
+                if (cfg.Nombre == "Facturaciones")
+                {
+                    bool editar = codigoEnEdicion > 0;
+                    // Valida y prepara el detalle antes de guardar la factura.
+                    DetalleFactura detalle = editorDetalle.ObtenerDetalleParaGuardar(codigoEnEdicion, !editar);
+                    int codigoFactura;
+                    if (!editar)
+                    {
+                        codigoFactura = ModuloCrud.GuardarFacturaConDetalle((Factura)entidad, detalle);
+                    }
+                    else if (detalle != null)
+                    {
+                        detalle.CodigoFacturacion = codigoEnEdicion;
+                        codigoFactura = detalle.CodigoDetalleFactura > 0
+                            ? ModuloCrud.ActualizarFacturaConDetalle((Factura)entidad, detalle)
+                            : ModuloCrud.ActualizarFacturaConNuevoDetalle((Factura)entidad, detalle);
+                    }
+                    else codigoFactura = ModuloCrud.GuardarFactura((Factura)entidad, true);
+                    editorDetalle.Recargar(codigoFactura);
+                }
+                else if (cfg.Nombre == "Compras")
+                {
+                    bool editar = codigoEnEdicion > 0;
+                    // Los controles existentes preparan el detalle antes de abrir la transacción.
+                    DetalleCompra detalle = editorDetalle.ObtenerDetalleCompraParaGuardar(!editar);
+                    int codigoCompra;
+                    if (!editar)
+                    {
+                        codigoCompra = ModuloCrud.GuardarCompraConDetalle((Compra)entidad, detalle);
+                    }
+                    else if (detalle != null)
+                    {
+                        detalle.CodigoCompra = codigoEnEdicion;
+                        codigoCompra = ModuloCrud.ActualizarCompraConDetalle((Compra)entidad, detalle);
+                    }
+                    else
+                    {
+                        codigoCompra = ModuloCrud.GuardarCompra((Compra)entidad, true);
+                    }
+                    editorDetalle.Recargar(codigoCompra);
+                }
+                else ModuloCrud.Guardar(cfg.Nombre, entidad, codigoEnEdicion > 0);
+                datosCargados = false;
+                nuevoRegistroSolicitado = false;
+                EnsureLoaded();
+                LimpiarFormulario();
+                Tabs.Seleccion = 0;
+                MessageBox.Show("Los datos se guardaron correctamente.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex) { MessageBox.Show("No se pudieron guardar los datos:\n" + ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }
+        }
+
+        void EliminarSeleccionado()
+        {
+            try
+            {
+                if (!datosCargados) { EnsureLoaded(); return; }
+                object entidad = BuscarEntidadSeleccionada();
+                if (entidad == null) { MessageBox.Show("Selecciona un registro para eliminar.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+                int codigo = Convert.ToInt32(entidad.GetType().GetProperty(cfg.Clave).GetValue(entidad, null));
+                if (MessageBox.Show("¿Deseas eliminar el registro " + codigo + "?", Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                ModuloCrud.Eliminar(cfg.Nombre, codigo);
+                datosCargados = false;
+                EnsureLoaded();
+            }
+            catch (Exception ex) { MessageBox.Show("No se pudo eliminar el registro:\n" + ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }
+        }
+
+        void LimpiarFormulario()
+        {
+            LimpiarCamposEncabezado();
+            // En factura se limpia el detalle al iniciar un registro nuevo.
+            if (editorDetalle != null && cfg.Nombre != "Compras") editorDetalle.CambiarPadre(codigoEnEdicion);
+        }
+
+        void LimpiarCamposEncabezado()
+        {
+            codigoEnEdicion = 0;
+            foreach (var opcion in opcionesFijas)
+            {
+                opcion.Key.Items.Clear();
+                opcion.Key.Items.AddRange(opcion.Value);
+            }
+            for (int i = 0; i < cfg.Campos.Length; i++)
+            {
+                var texto = inputs[i] as CampoTexto;
+                var numero = inputs[i] as CampoNumero;
+                var fecha = inputs[i] as CampoFecha;
+                var selector = inputs[i] as Selector;
+                if (texto != null) texto.Caja.Clear();
+                if (numero != null) numero.Limpiar();
+                if (fecha != null) fecha.Fecha.Value = DateTime.Today;
+                if (selector != null)
+                {
+                    selector.Seleccion = -1;
+                }
+            }
+        }
+
+        void MostrarDetalle()
+        {
+            if (cfg.Detalle == null) return;
+            int i = Tabla.Seleccion; string id = ""; string[][] d = null;
+            if (i >= 0 && i < Tabla.Filas.Count)
+            {
+                id = Tabla.Filas[i][1];
+                if (cfg.Nombre != "Compras") cfg.Detalle.TryGetValue(id, out d);
+            }
+            int codigoCompraSeleccionada = 0;
+            string[][] detalleCompleto = d;
+            if (cfg.Nombre == "Compras" && editorDetalle != null)
+            {
+                int.TryParse(id, out codigoCompraSeleccionada);
+                editorDetalle.CambiarPadre(codigoCompraSeleccionada);
+                detalleCompleto = editorDetalle.ObtenerFilasDetalle();
+                d = detalleCompleto;
+                if (codigoCompraSeleccionada > 0) cfg.Detalle[id] = detalleCompleto;
+            }
+            else if (cfg.Nombre == "Facturaciones" && editorDetalle != null && id != "")
+            {
+                int codigoFacturaSeleccionada;
+                if (int.TryParse(id, out codigoFacturaSeleccionada) && codigoFacturaSeleccionada > 0)
+                {
+                    editorDetalle.CambiarPadre(codigoFacturaSeleccionada);
+                    detalleCompleto = editorDetalle.ObtenerFilasDetalle();
+                    cfg.Detalle[id] = detalleCompleto;
+                    d = detalleCompleto;
+                }
+            }
+            string textoDetalle = Buscar == null ? "" : Buscar.Text.Trim();
+            if (textoDetalle.Length > 0 && detalleCompleto != null)
+                d = detalleCompleto.Where(fila => fila.Any(valor =>
+                    valor != null && valor.IndexOf(textoDetalle, StringComparison.CurrentCultureIgnoreCase) >= 0)).ToArray();
+            if (lblDet != null) lblDet.Text = id == "" ? cfg.TituloDet : cfg.TituloDet + " " + id;
+            if (TablaDet != null)
+            {
+                filasDetalleVista = d ?? new string[0][];
+                paginaDetalleActual = 1;
+                MostrarPaginaDetalle();
+                if (totDet != null)
+                {
+                    if (cfg.Nombre == "Compras") TotalizarCompra(codigoCompraSeleccionada, detalleCompleto);
+                    else Totalizar(detalleCompleto, totDet);
+                }
+            }
+            if (TablaGes != null)
+            {
+                TablaGes.Filas.Clear(); if (detalleCompleto != null) TablaGes.Filas.AddRange(detalleCompleto.Select(f => (string[])f.Clone()));
+                TablaGes.InvalidarAnchosColumnas();
+                TablaGes.Seleccion = TablaGes.Filas.Count > 0 ? 0 : -1;
+            }
+        }
+
+        void CambiarPaginaDetalle(int pagina)
+        {
+            int tamanoPagina = cfg.Nombre == "Compras" ? RegistrosPorPagina : Math.Max(1, filasDetalleVista.Length);
+            int totalPaginas = Math.Max(1, (int)Math.Ceiling(filasDetalleVista.Length / (double)tamanoPagina));
+            paginaDetalleActual = Math.Max(1, Math.Min(pagina, totalPaginas));
+            MostrarPaginaDetalle();
+        }
+
+        void MostrarPaginaDetalle()
+        {
+            if (TablaDet == null) return;
+            int total = filasDetalleVista.Length;
+            int tamanoPagina = cfg.Nombre == "Compras" ? RegistrosPorPagina : Math.Max(1, total);
+            int paginas = Math.Max(1, (int)Math.Ceiling(total / (double)tamanoPagina));
+            paginaDetalleActual = Math.Max(1, Math.Min(paginaDetalleActual, paginas));
+            int desde = total == 0 ? 0 : (paginaDetalleActual - 1) * tamanoPagina;
+            TablaDet.Filas.Clear();
+            TablaDet.Filas.AddRange(filasDetalleVista.Skip(desde).Take(tamanoPagina));
+            TablaDet.InvalidarAnchosColumnas();
+            TablaDet.Invalidate();
+
+            int primero = total == 0 ? 0 : desde + 1;
+            int ultimo = total == 0 ? 0 : Math.Min(desde + tamanoPagina, total);
+            textoPaginacionDetalle.Text = string.Format("Mostrando {0} - {1} de {2} detalles", primero, ultimo, total);
+            botonDetalleAnterior.Enabled = paginaDetalleActual > 1;
+            botonDetalleSiguiente.Enabled = paginaDetalleActual < paginas;
+        }
+
+        void TotalizarCompra(int codigoCompra, string[][] detalles)
+        {
+            int indiceSubtotal = Array.IndexOf(cfg.ColumnasDetallePropiedades, "Subtotal");
+            int indiceDescuento = Array.IndexOf(cfg.ColumnasDetallePropiedades, "DescuentoCompra");
+            decimal subtotal = 0;
+            decimal descuento = 0;
+
+            if (detalles != null)
+            {
+                foreach (string[] detalle in detalles)
+                {
+                    if (indiceSubtotal >= 0 && indiceSubtotal < detalle.Length)
+                        subtotal += Monto(detalle[indiceSubtotal]);
+                    if (indiceDescuento >= 0 && indiceDescuento < detalle.Length)
+                        descuento += Monto(detalle[indiceDescuento]);
+                }
+            }
+
+            object compra = registros.FirstOrDefault(x =>
+                Convert.ToInt32(x.GetType().GetProperty(cfg.Clave).GetValue(x, null)) == codigoCompra);
+            decimal totalCompra = compra == null
+                ? 0
+                : Convert.ToDecimal(compra.GetType().GetProperty("TotalCompra").GetValue(compra, null));
+
+            totDet.Sub = M(subtotal);
+            totDet.Iva = M(descuento);
+            totDet.Total = M(totalCompra);
+            totDet.Invalidate();
+        }
+
+        static decimal Monto(string s) { decimal d; return decimal.TryParse((s ?? "").Replace("Q", "").Replace(",", "").Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out d) ? d : 0; }
+        static string M(decimal d) { return "Q " + d.ToString("N2", CultureInfo.InvariantCulture); }
+        static void Totalizar(string[][] filas, Totales tt)
+        {
+            decimal sum = 0;
+            if (filas != null)
+                foreach (var f in filas) sum += Monto(f[f.Length - 1]);
+            decimal iva = sum - Math.Round(sum / 1.12m, 2); tt.Sub = M(sum - iva); tt.Iva = M(iva); tt.Total = M(sum); tt.Invalidate();
+        }
+
+        // ---------------- Gestionar ----------------
+        static Tarjeta Sec() { return new Tarjeta { Dock = DockStyle.Fill, Radio = 14, Opacidad = 200, C1 = Color.FromArgb(16, 34, 116), C2 = Color.FromArgb(26, 28, 132), ColorBorde = Color.FromArgb(120, 70, 105, 255), Vidrio = false }; }
+
+        void ConstruirGestionar(Panel host)
+        {
+            var card = Card(); bool det = cfg.Detalle != null;
+            var pie = P(DockStyle.Bottom, det ? 78 : 64, new Padding(18, 10, 18, 10));
+            var fb = new FlowLayoutPanel { Dock = DockStyle.Right, Width = 390, BackColor = Color.Transparent, FlowDirection = FlowDirection.RightToLeft };
+            var bc = new Boton { Texto = "Cancelar", C1 = Color.FromArgb(255, 50, 170), C2 = Color.FromArgb(225, 40, 130), Width = 112, Height = 40, Margin = new Padding(8, 0, 0, 0) };
+            var bl = new Boton { Texto = det ? "Nueva" : "Limpiar", Icono = det ? "\u2795" : "\U0001F5D1", C1 = Color.FromArgb(130, 60, 255), C2 = Color.FromArgb(60, 110, 255), Width = 112, Height = 40, Margin = new Padding(8, 0, 0, 0) };
+            var bs = new Boton { Texto = "Guardar", Icono = "\U0001F5C4", C1 = Color.FromArgb(0, 190, 150), C2 = Color.FromArgb(0, 215, 125), Width = 124, Height = 40, Margin = new Padding(8, 0, 0, 0) };
+            bc.Click += (s, e) => { nuevoRegistroSolicitado = false; LimpiarFormulario(); Tabs.Seleccion = 0; };
+            bl.Click += (s, e) =>
+            {
+                nuevoRegistroSolicitado = true;
+                LimpiarFormulario();
+                if (cfg.Nombre == "Compras" && editorDetalle != null) editorDetalle.CambiarPadre(0);
+            };
+            bs.Click += (s, e) => GuardarFormulario();
+            fb.Controls.AddRange(new Control[] { bc, bl, bs }); pie.Controls.Add(fb);
+
+            int cols = det ? 4 : 3, n = cfg.Campos.Length, filas = (n + cols - 1) / cols;
+            var grid = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = cols, RowCount = filas, BackColor = Color.Transparent };
+            for (int i = 0; i < cols; i++) grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / cols));
+            for (int i = 0; i < filas; i++) grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 64));
+            for (int i = 0; i < n; i++)
+            {
+                var ctl = Campo(cfg.Campos[i]);
+                inputs.Add(ctl);
+                var selector = ctl as Selector;
+                if (selector != null && !ModuloCrud.EsRelacion(PropiedadCampo(cfg.Campos[i])))
+                    opcionesFijas[selector] = selector.Items.ToList();
+                grid.Controls.Add(ctl, i % cols, i / cols);
+            }
+
+            if (!det)
+            {
+                var gw = P(DockStyle.Top, filas * 64 + 6, new Padding(18, 0, 6, 0)); gw.Controls.Add(grid);
+                var tit = P(DockStyle.Top, 52, new Padding(0)); tit.Controls.Add(Tema.L("Datos de " + cfg.Nombre.ToLower(), 13, Color.White, 20, 16, true));
+                card.Controls.Add(pie); card.Controls.Add(gw); card.Controls.Add(tit);
+
+                // Un formulario con muchos campos puede desplazarse sin cortar las filas inferiores.
+                int alturaMinima = 52 + filas * 64 + 6 + pie.Height;
+                card.Dock = DockStyle.Top;
+                card.Width = Math.Max(1, host.ClientSize.Width);
+                card.Height = Math.Max(alturaMinima, host.ClientSize.Height);
+                host.AutoScroll = true;
+                host.Resize += (s, e) =>
+                {
+                    card.Width = Math.Max(1, host.ClientSize.Width);
+                    card.Height = Math.Max(alturaMinima, host.ClientSize.Height);
+                };
+                host.Controls.Add(card);
+                return;
+            }
+
+            string sing = cfg.Nombre == "Compras" ? "compra" : cfg.Nombre == "Facturaciones" ? "factura" : "registro";
+            bool compra = cfg.Nombre == "Compras";
+            card.Padding = new Padding(14, 12, 14, 0);
+
+            // Sección 1: datos de la factura / compra
+            var s1 = Sec(); var s1b = P(DockStyle.Fill, 0, new Padding(14, 0, 6, 6)); s1b.Controls.Add(grid);
+            var s1h = P(DockStyle.Top, 40, new Padding(0)); s1h.Controls.Add(Tema.L("Datos de la " + sing, 12.5f, Color.White, 16, 10, true));
+            s1.Controls.Add(s1b); s1.Controls.Add(s1h);
+            var s1w = P(DockStyle.Top, 40 + filas * 64 + 12 + 10, new Padding(0, 0, 0, 10)); s1w.Controls.Add(s1);
+
+            // Sección 2: detalle (captura de líneas + tabla)
+            var s2 = Sec();
+            var tw = P(DockStyle.Fill, 0, new Padding(12, 0, 12, 10));
+            TablaGes = new Tabla { Dock = DockStyle.Fill }; TablaGes.Columnas.AddRange(cfg.ColsDet);
+            TablaGes.TituloVacio = "Aún no hay líneas en el detalle"; TablaGes.TextoVacio = "Escribe el ítem, la cantidad y el precio, y pulsa \"Agregar línea\".";
+            if (!cfg.DetalleSoloLectura) tw.Controls.Add(TablaGes);
+            var le = P(DockStyle.Top, 68, new Padding(14, 0, 14, 0));
+            var lt = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 5, RowCount = 1, BackColor = Color.Transparent };
+            lt.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            foreach (var pc in new float[] { 34, 12, 18, 20, 16 }) lt.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, pc));
+            Padding mg = new Padding(0, 4, 10, 4);
+            eDesc = new CampoTexto(compra ? "Material / producto" : "Descripción del servicio o producto", "") { Dock = DockStyle.Fill, Margin = mg };
+            eCant = new CampoNumero("Cantidad", 0, false, false) { Dock = DockStyle.Fill, Margin = mg }; eCant.Num.Minimum = 1; eCant.Valor = 1;
+            ePrecio = new CampoNumero(compra ? "Costo unitario" : "Precio unitario", 2, true, false) { Dock = DockStyle.Fill, Margin = mg };
+            eSubLin = new CampoNumero("Subtotal (calculado)", 2, true, true) { Dock = DockStyle.Fill, Margin = mg };
+            eCant.Num.ValueChanged += (s, e) => eSubLin.Valor = eCant.Valor * ePrecio.Valor; ePrecio.Num.ValueChanged += (s, e) => eSubLin.Valor = eCant.Valor * ePrecio.Valor;
+            var ba = new Boton { Texto = "Agregar", Icono = "\u2795", C1 = Color.FromArgb(0, 190, 150), C2 = Color.FromArgb(0, 215, 125), Dock = DockStyle.Fill, Margin = new Padding(0, 10, 0, 10) };
+            ba.Click += (s, e) => AgregarLinea();
+            if (cfg.DetalleSoloLectura) { le.Visible = false; ba.Enabled = false; }
+            lt.Controls.Add(eDesc, 0, 0); lt.Controls.Add(eCant, 1, 0); lt.Controls.Add(ePrecio, 2, 0); lt.Controls.Add(eSubLin, 3, 0); lt.Controls.Add(ba, 4, 0); le.Controls.Add(lt);
+            var hd = P(DockStyle.Top, 42, new Padding(0)); hd.Controls.Add(Tema.L("Detalle de la " + sing, 12.5f, Color.White, 16, 10, true));
+            var bq = new Boton { Texto = cfg.DetalleSoloLectura ? "Gestionar detalle" : "Quitar línea", Icono = "\U0001F5D1", C1 = Color.FromArgb(255, 50, 170), C2 = Color.FromArgb(225, 40, 130), Dock = DockStyle.Fill };
+            var bw = P(DockStyle.Right, 176, new Padding(0, 3, 14, 3)); bw.Controls.Add(bq); hd.Controls.Add(bw);
+            if (cfg.DetalleSoloLectura) { bw.Visible = false; editorDetalle = new FormularioDetalleCrud(cfg.Nombre, 0) { Dock = DockStyle.Fill }; editorDetalle.DatosCambiados += (s, e) => MostrarDetalle(); tw.Controls.Add(editorDetalle); }
+            else bq.Click += (s, e) => { int k = TablaGes.Seleccion; if (k < 0 || k >= TablaGes.Filas.Count) k = TablaGes.Filas.Count - 1; if (k >= 0) { TablaGes.Filas.RemoveAt(k); for (int z = 0; z < TablaGes.Filas.Count; z++) TablaGes.Filas[z][0] = (z + 1).ToString(); TablaGes.InvalidarAnchosColumnas(); TablaGes.Seleccion = TablaGes.Filas.Count - 1; Recalcular(); } };
+            s2.Controls.Add(tw); s2.Controls.Add(le); s2.Controls.Add(hd);
+            var s2w = P(DockStyle.Fill, 0, new Padding(0)); s2w.Controls.Add(s2);
+
+            var tt = new TableLayoutPanel { Dock = DockStyle.Left, Width = 560, ColumnCount = 3, RowCount = 1, BackColor = Color.Transparent };
+            tt.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); for (int z = 0; z < 3; z++) tt.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
+            eSubt = new CampoNumero("Subtotal (calculado)", 2, true, true) { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 10, 0) };
+            eDescto = new CampoNumero("Descuento", 2, true, false) { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 10, 0) }; eDescto.Num.ValueChanged += (s, e) => Recalcular();
+            eTot = new CampoNumero("Total (calculado)", 2, true, true) { Dock = DockStyle.Fill, Margin = new Padding(0) }; eTot.Color2(Color.FromArgb(95, 60, 215)); eTot.Num.Font = Tema.F(10.5f, true);
+            tt.Controls.Add(eSubt, 0, 0); tt.Controls.Add(eDescto, 1, 0); tt.Controls.Add(eTot, 2, 0); pie.Controls.Add(tt);
+            if (cfg.DetalleSoloLectura) tt.Visible = false;
+            card.Controls.Add(s2w); card.Controls.Add(pie); card.Controls.Add(s1w);
+            host.Controls.Add(card);
+            if (cfg.DetalleSoloLectura) le.Visible = false;
+            Nueva(false);
+        }
+
+        void AgregarLinea()
+        {
+            decimal q = eCant.Valor, p = ePrecio.Valor; int n = TablaGes.Filas.Count;
+            string d = eDesc.Caja.Text.Trim(); if (d == "") d = "Ítem " + (n + 1);
+            TablaGes.Filas.Add(new[] { (n + 1).ToString(), d, q.ToString("0.##", CultureInfo.InvariantCulture), M(p), M(q * p) });
+            TablaGes.InvalidarAnchosColumnas();
+            TablaGes.Seleccion = n; eDesc.Caja.Text = ""; eCant.Valor = 1; ePrecio.Valor = 0; Recalcular(); eDesc.Caja.Focus();
+        }
+
+        void AbrirGestionDetalle()
+        {
+            try
+            {
+                if (codigoEnEdicion <= 0)
+                {
+                    MessageBox.Show("Selecciona el registro y pulsa Editar antes de gestionar su detalle.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                editorDetalle.CambiarPadre(codigoEnEdicion);
+            }
+            catch (Exception ex) { MessageBox.Show("No se pudo abrir el detalle:\n" + ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }
+        }
+
+        // Campos calculados: Subtotal = suma de las líneas; Total = Subtotal - Descuento (sin IVA)
+        void Recalcular()
+        {
+            if (TablaGes == null || eSubt == null) return;
+            decimal sum = 0; foreach (var f in TablaGes.Filas) sum += Monto(f[f.Length - 1]);
+            eSubt.Valor = sum; eTot.Valor = Math.Max(0, sum - eDescto.Valor);
+        }
+
+        string Siguiente()
+        {
+            string pre = "", w = ""; int max = 0;
+            foreach (var f in cfg.Filas)
+            {
+                string id = f[1]; int k = id.IndexOf('-'); if (k < 0) continue;
+                string num = id.Substring(k + 1); int v; if (int.TryParse(num, out v) && v > max) { max = v; w = num; pre = id.Substring(0, k + 1); }
+            }
+            return pre + (max + 1).ToString().PadLeft(w.Length, '0');
+        }
+
+        // Formulario en blanco: número siguiente, fecha de hoy y detalle vacío
+        void Nueva(bool ir)
+        {
+            for (int i = 0; i < inputs.Count; i++)
+            {
+                string tp = cfg.Campos[i].Substring(cfg.Campos[i].IndexOf(':') + 1);
+                var ct = inputs[i] as CampoTexto; var sl = inputs[i] as Selector;
+                var cf = inputs[i] as CampoFecha; if (cf != null) cf.Fecha.Value = DateTime.Today;
+                if (ct != null) ct.Caja.Clear();
+                if (sl != null) sl.Seleccion = -1;
+                var cn = inputs[i] as CampoNumero; if (cn != null) cn.Limpiar();
+            }
+            if (eDescto != null) eDescto.Valor = 0;
+            if (TablaGes != null) { TablaGes.Filas.Clear(); TablaGes.InvalidarAnchosColumnas(); TablaGes.Seleccion = -1; Recalcular(); }
+            if (ir) Tabs.Seleccion = 1;
+        }
+
+        // Carga la fila elegida (con su detalle) en el formulario
+        void Cargar()
+        {
+            int k = Tabla.Seleccion; if (k < 0 || k >= Tabla.Filas.Count) { Tabs.Seleccion = 1; return; }
+            var row = Tabla.Filas[k]; string[][] dd; Nueva(false);
+            var c0 = inputs[0] as CampoTexto; if (c0 != null) c0.Caja.Text = row[1];
+            foreach (var ctl in inputs) { var sl = ctl as Selector; if (sl != null) { int ix = sl.Items.FindIndex(o => row.Contains(o)); if (ix >= 0) sl.Seleccion = ix; } }
+            if (cfg.Detalle.TryGetValue(row[1], out dd)) { foreach (var ln in dd) TablaGes.Filas.Add((string[])ln.Clone()); TablaGes.InvalidarAnchosColumnas(); TablaGes.Seleccion = 0; Recalcular(); }
+            Tabs.Seleccion = 1;
+        }
+
+        static Control Campo(string spec)
+        {
+            int i = spec.IndexOf(':'); string rot = spec.Substring(0, i), tp = spec.Substring(i + 1);
+            int separador = rot.IndexOf('|');
+            string propiedad = separador >= 0 ? rot.Substring(separador + 1) : rot;
+            if (separador >= 0) rot = rot.Substring(0, separador);
+            if (tp == "b")
+            {
+                var s = new Selector { Dock = DockStyle.Fill, Rotulo = rot, Margin = new Padding(0, 4, 12, 8) };
+                s.Items.Add("Inactivo"); s.Items.Add("Activo"); return s;
+            }
+            if (tp.StartsWith("c="))
+            {
+                var s = new Selector { Dock = DockStyle.Fill, Rotulo = rot, Margin = new Padding(0, 4, 12, 8) };
+                foreach (var o in tp.Substring(2).Split(',')) s.Items.Add(o); return s;
+            }
+            if (tp == "f") return new CampoFecha(rot) { Dock = DockStyle.Fill, Margin = new Padding(0, 4, 12, 8) };
+            if (tp == "n" && ModuloCrud.EsRelacion(propiedad))
+                return new Selector { Dock = DockStyle.Fill, Rotulo = rot, Margin = new Padding(0, 4, 12, 8) };
+            if (tp == "n" || tp == "m") return new CampoNumero(rot, tp == "m" ? 2 : 0, tp == "m", false) { Dock = DockStyle.Fill, Margin = new Padding(0, 4, 12, 8) };
+            string v = tp == "f" ? DateTime.Today.ToString("dd/MM/yyyy") : tp == "h" ? "08:00" : "";
+            var campoTexto = new CampoTexto(rot, v) { Dock = DockStyle.Fill, Margin = new Padding(0, 4, 12, 8) };
+            if (propiedad == "Clave") campoTexto.Caja.UseSystemPasswordChar = true;
+            return campoTexto;
+        }
+
+        // ---------------- Resumen ----------------
+        void ConstruirResumen(Panel host)
+        {
+            var b = new BarrasEstado { Dock = DockStyle.Fill, Radio = 18, Opacidad = 225, C1 = Color.FromArgb(10, 24, 98), C2 = Color.FromArgb(24, 22, 118), Brillo = Color.FromArgb(60, 150, 60, 255), Brillo2 = Color.FromArgb(30, 0, 200, 255) };
+            barraResumen = b;
+            b.Cols.AddRange(cfg.Cols); if (cfg.Filas != null) b.Filas.AddRange(cfg.Filas);
+            host.Controls.Add(b);
+        }
+
+        Control Combo(string spec)
+        {
+            int k = spec.IndexOf('='); string nombre = spec.Substring(0, k), ops = spec.Substring(k + 1);
+            var host = P(DockStyle.Right, 168, new Padding(12, 0, 0, 0));
+            var sel = new Selector { Dock = DockStyle.Fill, Rotulo = nombre }; sel.Items.Add(nombre == "Sucursal" ? "Todas" : "Todos");
+            foreach (var o in ops.Split(',')) if (o != "") sel.Items.Add(o);
+            sel.Cambio += (s, e) => AplicarFiltro(); Combos.Add(sel); host.Controls.Add(sel); return host;
+        }
+
+        static Boton Acc(string t, string ic, Color a, Color b) { return new Boton { Texto = t, Icono = ic, C1 = a, C2 = b, Width = 112, Height = 40, Margin = new Padding(0, 0, 8, 0), Radio = 12 }; }
+        static Boton Pag(string t, bool act, int w)
+        { return new Boton { Texto = t, C1 = act ? Tema.Morado : Tema.Campo, C2 = act ? Tema.Rosa : Tema.Campo, Width = w, Height = 34, Margin = new Padding(3, 0, 3, 0), Radio = 9, ColorBorde = Tema.Borde }; }
+
+        protected override void OnPaintBackground(PaintEventArgs e) { Tema.PintarFondo(e.Graphics, this); }
+    }
+}
