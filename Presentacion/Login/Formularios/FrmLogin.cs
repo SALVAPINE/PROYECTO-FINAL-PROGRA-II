@@ -39,6 +39,7 @@ namespace Login.Formularios
 
         public FrmLogin()
         {
+            AutoScaleMode = AutoScaleMode.None;
             FormBorderStyle = FormBorderStyle.None;
             StartPosition = FormStartPosition.CenterScreen;
             ClientSize = new Size(U.P(1640), U.P(960));

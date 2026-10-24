@@ -27,6 +27,7 @@ namespace SistemaPublicidad.Formularios
 
         public FrmPrincipal(string usuario, string rol)
         {
+            AutoScaleMode = AutoScaleMode.None;
             SuspendLayout();
             Text = "Publicidad Multisucursal"; ClientSize = new Size(1366, 768); MinimumSize = new Size(1300, 720);
             StartPosition = FormStartPosition.CenterScreen; BackColor = Tema.Fondo; DoubleBuffered = true;
