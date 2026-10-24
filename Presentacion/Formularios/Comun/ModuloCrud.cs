@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Entidad;
@@ -12,6 +13,9 @@ namespace SistemaPublicidad.Formularios
     /// </summary>
     internal static class ModuloCrud
     {
+        static readonly ConcurrentDictionary<string, List<string>> Esquemas =
+            new ConcurrentDictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+
         internal sealed class Opcion
         {
             public int Codigo;
@@ -106,7 +110,11 @@ namespace SistemaPublicidad.Formularios
                 }
             }
 
-            return new EsquemaNegocio().ListarColumnas(tabla);
+            // El esquema no cambia mientras la aplicación está abierta. Reutilizarlo
+            // evita una consulta de catálogo cada vez que se visita el módulo.
+            List<string> columnas = Esquemas.GetOrAdd(tabla,
+                nombreTabla => new EsquemaNegocio().ListarColumnas(nombreTabla));
+            return columnas.ToList();
         }
 
         public static Type TipoEntidad(string modulo)

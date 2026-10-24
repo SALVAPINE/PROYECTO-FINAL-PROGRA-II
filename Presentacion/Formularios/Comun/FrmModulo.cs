@@ -148,6 +148,7 @@ namespace SistemaPublicidad.Formularios
         Label lblTit, lblSub, lblDet; Totales totDet; BarrasEstado barraResumen; Panel vC, vG, vR, filaStats; readonly List<Control> inputs = new List<Control>(); readonly Dictionary<Selector, List<string>> opcionesFijas = new Dictionary<Selector, List<string>>(); CampoTexto eDesc; CampoNumero eCant, ePrecio, eSubLin, eSubt, eDescto, eTot; readonly ModuloCfg cfg;
         int codigoEnEdicion; bool datosCargados, datosCargando, nuevoRegistroSolicitado;
         int solicitudBusquedaDetalle;
+        int solicitudFiltro;
         string terminoCoincidenciasDetalle = "";
         HashSet<int> coincidenciasDetalle = new HashSet<int>();
         List<object> registros = new List<object>();
@@ -160,6 +161,8 @@ namespace SistemaPublicidad.Formularios
         Boton botonDetalleAnterior, botonDetalleSiguiente;
         Label textoPaginacionDetalle;
         FormularioDetalleCrud editorDetalle;
+        bool gestionarConstruido, resumenConstruido;
+        Dictionary<string, List<ModuloCrud.Opcion>> opcionesRelaciones = new Dictionary<string, List<ModuloCrud.Opcion>>();
         static readonly Color[][] Cs = {
             new[] { Color.FromArgb(40, 80, 255), Color.FromArgb(0, 200, 255) }, new[] { Color.FromArgb(255, 40, 190), Color.FromArgb(190, 40, 235) },
             new[] { Color.FromArgb(0, 190, 150), Color.FromArgb(0, 225, 200) }, new[] { Color.FromArgb(255, 165, 30), Color.FromArgb(240, 85, 45) } };
@@ -204,7 +207,9 @@ namespace SistemaPublicidad.Formularios
 
             var host = P(DockStyle.Fill, 0, new Padding(0, 2, 0, 0));
             vC = P(DockStyle.Fill, 0, new Padding(0)); vG = P(DockStyle.Fill, 0, new Padding(0)); vR = P(DockStyle.Fill, 0, new Padding(0));
-            ConstruirConsultar(vC); ConstruirGestionar(vG); ConstruirResumen(vR);
+            // La primera entrada solo necesita Consultar. Las demás vistas se crean
+            // cuando se abren por primera vez para reducir el trabajo al navegar.
+            ConstruirConsultar(vC);
             host.Controls.Add(vC); host.Controls.Add(vG); host.Controls.Add(vR);
 
             Controls.Add(host); Controls.Add(fila); Controls.Add(tabs); Controls.Add(head);
@@ -247,7 +252,20 @@ namespace SistemaPublicidad.Formularios
 
         void Vistas()
         {
-            int t = Tabs.Seleccion; if (cfg.Detalle != null && filaStats != null) filaStats.Visible = t != 1; vC.Visible = t == 0; vG.Visible = t == 1; vR.Visible = t == 2;
+            int t = Tabs.Seleccion;
+            if (t == 1 && !gestionarConstruido)
+            {
+                ConstruirGestionar(vG);
+                gestionarConstruido = true;
+                if (datosCargados) ActualizarRelaciones(opcionesRelaciones);
+            }
+            if (t == 2 && !resumenConstruido)
+            {
+                ConstruirResumen(vR);
+                resumenConstruido = true;
+            }
+            if (cfg.Detalle != null && filaStats != null) filaStats.Visible = t != 1;
+            vC.Visible = t == 0; vG.Visible = t == 1; vR.Visible = t == 2;
             string n = cfg.Nombre, p = cfg.Plural;
             switch (t)
             {
@@ -313,9 +331,9 @@ namespace SistemaPublicidad.Formularios
             Anadir.Click += (s, e) =>
             {
                 nuevoRegistroSolicitado = true;
+                Tabs.Seleccion = 1;
                 LimpiarFormulario();
                 if (cfg.Nombre == "Compras" && editorDetalle != null) editorDetalle.CambiarPadre(0);
-                Tabs.Seleccion = 1;
             };
             Editar.Click += (s, e) => CargarSeleccionado();
             Eliminar.Click += (s, e) => EliminarSeleccionado();
@@ -386,45 +404,90 @@ namespace SistemaPublicidad.Formularios
 
         void Aplicar()
         {
-            IEnumerable<string[]> q = cfg.Filas ?? new string[0][];
-            string t = (Buscar == null ? "" : Buscar.Text ?? "").Trim().ToLower();
-            if (t.Length > 0)
-            {
-                if (cfg.Nombre == "Compras")
-                {
-                    HashSet<int> comprasPorDetalle = terminoCoincidenciasDetalle == t
-                        ? coincidenciasDetalle : new HashSet<int>();
-                    q = q.Where(r => r.Any(x => x != null && x.ToLower().Contains(t))
-                        || (r.Length > 1 && comprasPorDetalle.Contains(Convert.ToInt32(r[1]))));
-                }
-                else if (cfg.Nombre == "Facturaciones")
-                {
-                    HashSet<int> facturasPorDetalle = terminoCoincidenciasDetalle == t
-                        ? coincidenciasDetalle : new HashSet<int>();
-                    q = q.Where(r => r.Any(x => x != null && x.ToLower().Contains(t))
-                        || (r.Length > 1 && facturasPorDetalle.Contains(Convert.ToInt32(r[1]))));
-                }
-                else q = q.Where(r => r.Any(x => x != null && x.ToLower().Contains(t)));
-            }
-            foreach (var sel in Combos) if (sel.Seleccion > 0) { string o = sel.Texto; q = q.Where(r => r.Any(x => x == o)); }
-            var lista = q.ToList();
-            int total = lista.Count;
-            int paginas = Math.Max(1, (int)Math.Ceiling(total / (double)RegistrosPorPagina));
-            paginaActual = Math.Max(1, Math.Min(paginaActual, paginas));
-            List<string[]> visibles = lista.Skip((paginaActual - 1) * RegistrosPorPagina)
-                .Take(RegistrosPorPagina).ToList();
-            int desde = total == 0 ? 0 : (paginaActual - 1) * RegistrosPorPagina + 1;
-            int hasta = total == 0 ? 0 : desde + visibles.Count - 1;
-            Pie.Text = string.Format("Mostrando {0} - {1} de {2} {3}", desde, hasta, total, cfg.Plural);
-            ActualizarPaginador(total);
+            _ = AplicarAsync(false, false);
+        }
 
-            int seleccionAnterior = Tabla.Seleccion;
-            Tabla.Filas.Clear(); Tabla.Filas.AddRange(visibles); Tabla.Marcadas.Clear();
-            Tabla.InvalidarAnchosColumnas();
-            // Al abrir o actualizar una consulta, el usuario elige explícitamente la fila.
-            Tabla.Seleccion = -1; Tabla.Invalidate();
-            if ((cfg.Nombre == "Compras" || cfg.Nombre == "Facturaciones") && seleccionAnterior == Tabla.Seleccion)
-                MostrarDetalle();
+        sealed class ResultadoFiltro
+        {
+            public List<string[]> Filas;
+            public int Total;
+            public int Pagina;
+        }
+
+        async Task AplicarAsync(bool reiniciarPagina, bool esperar)
+        {
+            int solicitud = ++solicitudFiltro;
+            string termino = (Buscar == null ? "" : Buscar.Text ?? "").Trim();
+            string plural = cfg.Plural;
+            string nombreModulo = cfg.Nombre;
+            string terminoDetalle = terminoCoincidenciasDetalle;
+            HashSet<int> detalle = terminoDetalle == termino
+                ? new HashSet<int>(coincidenciasDetalle) : new HashSet<int>();
+            List<string> filtros = Combos.Where(x => x.Seleccion > 0)
+                .Select(x => x.Texto).ToList();
+            string[][] origen = cfg.Filas ?? new string[0][];
+            int paginaSolicitada = reiniciarPagina ? 1 : paginaActual;
+
+            try
+            {
+                if (esperar) await Task.Delay(180);
+                if (IsDisposed || Disposing || solicitud != solicitudFiltro) return;
+
+                ResultadoFiltro resultado = await Task.Run(() =>
+                {
+                    IEnumerable<string[]> consulta = origen;
+                    if (termino.Length > 0)
+                    {
+                        bool buscarEnDetalle = nombreModulo == "Compras" || nombreModulo == "Facturaciones";
+                        consulta = consulta.Where(fila =>
+                            fila.Any(valor => valor != null && valor.IndexOf(termino, StringComparison.OrdinalIgnoreCase) >= 0)
+                            || (buscarEnDetalle && fila.Length > 1 &&
+                                int.TryParse(fila[1], out int codigo) && detalle.Contains(codigo)));
+                    }
+                    foreach (string filtro in filtros)
+                        consulta = consulta.Where(fila => fila.Any(valor =>
+                            string.Equals(valor, filtro, StringComparison.OrdinalIgnoreCase)));
+
+                    List<string[]> lista = consulta.ToList();
+                    int total = lista.Count;
+                    int totalPaginas = Math.Max(1, (int)Math.Ceiling(total / (double)RegistrosPorPagina));
+                    int pagina = Math.Max(1, Math.Min(paginaSolicitada, totalPaginas));
+                    List<string[]> visibles = lista.Skip((pagina - 1) * RegistrosPorPagina)
+                        .Take(RegistrosPorPagina).ToList();
+                    return new ResultadoFiltro { Filas = visibles, Total = total, Pagina = pagina };
+                });
+
+                if (IsDisposed || Disposing || solicitud != solicitudFiltro) return;
+                paginaActual = resultado.Pagina;
+                if (resultado.Total == 0 && (termino.Length > 0 || filtros.Count > 0))
+                {
+                    Tabla.TituloVacio = "Sin resultados";
+                    Tabla.TextoVacio = "Prueba con otro texto o cambia los filtros.";
+                }
+                else
+                {
+                    Tabla.TituloVacio = "Aún no hay registros";
+                    Tabla.TextoVacio = "Presiona \"Añadir\" para agregar el primero.";
+                }
+                int desde = resultado.Total == 0 ? 0 : (paginaActual - 1) * RegistrosPorPagina + 1;
+                int hasta = resultado.Total == 0 ? 0 : desde + resultado.Filas.Count - 1;
+                Pie.Text = string.Format("Mostrando {0} - {1} de {2} {3}", desde, hasta, resultado.Total, plural);
+                ActualizarPaginador(resultado.Total);
+
+                int seleccionAnterior = Tabla.Seleccion;
+                Tabla.Filas.Clear(); Tabla.Filas.AddRange(resultado.Filas); Tabla.Marcadas.Clear();
+                Tabla.InvalidarAnchosColumnas();
+                // Al abrir o actualizar una consulta, el usuario elige explícitamente la fila.
+                Tabla.Seleccion = -1; Tabla.Invalidate();
+                if ((nombreModulo == "Compras" || nombreModulo == "Facturaciones") && seleccionAnterior == Tabla.Seleccion)
+                    MostrarDetalle();
+            }
+            catch (Exception ex)
+            {
+                if (!IsDisposed && !Disposing && solicitud == solicitudFiltro)
+                    MessageBox.Show("No se pudo buscar la información:\n" + ex.Message, Text,
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         void CambiarPagina(int pagina)
@@ -435,16 +498,7 @@ namespace SistemaPublicidad.Formularios
 
         void AplicarFiltro()
         {
-            try
-            {
-                paginaActual = 1;
-                Aplicar();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("No se pudo buscar la información:\n" + ex.Message, Text,
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            _ = AplicarAsync(true, true);
         }
 
         void ActualizarPaginador(int totalRegistros)
@@ -482,26 +536,41 @@ namespace SistemaPublicidad.Formularios
             if (datosCargados || datosCargando || string.IsNullOrEmpty(cfg.Clave)) return;
             datosCargando = true;
             Pie.Text = "Cargando " + cfg.Plural + "...";
+            Tabla.TituloVacio = "Cargando datos...";
+            Tabla.TextoVacio = "Preparando la consulta.";
+            Tabla.Invalidate();
             try
             {
-                // Las consultas lentas se ejecutan fuera del hilo de Windows Forms.
-                CargaModulo carga = await Task.Run((System.Func<CargaModulo>)LeerDatos);
+                // Ejecuta en paralelo las lecturas independientes del módulo. Así el
+                // tiempo de espera no se suma por cada consulta a SQL Server.
+                CargaModulo carga = await LeerDatosAsync();
                 if (IsDisposed || Disposing) return;
 
                 registros = carga.Registros;
-                ActualizarRelaciones(carga.Opciones);
+                opcionesRelaciones = carga.Opciones;
+                if (gestionarConstruido) ActualizarRelaciones(opcionesRelaciones);
                 ActualizarTitulosDesdeBaseDatos(carga.Columnas, carga.ColumnasDetalle);
-                CargarDetalles(carga.Detalles);
-                cfg.Filas = new string[registros.Count][];
-                for (int i = 0; i < registros.Count; i++)
+                Dictionary<string, string[][]> detallesPreparados = await Task.Run(() =>
+                    PrepararDetalles(carga.Detalles, cfg.Nombre, cfg.ColumnasDetallePropiedades));
+                if (IsDisposed || Disposing) return;
+                CargarDetalles(detallesPreparados);
+                string[] columnasFila = cfg.ColumnasPropiedades;
+                CultureInfo cultura = CultureInfo.CurrentCulture;
+                cfg.Filas = await Task.Run(() =>
                 {
-                    string[] fila = new string[cfg.ColumnasPropiedades.Length + 2];
-                    fila[0] = string.Empty;
-                    for (int j = 0; j < cfg.ColumnasPropiedades.Length; j++)
-                        fila[j + 1] = Formatear(registros[i], cfg.ColumnasPropiedades[j]);
-                    fila[fila.Length - 1] = string.Empty;
-                    cfg.Filas[i] = fila;
-                }
+                    string[][] filas = new string[registros.Count][];
+                    for (int i = 0; i < registros.Count; i++)
+                    {
+                        string[] fila = new string[columnasFila.Length + 2];
+                        fila[0] = string.Empty;
+                        for (int j = 0; j < columnasFila.Length; j++)
+                            fila[j + 1] = Formatear(registros[i], columnasFila[j], cultura);
+                        fila[fila.Length - 1] = string.Empty;
+                        filas[i] = fila;
+                    }
+                    return filas;
+                });
+                if (IsDisposed || Disposing) return;
                 cfg.Total = registros.Count;
                 datosCargados = true;
                 ActualizarIndicadores(registros);
@@ -511,7 +580,9 @@ namespace SistemaPublicidad.Formularios
                     barraResumen.Filas.AddRange(cfg.Filas);
                     barraResumen.Invalidate();
                 }
-                Aplicar();
+                // Espera a que Consultar aplique las filas antes de cerrar el estado
+                // de carga; así el pie y la tabla no quedan desincronizados.
+                await AplicarAsync(false, false);
 
                 // Si la persona abrió Gestionar mientras se consultaban los datos, cargar la selección ahora.
                 if (Tabs.Seleccion == 1 && !nuevoRegistroSolicitado)
@@ -533,6 +604,8 @@ namespace SistemaPublicidad.Formularios
                 if (IsDisposed || Disposing) return;
                 cfg.Filas = new string[0][];
                 cfg.Total = 0;
+                Tabla.TituloVacio = "No se pudieron cargar los datos";
+                Tabla.TextoVacio = "Revisa la conexión y vuelve a intentarlo.";
                 Aplicar();
                 MessageBox.Show("No se pudieron cargar " + cfg.Plural + ":\n" + ex.Message,
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -541,49 +614,67 @@ namespace SistemaPublicidad.Formularios
             {
                 datosCargando = false;
                 // Evita dejar el mensaje inicial si la carga terminó antes de actualizar la tabla.
-                if (!IsDisposed && !Disposing && datosCargados && Pie != null &&
-                    Pie.Text.StartsWith("Cargando ", StringComparison.Ordinal))
+                if (!IsDisposed && !Disposing && datosCargados && Pie != null)
                 {
                     int cantidad = Tabla == null ? 0 : Tabla.Filas.Count;
-                    int total = Math.Max(cfg.Total, cantidad);
-                    Pie.Text = string.Format("Mostrando {0} - {1} de {2} {3}",
-                        cantidad == 0 ? 0 : 1, cantidad, total, cfg.Plural);
+                    int total = cfg.Total;
+                    int desde = cantidad == 0 ? 0 : (paginaActual - 1) * RegistrosPorPagina + 1;
+                    int hasta = cantidad == 0 ? 0 : desde + cantidad - 1;
+                    Pie.Text = string.Format("Mostrando {0} - {1} de {2} {3}", desde, hasta, total, cfg.Plural);
+                    Pie.Invalidate();
                 }
             }
         }
 
-        CargaModulo LeerDatos()
+        async Task<CargaModulo> LeerDatosAsync()
         {
             var carga = new CargaModulo();
-            carga.Registros = ModuloCrud.Listar(cfg.Nombre);
-            carga.Columnas = ModuloCrud.ListarColumnasBaseDatos(cfg.Nombre, false);
+            Task<List<object>> tareaRegistros = Task.Run(() => ModuloCrud.Listar(cfg.Nombre));
+            Task<List<string>> tareaColumnas = Task.Run(() => ModuloCrud.ListarColumnasBaseDatos(cfg.Nombre, false));
+            Task<List<string>> tareaColumnasDetalle = cfg.Detalle == null
+                ? Task.FromResult<List<string>>(null)
+                : Task.Run(() => ModuloCrud.ListarColumnasBaseDatos(cfg.Nombre, true));
+            Task<List<object>> tareaDetalles = cfg.Detalle == null || cfg.Nombre == "Compras"
+                ? Task.FromResult<List<object>>(null)
+                : Task.Run(() => ModuloCrud.ListarDetalles(cfg.Nombre));
 
-            if (cfg.Detalle != null)
-            {
-                carga.ColumnasDetalle = ModuloCrud.ListarColumnasBaseDatos(cfg.Nombre, true);
-                if (cfg.Nombre != "Compras") carga.Detalles = ModuloCrud.ListarDetalles(cfg.Nombre);
-            }
-
+            var tareasOpciones = new Dictionary<string, Task<List<ModuloCrud.Opcion>>>();
             foreach (string campo in cfg.Campos)
             {
                 string propiedad = PropiedadCampo(campo);
-                if (ModuloCrud.EsRelacion(propiedad) && !carga.Opciones.ContainsKey(propiedad))
-                    carga.Opciones.Add(propiedad, ModuloCrud.Opciones(propiedad));
+                if (ModuloCrud.EsRelacion(propiedad) && !tareasOpciones.ContainsKey(propiedad))
+                    tareasOpciones.Add(propiedad, Task.Run(() => ModuloCrud.Opciones(propiedad)));
             }
+
+            var todasLasTareas = new List<Task> { tareaRegistros, tareaColumnas, tareaColumnasDetalle, tareaDetalles };
+            todasLasTareas.AddRange(tareasOpciones.Values);
+            await Task.WhenAll(todasLasTareas);
+
+            carga.Registros = tareaRegistros.Result;
+            carga.Columnas = tareaColumnas.Result;
+            carga.ColumnasDetalle = tareaColumnasDetalle.Result;
+            carga.Detalles = tareaDetalles.Result;
+            foreach (var tarea in tareasOpciones)
+                carga.Opciones.Add(tarea.Key, tarea.Value.Result);
             return carga;
         }
 
         static string Formatear(object entidad, string propiedad)
+        {
+            return Formatear(entidad, propiedad, CultureInfo.CurrentCulture);
+        }
+
+        static string Formatear(object entidad, string propiedad, CultureInfo cultura)
         {
             var p = entidad.GetType().GetProperty(propiedad);
             if (p == null) return string.Empty;
             object valor = p.GetValue(entidad, null);
             if (valor == null) return string.Empty;
             if (valor is bool) return (bool)valor ? "Activo" : "Inactivo";
-            if (valor is DateTime) return ((DateTime)valor).ToString("dd/MM/yyyy");
+            if (valor is DateTime) return ((DateTime)valor).ToString("dd/MM/yyyy", cultura);
             if (valor is TimeSpan) return ((TimeSpan)valor).ToString(@"hh\:mm");
             if (valor is decimal) return ((decimal)valor).ToString("N2", CultureInfo.GetCultureInfo("es-GT"));
-            return Convert.ToString(valor, CultureInfo.CurrentCulture);
+            return Convert.ToString(valor, cultura);
         }
 
         void ActualizarRelaciones(Dictionary<string, List<ModuloCrud.Opcion>> opciones)
@@ -608,23 +699,35 @@ namespace SistemaPublicidad.Formularios
             }
         }
 
-        void CargarDetalles(List<object> detalles)
+        static Dictionary<string, string[][]> PrepararDetalles(List<object> detalles, string nombreModulo,
+            string[] columnasDetalle)
         {
-            // En Compras, el detalle se consulta al seleccionar su encabezado;
-            // no se cargan todas las líneas de todas las compras al abrir el módulo.
-            if (cfg.Detalle == null || cfg.Nombre == "Compras") return;
-            cfg.Detalle.Clear();
-            string propiedadPadre = cfg.Nombre == "Compras" ? "CodigoCompra" : "CodigoFacturacion";
+            var agrupadas = new Dictionary<string, List<string[]>>();
+            if (detalles == null || columnasDetalle == null || nombreModulo == "Compras")
+                return new Dictionary<string, string[][]>();
+
+            string propiedadPadre = nombreModulo == "Compras" ? "CodigoCompra" : "CodigoFacturacion";
             foreach (object detalle in detalles ?? new List<object>())
             {
                 object valorPadre = detalle.GetType().GetProperty(propiedadPadre).GetValue(detalle, null);
                 string llave = Convert.ToString(valorPadre, CultureInfo.InvariantCulture);
-                string[] fila = new string[cfg.ColumnasDetallePropiedades.Length];
-                for (int i = 0; i < cfg.ColumnasDetallePropiedades.Length; i++)
-                    fila[i] = Formatear(detalle, cfg.ColumnasDetallePropiedades[i]);
-                if (!cfg.Detalle.ContainsKey(llave)) cfg.Detalle.Add(llave, new string[0][]);
-                cfg.Detalle[llave] = cfg.Detalle[llave].Concat(new[] { fila }).ToArray();
+                string[] fila = new string[columnasDetalle.Length];
+                for (int i = 0; i < columnasDetalle.Length; i++)
+                    fila[i] = Formatear(detalle, columnasDetalle[i]);
+                if (!agrupadas.ContainsKey(llave)) agrupadas.Add(llave, new List<string[]>());
+                agrupadas[llave].Add(fila);
             }
+
+            return agrupadas.ToDictionary(par => par.Key, par => par.Value.ToArray());
+        }
+
+        void CargarDetalles(Dictionary<string, string[][]> detalles)
+        {
+            // Compras carga sus detalles al seleccionar una compra, no al iniciar el módulo.
+            if (cfg.Detalle == null || cfg.Nombre == "Compras") return;
+            cfg.Detalle.Clear();
+            foreach (var par in detalles ?? new Dictionary<string, string[][]>())
+                cfg.Detalle.Add(par.Key, par.Value);
         }
 
         async void CargarDetalles()
@@ -633,7 +736,10 @@ namespace SistemaPublicidad.Formularios
             {
                 List<object> detalles = await Task.Run(() => ModuloCrud.ListarDetalles(cfg.Nombre));
                 if (IsDisposed || Disposing) return;
-                CargarDetalles(detalles);
+                Dictionary<string, string[][]> preparados = await Task.Run(() =>
+                    PrepararDetalles(detalles, cfg.Nombre, cfg.ColumnasDetallePropiedades));
+                if (IsDisposed || Disposing) return;
+                CargarDetalles(preparados);
                 MostrarDetalle();
             }
             catch (Exception ex)
@@ -774,8 +880,8 @@ namespace SistemaPublicidad.Formularios
                 if (entidad == null) { MessageBox.Show("Selecciona un registro para editar.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
                 nuevoRegistroSolicitado = false;
                 codigoEnEdicion = Convert.ToInt32(entidad.GetType().GetProperty(cfg.Clave).GetValue(entidad, null));
-                CargarCampos(entidad);
                 Tabs.Seleccion = 1;
+                CargarCampos(entidad);
                 if (cfg.Nombre != "Compras") MostrarDetalle();
             }
             catch (Exception ex) { MessageBox.Show("No se pudo cargar el registro: " + ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }

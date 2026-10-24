@@ -181,10 +181,12 @@ namespace SistemaPublicidad.Formularios
                 if (actual == it || (actual != null && actual.Padre == it)) { if (!abiertos.Remove(it)) abiertos.Add(it); Reacomodar(); Refrescar(); return; }
                 abiertos.Add(it); it = it.Hijos[0];
             }
-            actual = it; Reacomodar(); Refrescar();
             ItemMenu mod = it.Padre ?? it; int tab = it.Padre == null ? 0 : it.Padre.Hijos.IndexOf(it);
+            // Crear primero la vista evita que el menú anuncie el módulo nuevo
+            // mientras todavía se ve el anterior durante la construcción.
             Form f = Vista(mod.Texto, mod.Icono);
             var fm = f as FrmModulo; if (fm != null && fm.Tabs.Seleccion != tab) fm.Tabs.Seleccion = tab;
+            actual = it; Reacomodar(); Refrescar();
             contenido.SuspendLayout();
             try
             {

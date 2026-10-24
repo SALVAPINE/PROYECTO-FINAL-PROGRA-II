@@ -41,13 +41,20 @@ namespace SistemaPublicidad.Formularios
 
         public Tabla()
         {
-            SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.Selectable | ControlStyles.AllPaintingInWmPaint, true);
-            BackColor = Color.Transparent;
+            // La tabla pinta su contenido en un rectángulo propio. Un fondo opaco
+            // evita que queden restos de controles vecinos durante repintados parciales.
+            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.Selectable | ControlStyles.AllPaintingInWmPaint, true);
+            BackColor = Color.FromArgb(16, 32, 106);
             barraHorizontal = new BarraDeslizamiento(true) { Visible = false, Height = 12 };
             barraVertical = new BarraDeslizamiento(false) { Visible = false, Width = 12 };
             barraHorizontal.ValueChanged += (s, e) => { scrollHorizontal = barraHorizontal.Value; Invalidate(); };
             barraVertical.ValueChanged += (s, e) => { scroll = barraVertical.Value; Invalidate(); };
             Controls.Add(barraHorizontal); Controls.Add(barraVertical);
+        }
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            using (var fondo = new SolidBrush(BackColor))
+                e.Graphics.FillRectangle(fondo, ClientRectangle);
         }
         int Alto { get { return 42; } }
         static StringFormat Fmt() { return new StringFormat { LineAlignment = StringAlignment.Center, Trimming = StringTrimming.EllipsisCharacter, FormatFlags = StringFormatFlags.NoWrap }; }
