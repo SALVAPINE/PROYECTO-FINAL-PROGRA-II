@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -6,165 +6,164 @@ using Entidad;
 
 namespace Datos
 {
-    /// <summary>
-    /// Acceso parametrizado a SQL Server para los materiales.
-    /// La Presentación nunca usa esta clase directamente: la llama Negocio.
-    /// </summary>
+    /// <summary>Consultas de solo lectura para materiales y su catálogo relacionado.</summary>
     public class MaterialDatos
     {
+        /// <summary>Devuelve todos los materiales y el nombre de su orden de trabajo.</summary>
         public List<Material> Listar()
         {
-            return Buscar(string.Empty, "Todos");
+            return Buscar(string.Empty, null);
         }
 
-        public List<Material> Buscar(string texto, string estado)
+        /// <summary>Filtra materiales por texto y estado. La paginación se realiza en Presentación.</summary>
+        public List<Material> Buscar(string texto, bool? estado)
         {
-            const string sql = @"SELECT CodigoMaterial, CodigoOrdenTrabajo, NombreMaterial,
-                    TipoDeMaterial, UnidadMedida, CategoriaMaterial, CostoMaterial, Estado
-                FROM dbo.Tbl_Materiales
-                WHERE (@texto = ''
-                    OR CONVERT(varchar(20), CodigoMaterial) LIKE @patron
-                    OR CONVERT(varchar(20), CodigoOrdenTrabajo) LIKE @patron
-                    OR NombreMaterial LIKE @patron
-                    OR TipoDeMaterial LIKE @patron
-                    OR UnidadMedida LIKE @patron
-                    OR CategoriaMaterial LIKE @patron
-                    OR CONVERT(varchar(40), CostoMaterial) LIKE @patron)
-                  AND (@estado IS NULL OR Estado = @estado)
-                ORDER BY CodigoMaterial";
+            List<Material> materiales = new List<Material>();
+            const string consulta = @"
+                SELECT m.CodigoMaterial, m.CodigoOrdenTrabajo,
+                       ot.NombreOrdenTrabajo, m.NombreMaterial, m.TipoDeMaterial,
+                       m.UnidadMedida, m.CategoriaMaterial, m.CostoMaterial, m.Estado
+                FROM dbo.Tbl_Materiales AS m
+                INNER JOIN dbo.Tbl_OrdenesDeTrabajo AS ot
+                    ON m.CodigoOrdenTrabajo = ot.CodigoOrdenTrabajo
+                WHERE (@Texto = ''
+                       OR CONVERT(varchar(11), m.CodigoMaterial) LIKE '%' + @Texto + '%'
+                       OR m.NombreMaterial LIKE '%' + @Texto + '%'
+                       OR m.TipoDeMaterial LIKE '%' + @Texto + '%'
+                       OR m.CategoriaMaterial LIKE '%' + @Texto + '%')
+                  AND (@Estado IS NULL OR m.Estado = @Estado)
+                ORDER BY m.CodigoMaterial;";
 
-            try
+            using (SqlConnection conexion = ConexionDatos.CrearConexion())
+            using (SqlCommand comando = new SqlCommand(consulta, conexion))
             {
-                List<Material> materiales = new List<Material>();
-                string termino = (texto ?? string.Empty).Trim();
+                // Los valores del filtro se envían como parámetros, no se concatenan al SQL.
+                comando.Parameters.Add("@Texto", SqlDbType.VarChar, 4000).Value = texto ?? string.Empty;
+                SqlParameter parametroEstado = comando.Parameters.Add("@Estado", SqlDbType.Bit);
+                parametroEstado.Value = estado.HasValue ? (object)estado.Value : DBNull.Value;
 
-                using (SqlConnection conexion = ConexionDatos.CrearConexion())
-                using (SqlCommand comando = new SqlCommand(sql, conexion))
+                conexion.Open();
+                using (SqlDataReader lector = comando.ExecuteReader())
                 {
-                    comando.Parameters.Add("@texto", SqlDbType.VarChar, 1000).Value = termino;
-                    comando.Parameters.Add("@patron", SqlDbType.VarChar, 1002).Value = "%" + termino + "%";
-                    AgregarEstado(comando, estado);
-
-                    conexion.Open();
-                    using (SqlDataReader lector = comando.ExecuteReader())
-                        while (lector.Read()) materiales.Add(LeerMaterial(lector));
+                    while (lector.Read())
+                    {
+                        materiales.Add(new Material
+                        {
+                            CodigoMaterial = Convert.ToInt32(lector["CodigoMaterial"]),
+                            CodigoOrdenTrabajo = Convert.ToInt32(lector["CodigoOrdenTrabajo"]),
+                            NombreOrdenTrabajo = Convert.ToString(lector["NombreOrdenTrabajo"]),
+                            NombreMaterial = Convert.ToString(lector["NombreMaterial"]),
+                            TipoDeMaterial = Convert.ToString(lector["TipoDeMaterial"]),
+                            UnidadMedida = Convert.ToString(lector["UnidadMedida"]),
+                            CategoriaMaterial = Convert.ToString(lector["CategoriaMaterial"]),
+                            CostoMaterial = Convert.ToDecimal(lector["CostoMaterial"]),
+                            Estado = Convert.ToBoolean(lector["Estado"])
+                        });
+                    }
                 }
-
-                return materiales;
             }
-            catch (Exception ex)
+
+            return materiales;
+        }
+
+        /// <summary>Lista las órdenes para mostrar su nombre y conservar su código como valor.</summary>
+        public List<OrdenTrabajo> ListarOrdenesTrabajo()
+        {
+            List<OrdenTrabajo> ordenes = new List<OrdenTrabajo>();
+            const string consulta = @"
+                SELECT CodigoOrdenTrabajo, NombreOrdenTrabajo
+                FROM dbo.Tbl_OrdenesDeTrabajo
+                ORDER BY NombreOrdenTrabajo, CodigoOrdenTrabajo;";
+
+            using (SqlConnection conexion = ConexionDatos.CrearConexion())
+            using (SqlCommand comando = new SqlCommand(consulta, conexion))
             {
-                throw new Exception("No se pudieron consultar los materiales: " + ex.Message, ex);
+                conexion.Open();
+                using (SqlDataReader lector = comando.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        ordenes.Add(new OrdenTrabajo
+                        {
+                            CodigoOrdenTrabajo = Convert.ToInt32(lector["CodigoOrdenTrabajo"]),
+                            NombreOrdenTrabajo = Convert.ToString(lector["NombreOrdenTrabajo"])
+                        });
+                    }
+                }
             }
+
+            return ordenes;
         }
 
-        private static void AgregarEstado(SqlCommand comando, string estado)
-        {
-            SqlParameter parametro = comando.Parameters.Add("@estado", SqlDbType.Bit);
-            if (estado == "Activo") parametro.Value = true;
-            else if (estado == "Inactivo") parametro.Value = false;
-            else parametro.Value = DBNull.Value;
-        }
-
-        private static Material LeerMaterial(SqlDataReader lector)
-        {
-            return new Material
-            {
-                CodigoMaterial = Convert.ToInt32(lector["CodigoMaterial"]),
-                CodigoOrdenTrabajo = Convert.ToInt32(lector["CodigoOrdenTrabajo"]),
-                NombreMaterial = Convert.ToString(lector["NombreMaterial"]),
-                TipoDeMaterial = Convert.ToString(lector["TipoDeMaterial"]),
-                UnidadMedida = Convert.ToString(lector["UnidadMedida"]),
-                CategoriaMaterial = Convert.ToString(lector["CategoriaMaterial"]),
-                CostoMaterial = Convert.ToDecimal(lector["CostoMaterial"]),
-                Estado = Convert.ToBoolean(lector["Estado"])
-            };
-        }
-
-        // CodigoMaterial es IDENTITY; SQL Server asigna su valor al insertar.
+        /// <summary>Agrega un material; CodigoMaterial se genera como IDENTITY en SQL Server.</summary>
         public int Insertar(Material material)
         {
-            const string sql = @"INSERT INTO dbo.Tbl_Materiales
-                (CodigoOrdenTrabajo, NombreMaterial, TipoDeMaterial, UnidadMedida,
-                 CategoriaMaterial, CostoMaterial, Estado)
-                VALUES (@orden, @nombre, @tipo, @unidad, @categoria, @costo, @estado)";
+            const string consulta = @"
+                INSERT INTO dbo.Tbl_Materiales
+                    (CodigoOrdenTrabajo, NombreMaterial, TipoDeMaterial, UnidadMedida,
+                     CategoriaMaterial, CostoMaterial, Estado)
+                VALUES
+                    (@CodigoOrdenTrabajo, @NombreMaterial, @TipoDeMaterial, @UnidadMedida,
+                     @CategoriaMaterial, @CostoMaterial, @Estado);";
 
-            try
+            using (SqlConnection conexion = ConexionDatos.CrearConexion())
+            using (SqlCommand comando = new SqlCommand(consulta, conexion))
             {
-                using (SqlConnection conexion = ConexionDatos.CrearConexion())
-                using (SqlCommand comando = new SqlCommand(sql, conexion))
-                {
-                    AgregarParametros(comando, material);
-                    conexion.Open();
-                    return comando.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("No se pudo agregar el material: " + ex.Message, ex);
+                AgregarParametrosMaterial(comando, material);
+                conexion.Open();
+                return comando.ExecuteNonQuery();
             }
         }
 
+        /// <summary>Actualiza un material identificado por su clave primaria.</summary>
         public int Actualizar(Material material)
         {
-            const string sql = @"UPDATE dbo.Tbl_Materiales
-                SET CodigoOrdenTrabajo = @orden, NombreMaterial = @nombre,
-                    TipoDeMaterial = @tipo, UnidadMedida = @unidad,
-                    CategoriaMaterial = @categoria, CostoMaterial = @costo, Estado = @estado
-                WHERE CodigoMaterial = @codigo";
+            const string consulta = @"
+                UPDATE dbo.Tbl_Materiales
+                SET CodigoOrdenTrabajo = @CodigoOrdenTrabajo,
+                    NombreMaterial = @NombreMaterial,
+                    TipoDeMaterial = @TipoDeMaterial,
+                    UnidadMedida = @UnidadMedida,
+                    CategoriaMaterial = @CategoriaMaterial,
+                    CostoMaterial = @CostoMaterial,
+                    Estado = @Estado
+                WHERE CodigoMaterial = @CodigoMaterial;";
 
-            try
+            using (SqlConnection conexion = ConexionDatos.CrearConexion())
+            using (SqlCommand comando = new SqlCommand(consulta, conexion))
             {
-                using (SqlConnection conexion = ConexionDatos.CrearConexion())
-                using (SqlCommand comando = new SqlCommand(sql, conexion))
-                {
-                    AgregarParametros(comando, material);
-                    comando.Parameters.Add("@codigo", SqlDbType.Int).Value = material.CodigoMaterial;
-                    conexion.Open();
-                    return comando.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("No se pudo actualizar el material: " + ex.Message, ex);
+                AgregarParametrosMaterial(comando, material);
+                comando.Parameters.Add("@CodigoMaterial", SqlDbType.Int).Value = material.CodigoMaterial;
+                conexion.Open();
+                return comando.ExecuteNonQuery();
             }
         }
 
-        private static void AgregarParametros(SqlCommand comando, Material material)
-        {
-            comando.Parameters.Add("@orden", SqlDbType.Int).Value = material.CodigoOrdenTrabajo;
-            comando.Parameters.Add("@nombre", SqlDbType.VarChar, 45).Value = material.NombreMaterial;
-            comando.Parameters.Add("@tipo", SqlDbType.VarChar, 45).Value = material.TipoDeMaterial;
-            comando.Parameters.Add("@unidad", SqlDbType.VarChar, 45).Value = material.UnidadMedida;
-            comando.Parameters.Add("@categoria", SqlDbType.VarChar, 45).Value = material.CategoriaMaterial;
-            comando.Parameters.Add("@costo", SqlDbType.Decimal).Value = material.CostoMaterial;
-            comando.Parameters.Add("@estado", SqlDbType.Bit).Value = material.Estado;
-        }
-
+        /// <summary>Elimina un material por su clave primaria.</summary>
         public int Eliminar(int codigo)
         {
-            const string sql = "DELETE FROM dbo.Tbl_Materiales WHERE CodigoMaterial = @codigo";
+            const string consulta = "DELETE FROM dbo.Tbl_Materiales WHERE CodigoMaterial = @CodigoMaterial;";
+            using (SqlConnection conexion = ConexionDatos.CrearConexion())
+            using (SqlCommand comando = new SqlCommand(consulta, conexion))
+            {
+                comando.Parameters.Add("@CodigoMaterial", SqlDbType.Int).Value = codigo;
+                conexion.Open();
+                return comando.ExecuteNonQuery();
+            }
+        }
 
-            try
-            {
-                using (SqlConnection conexion = ConexionDatos.CrearConexion())
-                using (SqlCommand comando = new SqlCommand(sql, conexion))
-                {
-                    comando.Parameters.Add("@codigo", SqlDbType.Int).Value = codigo;
-                    conexion.Open();
-                    return comando.ExecuteNonQuery();
-                }
-            }
-            catch (SqlException ex)
-            {
-                if (ex.Number == 547)
-                    throw new Exception("No se puede eliminar el material porque tiene compras o inventario relacionados.", ex);
-                throw new Exception("No se pudo eliminar el material: " + ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("No se pudo eliminar el material: " + ex.Message, ex);
-            }
+        // Mantiene en un solo lugar los parámetros usados por INSERT y UPDATE.
+        private static void AgregarParametrosMaterial(SqlCommand comando, Material material)
+        {
+            comando.Parameters.Add("@CodigoOrdenTrabajo", SqlDbType.Int).Value = material.CodigoOrdenTrabajo;
+            comando.Parameters.Add("@NombreMaterial", SqlDbType.VarChar, 45).Value = material.NombreMaterial;
+            comando.Parameters.Add("@TipoDeMaterial", SqlDbType.VarChar, 45).Value = material.TipoDeMaterial;
+            comando.Parameters.Add("@UnidadMedida", SqlDbType.VarChar, 45).Value = material.UnidadMedida;
+            comando.Parameters.Add("@CategoriaMaterial", SqlDbType.VarChar, 45).Value = material.CategoriaMaterial;
+            comando.Parameters.Add("@CostoMaterial", SqlDbType.Decimal).Value = material.CostoMaterial;
+            comando.Parameters["@CostoMaterial"].Precision = 10;
+            comando.Parameters["@CostoMaterial"].Scale = 2;
+            comando.Parameters.Add("@Estado", SqlDbType.Bit).Value = material.Estado;
         }
     }
 }

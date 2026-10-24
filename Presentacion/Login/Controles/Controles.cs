@@ -10,7 +10,13 @@ namespace Login.Controles
     /// <summary>Utilidades de dibujo. Todas las coordenadas se expresan en unidades del mockup (1640x960) y se escalan con K.</summary>
     public static class U
     {
-        public const float K = 0.75f;
+        // Una sola escala para el dibujo, las fuentes y los controles del login.
+        public static readonly float K = CalcularEscala();
+        static float CalcularEscala()
+        {
+            var area = Screen.FromPoint(Cursor.Position).WorkingArea;
+            return Math.Min(1f, Math.Min(area.Width * 0.92f / 1640f, area.Height * 0.92f / 960f));
+        }
         static readonly Dictionary<string, Font> cache = new Dictionary<string, Font>();
 
         public static int P(float v) { return (int)Math.Round(v * K); }

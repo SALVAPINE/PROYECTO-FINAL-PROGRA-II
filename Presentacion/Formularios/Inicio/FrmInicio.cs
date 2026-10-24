@@ -13,6 +13,7 @@ namespace SistemaPublicidad.Formularios
 
         public FrmInicio()
         {
+            AutoScaleMode = AutoScaleMode.None;
             TopLevel = false; FormBorderStyle = FormBorderStyle.None; Dock = DockStyle.Fill; BackColor = Tema.Fondo; DoubleBuffered = true; SetStyle(ControlStyles.ResizeRedraw, true);
             var t = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 20, RowCount = 4, BackColor = Color.Transparent };
             t.SuspendLayout();

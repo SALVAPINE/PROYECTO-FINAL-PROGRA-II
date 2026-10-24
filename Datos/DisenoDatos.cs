@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -6,166 +6,193 @@ using Entidad;
 
 namespace Datos
 {
-    /// <summary>Acceso parametrizado a SQL Server para los diseños.</summary>
+    /// <summary>Consultas de diseños y catálogos relacionados.</summary>
     public class DisenoDatos
     {
         public List<Diseno> Listar()
         {
-            return Buscar(string.Empty, "Todos");
+            return Buscar(string.Empty, null);
         }
 
-        public List<Diseno> Buscar(string texto, string estado)
+        /// <summary>Devuelve todas las coincidencias; la paginación corresponde a Presentación.</summary>
+        public List<Diseno> Buscar(string texto, bool? estado)
         {
-            const string sql = @"SELECT [CodigoDiseño], CodigoCliente, [CodigoDiseñador], [NombreDiseño],
-                    [TipoDiseño], Descripcion, [RangoDiseño], FechaCreacion, Estado
-                FROM dbo.[Tbl_Diseños]
-                WHERE (@texto = ''
-                    OR CONVERT(varchar(20), [CodigoDiseño]) LIKE @patron
-                    OR CONVERT(varchar(20), CodigoCliente) LIKE @patron
-                    OR CONVERT(varchar(20), [CodigoDiseñador]) LIKE @patron
-                    OR [NombreDiseño] LIKE @patron
-                    OR [TipoDiseño] LIKE @patron
-                    OR Descripcion LIKE @patron
-                    OR [RangoDiseño] LIKE @patron
-                    OR CONVERT(varchar(23), FechaCreacion, 121) LIKE @patron)
-                  AND (@estado IS NULL OR Estado = @estado)
-                ORDER BY [CodigoDiseño]";
+            List<Diseno> disenos = new List<Diseno>();
+            const string consulta = @"
+                SELECT d.CodigoDiseño, d.CodigoCliente, c.NombreCliente,
+                       d.CodigoDiseñador, ds.NombreDiseñador, d.NombreDiseño,
+                       d.TipoDiseño, d.Descripcion, d.RangoDiseño,
+                       d.FechaCreacion, d.Estado
+                FROM dbo.Tbl_Diseños AS d
+                INNER JOIN dbo.Tbl_Clientes AS c
+                    ON d.CodigoCliente = c.CodigoCliente
+                INNER JOIN dbo.Tbl_Diseñadores AS ds
+                    ON d.CodigoDiseñador = ds.CodigoDiseñador
+                WHERE (@Texto = ''
+                       OR CONVERT(varchar(11), d.CodigoDiseño) LIKE '%' + @Texto + '%'
+                       OR d.NombreDiseño LIKE '%' + @Texto + '%'
+                       OR d.TipoDiseño LIKE '%' + @Texto + '%'
+                       OR d.RangoDiseño LIKE '%' + @Texto + '%')
+                  AND (@Estado IS NULL OR d.Estado = @Estado)
+                ORDER BY d.CodigoDiseño;";
 
-            try
+            using (SqlConnection conexion = ConexionDatos.CrearConexion())
+            using (SqlCommand comando = new SqlCommand(consulta, conexion))
             {
-                List<Diseno> disenos = new List<Diseno>();
-                string termino = (texto ?? string.Empty).Trim();
+                // Los filtros se envían como parámetros para no concatenar datos al SQL.
+                comando.Parameters.Add("@Texto", SqlDbType.VarChar, 4000).Value = texto ?? string.Empty;
+                SqlParameter parametroEstado = comando.Parameters.Add("@Estado", SqlDbType.Bit);
+                parametroEstado.Value = estado.HasValue ? (object)estado.Value : DBNull.Value;
 
-                using (SqlConnection conexion = ConexionDatos.CrearConexion())
-                using (SqlCommand comando = new SqlCommand(sql, conexion))
+                conexion.Open();
+                using (SqlDataReader lector = comando.ExecuteReader())
                 {
-                    comando.Parameters.Add("@texto", SqlDbType.VarChar, 1000).Value = termino;
-                    comando.Parameters.Add("@patron", SqlDbType.VarChar, 1002).Value = "%" + termino + "%";
-                    AgregarEstado(comando, estado);
-
-                    conexion.Open();
-                    using (SqlDataReader lector = comando.ExecuteReader())
-                        while (lector.Read()) disenos.Add(LeerDiseno(lector));
+                    while (lector.Read())
+                    {
+                        disenos.Add(new Diseno
+                        {
+                            CodigoDiseño = Convert.ToInt32(lector["CodigoDiseño"]),
+                            CodigoCliente = Convert.ToInt32(lector["CodigoCliente"]),
+                            NombreCliente = Convert.ToString(lector["NombreCliente"]),
+                            CodigoDiseñador = Convert.ToInt32(lector["CodigoDiseñador"]),
+                            NombreDiseñador = Convert.ToString(lector["NombreDiseñador"]),
+                            NombreDiseño = Convert.ToString(lector["NombreDiseño"]),
+                            TipoDiseño = Convert.ToString(lector["TipoDiseño"]),
+                            Descripcion = Convert.ToString(lector["Descripcion"]),
+                            RangoDiseño = Convert.ToString(lector["RangoDiseño"]),
+                            FechaCreacion = Convert.ToDateTime(lector["FechaCreacion"]),
+                            Estado = Convert.ToBoolean(lector["Estado"])
+                        });
+                    }
                 }
-
-                return disenos;
             }
-            catch (Exception ex)
+
+            return disenos;
+        }
+
+        /// <summary>Lista códigos y descripciones para el ComboBox de clientes.</summary>
+        public List<Cliente> ListarClientes()
+        {
+            List<Cliente> clientes = new List<Cliente>();
+            const string consulta = @"SELECT CodigoCliente, NombreCliente
+                FROM dbo.Tbl_Clientes ORDER BY NombreCliente, CodigoCliente;";
+
+            using (SqlConnection conexion = ConexionDatos.CrearConexion())
+            using (SqlCommand comando = new SqlCommand(consulta, conexion))
             {
-                throw new Exception("No se pudieron consultar los diseños: " + ex.Message, ex);
+                conexion.Open();
+                using (SqlDataReader lector = comando.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        clientes.Add(new Cliente
+                        {
+                            CodigoCliente = Convert.ToInt32(lector["CodigoCliente"]),
+                            NombreCliente = Convert.ToString(lector["NombreCliente"])
+                        });
+                    }
+                }
             }
+
+            return clientes;
         }
 
-        private static void AgregarEstado(SqlCommand comando, string estado)
+        /// <summary>Lista códigos y descripciones para el ComboBox de diseñadores.</summary>
+        public List<Disenador> ListarDisenadores()
         {
-            SqlParameter parametro = comando.Parameters.Add("@estado", SqlDbType.Bit);
-            if (estado == "Activo") parametro.Value = true;
-            else if (estado == "Inactivo") parametro.Value = false;
-            else parametro.Value = DBNull.Value;
-        }
+            List<Disenador> disenadores = new List<Disenador>();
+            const string consulta = @"SELECT CodigoDiseñador, NombreDiseñador
+                FROM dbo.Tbl_Diseñadores ORDER BY NombreDiseñador, CodigoDiseñador;";
 
-        private static Diseno LeerDiseno(SqlDataReader lector)
-        {
-            return new Diseno
+            using (SqlConnection conexion = ConexionDatos.CrearConexion())
+            using (SqlCommand comando = new SqlCommand(consulta, conexion))
             {
-                CodigoDiseño = Convert.ToInt32(lector["CodigoDiseño"]),
-                CodigoCliente = Convert.ToInt32(lector["CodigoCliente"]),
-                CodigoDiseñador = Convert.ToInt32(lector["CodigoDiseñador"]),
-                NombreDiseño = Convert.ToString(lector["NombreDiseño"]),
-                TipoDiseño = Convert.ToString(lector["TipoDiseño"]),
-                Descripcion = Convert.ToString(lector["Descripcion"]),
-                RangoDiseño = Convert.ToString(lector["RangoDiseño"]),
-                FechaCreacion = Convert.ToDateTime(lector["FechaCreacion"]),
-                Estado = Convert.ToBoolean(lector["Estado"])
-            };
+                conexion.Open();
+                using (SqlDataReader lector = comando.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        disenadores.Add(new Disenador
+                        {
+                            CodigoDiseñador = Convert.ToInt32(lector["CodigoDiseñador"]),
+                            NombreDiseñador = Convert.ToString(lector["NombreDiseñador"])
+                        });
+                    }
+                }
+            }
+
+            return disenadores;
         }
 
-        // CodigoDiseño es IDENTITY; SQL Server asigna su valor al insertar.
+        /// <summary>Agrega un diseño; CodigoDiseño es IDENTITY en SQL Server.</summary>
         public int Insertar(Diseno diseno)
         {
-            const string sql = @"INSERT INTO dbo.[Tbl_Diseños]
-                (CodigoCliente, [CodigoDiseñador], [NombreDiseño], [TipoDiseño],
-                 Descripcion, [RangoDiseño], FechaCreacion, Estado)
-                VALUES (@cliente, @disenador, @nombre, @tipo, @descripcion, @rango, @fecha, @estado)";
+            const string consulta = @"
+                INSERT INTO dbo.Tbl_Diseños
+                    (CodigoCliente, CodigoDiseñador, NombreDiseño, TipoDiseño,
+                     Descripcion, RangoDiseño, FechaCreacion, Estado)
+                VALUES
+                    (@CodigoCliente, @CodigoDiseñador, @NombreDiseño, @TipoDiseño,
+                     @Descripcion, @RangoDiseño, @FechaCreacion, @Estado);";
 
-            try
+            using (SqlConnection conexion = ConexionDatos.CrearConexion())
+            using (SqlCommand comando = new SqlCommand(consulta, conexion))
             {
-                using (SqlConnection conexion = ConexionDatos.CrearConexion())
-                using (SqlCommand comando = new SqlCommand(sql, conexion))
-                {
-                    AgregarParametros(comando, diseno);
-                    conexion.Open();
-                    return comando.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("No se pudo agregar el diseño: " + ex.Message, ex);
+                AgregarParametros(comando, diseno);
+                conexion.Open();
+                return comando.ExecuteNonQuery();
             }
         }
 
+        /// <summary>Actualiza los campos del diseño identificado por su clave primaria.</summary>
         public int Actualizar(Diseno diseno)
         {
-            const string sql = @"UPDATE dbo.[Tbl_Diseños]
-                SET CodigoCliente = @cliente, [CodigoDiseñador] = @disenador,
-                    [NombreDiseño] = @nombre, [TipoDiseño] = @tipo,
-                    Descripcion = @descripcion, [RangoDiseño] = @rango,
-                    FechaCreacion = @fecha, Estado = @estado
-                WHERE [CodigoDiseño] = @codigo";
+            const string consulta = @"
+                UPDATE dbo.Tbl_Diseños
+                SET CodigoCliente = @CodigoCliente,
+                    CodigoDiseñador = @CodigoDiseñador,
+                    NombreDiseño = @NombreDiseño,
+                    TipoDiseño = @TipoDiseño,
+                    Descripcion = @Descripcion,
+                    RangoDiseño = @RangoDiseño,
+                    FechaCreacion = @FechaCreacion,
+                    Estado = @Estado
+                WHERE CodigoDiseño = @CodigoDiseño;";
 
-            try
+            using (SqlConnection conexion = ConexionDatos.CrearConexion())
+            using (SqlCommand comando = new SqlCommand(consulta, conexion))
             {
-                using (SqlConnection conexion = ConexionDatos.CrearConexion())
-                using (SqlCommand comando = new SqlCommand(sql, conexion))
-                {
-                    AgregarParametros(comando, diseno);
-                    comando.Parameters.Add("@codigo", SqlDbType.Int).Value = diseno.CodigoDiseño;
-                    conexion.Open();
-                    return comando.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("No se pudo actualizar el diseño: " + ex.Message, ex);
+                AgregarParametros(comando, diseno);
+                comando.Parameters.Add("@CodigoDiseño", SqlDbType.Int).Value = diseno.CodigoDiseño;
+                conexion.Open();
+                return comando.ExecuteNonQuery();
             }
         }
 
-        private static void AgregarParametros(SqlCommand comando, Diseno diseno)
-        {
-            comando.Parameters.Add("@cliente", SqlDbType.Int).Value = diseno.CodigoCliente;
-            comando.Parameters.Add("@disenador", SqlDbType.Int).Value = diseno.CodigoDiseñador;
-            comando.Parameters.Add("@nombre", SqlDbType.VarChar, 45).Value = diseno.NombreDiseño;
-            comando.Parameters.Add("@tipo", SqlDbType.VarChar, 45).Value = diseno.TipoDiseño;
-            comando.Parameters.Add("@descripcion", SqlDbType.VarChar, 150).Value = diseno.Descripcion;
-            comando.Parameters.Add("@rango", SqlDbType.VarChar, 45).Value = diseno.RangoDiseño;
-            comando.Parameters.Add("@fecha", SqlDbType.DateTime).Value = diseno.FechaCreacion;
-            comando.Parameters.Add("@estado", SqlDbType.Bit).Value = diseno.Estado;
-        }
-
+        /// <summary>Elimina un diseño por su clave primaria.</summary>
         public int Eliminar(int codigo)
         {
-            const string sql = "DELETE FROM dbo.[Tbl_Diseños] WHERE [CodigoDiseño] = @codigo";
+            const string consulta = "DELETE FROM dbo.Tbl_Diseños WHERE CodigoDiseño = @CodigoDiseño;";
+            using (SqlConnection conexion = ConexionDatos.CrearConexion())
+            using (SqlCommand comando = new SqlCommand(consulta, conexion))
+            {
+                comando.Parameters.Add("@CodigoDiseño", SqlDbType.Int).Value = codigo;
+                conexion.Open();
+                return comando.ExecuteNonQuery();
+            }
+        }
 
-            try
-            {
-                using (SqlConnection conexion = ConexionDatos.CrearConexion())
-                using (SqlCommand comando = new SqlCommand(sql, conexion))
-                {
-                    comando.Parameters.Add("@codigo", SqlDbType.Int).Value = codigo;
-                    conexion.Open();
-                    return comando.ExecuteNonQuery();
-                }
-            }
-            catch (SqlException ex)
-            {
-                if (ex.Number == 547)
-                    throw new Exception("No se puede eliminar el diseño porque tiene registros relacionados.", ex);
-                throw new Exception("No se pudo eliminar el diseño: " + ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("No se pudo eliminar el diseño: " + ex.Message, ex);
-            }
+        // Usa parámetros explícitos para que los valores coincidan con los tipos SQL reales.
+        private static void AgregarParametros(SqlCommand comando, Diseno diseno)
+        {
+            comando.Parameters.Add("@CodigoCliente", SqlDbType.Int).Value = diseno.CodigoCliente;
+            comando.Parameters.Add("@CodigoDiseñador", SqlDbType.Int).Value = diseno.CodigoDiseñador;
+            comando.Parameters.Add("@NombreDiseño", SqlDbType.VarChar, 45).Value = diseno.NombreDiseño;
+            comando.Parameters.Add("@TipoDiseño", SqlDbType.VarChar, 45).Value = diseno.TipoDiseño;
+            comando.Parameters.Add("@Descripcion", SqlDbType.VarChar, 150).Value = diseno.Descripcion;
+            comando.Parameters.Add("@RangoDiseño", SqlDbType.VarChar, 45).Value = diseno.RangoDiseño;
+            comando.Parameters.Add("@FechaCreacion", SqlDbType.DateTime).Value = diseno.FechaCreacion;
+            comando.Parameters.Add("@Estado", SqlDbType.Bit).Value = diseno.Estado;
         }
     }
 }

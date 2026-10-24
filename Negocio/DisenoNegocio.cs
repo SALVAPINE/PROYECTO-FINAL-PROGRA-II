@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System;
 using System.Linq;
 using Datos;
 using Entidad;
@@ -20,7 +20,23 @@ namespace Negocio
 
         public List<Diseno> Buscar(string texto, string estado)
         {
-            return datos.Buscar(texto, estado);
+            bool? estadoSeleccionado = null;
+            if (estado == "Activo")
+                estadoSeleccionado = true;
+            else if (estado == "Inactivo")
+                estadoSeleccionado = false;
+
+            return datos.Buscar(texto, estadoSeleccionado);
+        }
+
+        public List<Cliente> ListarClientes()
+        {
+            return datos.ListarClientes();
+        }
+
+        public List<Disenador> ListarDisenadores()
+        {
+            return datos.ListarDisenadores();
         }
 
         public int Insertar(Diseno diseno)
@@ -33,33 +49,33 @@ namespace Negocio
         {
             Validar(diseno);
             if (diseno.CodigoDiseño <= 0)
-                throw new ArgumentException("Selecciona un diseño válido para editar.");
+                throw new ArgumentException("El código del diseño que se editará no es válido.");
             return datos.Actualizar(diseno);
         }
 
         public int Eliminar(int codigo)
         {
             if (codigo <= 0)
-                throw new ArgumentException("Selecciona un diseño válido para eliminar.");
+                throw new ArgumentException("El código del diseño que se eliminará no es válido.");
             return datos.Eliminar(codigo);
         }
 
         private static void Validar(Diseno diseno)
         {
             if (diseno == null)
-                throw new ArgumentException("No se recibieron los datos del diseño.");
+                throw new ArgumentNullException("diseno", "No se recibieron los datos del diseño.");
             if (diseno.CodigoCliente <= 0)
-                throw new ArgumentException("Selecciona un cliente.");
+                throw new ArgumentException("Selecciona un cliente válido.");
             if (diseno.CodigoDiseñador <= 0)
-                throw new ArgumentException("Selecciona un diseñador.");
+                throw new ArgumentException("Selecciona un diseñador válido.");
             if (string.IsNullOrWhiteSpace(diseno.NombreDiseño) || diseno.NombreDiseño.Length > 45)
                 throw new ArgumentException("El nombre del diseño es obligatorio y admite hasta 45 caracteres.");
             if (string.IsNullOrWhiteSpace(diseno.TipoDiseño) || diseno.TipoDiseño.Length > 45)
                 throw new ArgumentException("El tipo de diseño es obligatorio y admite hasta 45 caracteres.");
-            if (diseno.Descripcion != null && diseno.Descripcion.Length > 150)
-                throw new ArgumentException("La descripción admite hasta 150 caracteres.");
-            if (diseno.RangoDiseño != null && diseno.RangoDiseño.Length > 45)
-                throw new ArgumentException("El rango admite hasta 45 caracteres.");
+            if (string.IsNullOrWhiteSpace(diseno.Descripcion) || diseno.Descripcion.Length > 150)
+                throw new ArgumentException("La descripción es obligatoria y admite hasta 150 caracteres.");
+            if (string.IsNullOrWhiteSpace(diseno.RangoDiseño) || diseno.RangoDiseño.Length > 45)
+                throw new ArgumentException("El rango del diseño es obligatorio y admite hasta 45 caracteres.");
         }
 
         /// <summary>Resumen del módulo (se muestra en la pestaña Resumen).</summary>

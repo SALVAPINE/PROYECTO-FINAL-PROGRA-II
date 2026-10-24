@@ -250,6 +250,7 @@ namespace SistemaPublicidad.Formularios
 
         public FrmModulo(ModuloCfg c)
         {
+            AutoScaleMode = AutoScaleMode.None;
             SuspendLayout();
             cfg = c; cfg.Filas = new string[0][]; cfg.Total = 0;
             TopLevel = false; FormBorderStyle = FormBorderStyle.None; Dock = DockStyle.Fill; BackColor = Tema.Fondo; DoubleBuffered = true;
