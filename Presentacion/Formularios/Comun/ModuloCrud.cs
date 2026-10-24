@@ -76,6 +76,21 @@ namespace SistemaPublicidad.Formularios
             }
         }
 
+        public static FichaInventario ObtenerFichaInventario(int codigoInventario)
+        {
+            return new InventarioNegocio().ObtenerFicha(codigoInventario);
+        }
+
+        public static FacturaDocumento ObtenerDocumentoFactura(int codigoFacturacion)
+        {
+            return new FacturaNegocio().ObtenerDocumento(codigoFacturacion);
+        }
+
+        public static CompraDocumento ObtenerDocumentoCompra(int codigoCompra)
+        {
+            return new CompraNegocio().ObtenerDocumento(codigoCompra);
+        }
+
         /// <summary>Obtiene los nombres de columnas de la tabla real sin abrir conexiones en Presentación.</summary>
         public static List<string> ListarColumnasBaseDatos(string modulo, bool detalle)
         {

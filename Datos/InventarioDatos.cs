@@ -14,6 +14,48 @@ namespace Datos
             return Buscar(string.Empty, "Todos");
         }
 
+        public FichaInventario ObtenerFicha(int codigoInventario)
+        {
+            const string sql = @"SELECT i.CodigoInventario, i.NombreProducto, i.TipoProducto,
+                    i.Stock, i.PrecioCompra, i.FechaAlmacenamiento, i.Estado,
+                    s.NombreSucursal, m.NombreMaterial, m.UnidadMedida
+                FROM dbo.Tbl_Inventarios AS i
+                INNER JOIN dbo.Tbl_Sucursales AS s ON s.CodigoSucursal = i.CodigoSucursal
+                INNER JOIN dbo.Tbl_Materiales AS m ON m.CodigoMaterial = i.CodigoMaterial
+                WHERE i.CodigoInventario = @codigo";
+
+            try
+            {
+                using (SqlConnection conexion = ConexionDatos.CrearConexion())
+                using (SqlCommand comando = new SqlCommand(sql, conexion))
+                {
+                    comando.Parameters.Add("@codigo", SqlDbType.Int).Value = codigoInventario;
+                    conexion.Open();
+                    using (SqlDataReader lector = comando.ExecuteReader())
+                    {
+                        if (!lector.Read()) return null;
+                        return new FichaInventario
+                        {
+                            CodigoInventario = Convert.ToInt32(lector["CodigoInventario"]),
+                            NombreProducto = Convert.ToString(lector["NombreProducto"]),
+                            TipoProducto = Convert.ToString(lector["TipoProducto"]),
+                            Stock = Convert.ToInt32(lector["Stock"]),
+                            PrecioCompra = Convert.ToDecimal(lector["PrecioCompra"]),
+                            FechaIngreso = Convert.ToDateTime(lector["FechaAlmacenamiento"]),
+                            Estado = Convert.ToBoolean(lector["Estado"]),
+                            NombreSucursal = Convert.ToString(lector["NombreSucursal"]),
+                            NombreMaterial = Convert.ToString(lector["NombreMaterial"]),
+                            UnidadMedida = Convert.ToString(lector["UnidadMedida"])
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo consultar la ficha de inventario: " + ex.Message, ex);
+            }
+        }
+
         public List<Inventario> Buscar(string texto, string estado)
         {
             const string sql = @"SELECT CodigoInventario, CodigoSucursal, CodigoMaterial,

@@ -18,6 +18,13 @@ namespace Negocio
             return datos.Listar();
         }
 
+        public FichaInventario ObtenerFicha(int codigoInventario)
+        {
+            if (codigoInventario <= 0)
+                throw new ArgumentException("Selecciona un registro de inventario válido.");
+            return datos.ObtenerFicha(codigoInventario);
+        }
+
         public List<Inventario> Buscar(string texto, string estado)
         {
             return datos.Buscar(texto, estado);

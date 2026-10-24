@@ -55,6 +55,79 @@ namespace Datos
             }
         }
 
+        public CompraDocumento ObtenerDocumento(int codigoCompra)
+        {
+            const string sql = @"SELECT c.CodigoCompra, c.FechaCompra, c.FechaEntrega,
+                    c.CantidadComprada, c.TotalCompra, p.NombreProveedor, p.Telefono,
+                    p.Direccion, m.NombreMaterial, m.UnidadMedida,
+                    d.CodigoDetalleCompra, d.TipoDeCompra, d.Descripcion,
+                    d.PrecioUnitario, d.DescuentoCompra, d.Subtotal
+                FROM dbo.Tbl_Compras c
+                INNER JOIN dbo.Tbl_Proveedores p ON p.CodgioProveedor = c.CodigoProveedor
+                INNER JOIN dbo.Tbl_Materiales m ON m.CodigoMaterial = c.CodigoMaterial
+                LEFT JOIN dbo.Tbl_DetalleCompra d ON d.CodigoCompra = c.CodigoCompra
+                WHERE c.CodigoCompra = @codigoCompra
+                ORDER BY d.CodigoDetalleCompra";
+
+            try
+            {
+                CompraDocumento documento = null;
+                using (SqlConnection conexion = ConexionDatos.CrearConexion())
+                using (SqlCommand comando = new SqlCommand(sql, conexion))
+                {
+                    comando.Parameters.Add("@codigoCompra", SqlDbType.Int).Value = codigoCompra;
+                    conexion.Open();
+                    using (SqlDataReader lector = comando.ExecuteReader())
+                    {
+                        while (lector.Read())
+                        {
+                            if (documento == null)
+                            {
+                                documento = new CompraDocumento
+                                {
+                                    CodigoCompra = Convert.ToInt32(lector["CodigoCompra"]),
+                                    FechaCompra = Convert.ToDateTime(lector["FechaCompra"]),
+                                    FechaEntrega = Convert.ToDateTime(lector["FechaEntrega"]),
+                                    TotalCompra = Convert.ToDecimal(lector["TotalCompra"]),
+                                    NombreProveedor = Convert.ToString(lector["NombreProveedor"]),
+                                    TelefonoProveedor = Convert.ToString(lector["Telefono"]),
+                                    DireccionProveedor = Convert.ToString(lector["Direccion"])
+                                };
+                            }
+
+                            if (lector.IsDBNull(lector.GetOrdinal("CodigoDetalleCompra")))
+                                continue;
+
+                            if (documento.Detalles.Count > 0)
+                            {
+                                throw new InvalidOperationException(
+                                    "La compra tiene varias líneas, pero el modelo solo relaciona un material y una cantidad en la cabecera. " +
+                                    "No se puede asignar una cantidad correcta a cada línea sin cambiar el modelo de datos.");
+                            }
+
+                            documento.CondicionPago = Convert.ToString(lector["TipoDeCompra"]);
+                            documento.Detalles.Add(new DetalleCompraDocumento
+                            {
+                                NombreMaterial = Convert.ToString(lector["NombreMaterial"]),
+                                Cantidad = Convert.ToInt32(lector["CantidadComprada"]),
+                                UnidadMedida = Convert.ToString(lector["UnidadMedida"]),
+                                Observaciones = Convert.ToString(lector["Descripcion"]),
+                                PrecioUnitario = Convert.ToDecimal(lector["PrecioUnitario"]),
+                                Descuento = Convert.ToDecimal(lector["DescuentoCompra"]),
+                                Subtotal = Convert.ToDecimal(lector["Subtotal"])
+                            });
+                        }
+                    }
+                }
+
+                return documento;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo obtener el comprobante de compra: " + ex.Message, ex);
+            }
+        }
+
         private static void AgregarEstado(SqlCommand comando, string estado)
         {
             SqlParameter parametro = comando.Parameters.Add("@estado", SqlDbType.Bit);

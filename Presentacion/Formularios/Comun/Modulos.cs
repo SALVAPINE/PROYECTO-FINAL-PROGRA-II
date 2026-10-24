@@ -166,6 +166,8 @@ namespace SistemaPublicidad.Formularios
                 orden.Tipo = "texto";
                 orden.Peso = 1.5f;
             }
+            if (c.Nombre == "Facturaciones" || c.Nombre == "Compras" || c.Nombre == "Inventarios")
+                c.Cols = c.Cols.Concat(new[] { new Tabla.Col("Imprimir", 0, "print") }).ToArray();
             c.Filas = new string[0][];
             c.Total = 0;
             c.Tabs = new[] { "Consultar", "Gestionar", "Resumen" };

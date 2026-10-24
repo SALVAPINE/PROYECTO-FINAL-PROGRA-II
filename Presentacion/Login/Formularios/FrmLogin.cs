@@ -1,3 +1,7 @@
+#if LOGIN_STANDALONE
+extern alias SistemaPublicidadCompartida;
+#endif
+
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -5,6 +9,11 @@ using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Login.Controles;
+#if LOGIN_STANDALONE
+using AppDialog = SistemaPublicidadCompartida::SistemaPublicidad.Formularios.AppDialog;
+#else
+using SistemaPublicidad.Formularios;
+#endif
 
 namespace Login.Formularios
 {
@@ -89,7 +98,8 @@ namespace Login.Formularios
             };
             lnkOlvido.MouseEnter += (s, e) => lnkOlvido.ForeColor = Color.White;
             lnkOlvido.MouseLeave += (s, e) => lnkOlvido.ForeColor = Color.FromArgb(80, 180, 255);
-            lnkOlvido.Click += (s, e) => MessageBox.Show("Comuníquese con el administrador del sistema para restablecer su contraseña.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            lnkOlvido.Click += (s, e) => AppDialog.Information(this, "Recuperar acceso",
+                "Comunícate con el administrador del sistema para restablecer tu contraseña.");
 
             btnIngresar = new GradientButton { Text = "INICIAR SESIÓN" };
             btnIngresar.Bounds = Rectangle.Inflate(U.R(1047, 590, 520, 64), btnIngresar.Pad, btnIngresar.Pad);
@@ -167,7 +177,8 @@ namespace Login.Formularios
         {
             if (string.IsNullOrWhiteSpace(txtUsuario.Text) || txtClave.Text.Length == 0)
             {
-                MessageBox.Show("Ingrese su usuario y contraseña.", Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                AppDialog.Warning(this, "Completa tus datos",
+                    "Escribe tu usuario y contraseña para iniciar sesión.");
                 return;
             }
 
@@ -180,8 +191,8 @@ namespace Login.Formularios
 
             if (!credencialesValidas || txtClave.Text != "123")
             {
-                MessageBox.Show("El usuario, la contraseña o el rol seleccionado no son correctos.", Text,
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AppDialog.Error(this, "No se pudo iniciar sesión",
+                    "Verifica el usuario, la contraseña y el perfil seleccionado.");
                 txtClave.Clear();
                 txtClave.Focus();
                 return;

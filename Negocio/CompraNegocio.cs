@@ -23,6 +23,13 @@ namespace Negocio
             return datos.Buscar(texto, estado);
         }
 
+        public CompraDocumento ObtenerDocumento(int codigoCompra)
+        {
+            if (codigoCompra <= 0)
+                throw new ArgumentException("Selecciona una compra válida para imprimir.");
+            return datos.ObtenerDocumento(codigoCompra);
+        }
+
         public int Insertar(Compra compra)
         {
             Validar(compra);
