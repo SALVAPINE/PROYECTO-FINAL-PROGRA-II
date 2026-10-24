@@ -30,7 +30,7 @@ namespace SistemaPublicidad.Formularios
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            var g = e.Graphics; g.SmoothingMode = SmoothingMode.AntiAlias; g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+            var g = e.Graphics; g.SmoothingMode = SmoothingMode.AntiAlias; g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             if (Width < 30 || Height < 20) return;
             using (var p = Tema.Ruta(new RectangleF(0.5f, 0.5f, Width - 2, Height - 2), 12))
             { using (var b = new SolidBrush(Tema.Campo)) g.FillPath(b, p); using (var pn = new Pen(Color.FromArgb(150, Tema.Borde), 1.3f)) g.DrawPath(pn, p); }

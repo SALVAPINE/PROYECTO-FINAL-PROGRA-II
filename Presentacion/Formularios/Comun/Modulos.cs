@@ -28,6 +28,28 @@ namespace SistemaPublicidad.Formularios
         }
         static readonly string[] Ic = { "\U0001F465", "\U0001F464", "\U0001F552", "\U0001F4CA" };
 
+        // Cada apartado usa dibujos relacionados con el tipo de información que administra.
+        static string[] IconosResumen(string nombre)
+        {
+            switch (nombre)
+            {
+                case "Usuarios": return new[] { "\U0001F465", "\U0001F464", "\U0001F6E1", "\U0001F4CA" };
+                case "Clientes": return new[] { "\U0001F465", "\U0001F4CD", "\U0001F4C4", "\U0001F464" };
+                case "Cotizaciones": return new[] { "\U0001F4C4", "\U0001F4CB", "\U0001FA99", "\U0001F4CA" };
+                case "Tipo de Servicio": return new[] { "\U0001F6E0", "\U0001FA99", "\U0001F4C4", "\U0001F4CA" };
+                case "Materiales": return new[] { "\U0001F4E6", "\U0001F6E0", "\U0001F4CB", "\U0001F4CA" };
+                case "Diseños": return new[] { "\U0001F5BC", "\U0001F3A8", "\u270F", "\U0001F4CB" };
+                case "Diseñadores": return new[] { "\U0001F3A8", "\U0001F464", "\U0001F5BC", "\U0001F4CA" };
+                case "Órdenes de Trabajo": return new[] { "\U0001F6E0", "\U0001F4CB", "\U0001F4C5", "\U0001F69A" };
+                case "Facturaciones": return new[] { "\U0001F9FE", "\U0001F4C4", "\U0001FA99", "\U0001F4CA" };
+                case "Compras": return new[] { "\U0001F6D2", "\U0001F4E6", "\U0001F69A", "\U0001FA99" };
+                case "Sucursales": return new[] { "\U0001F3E0", "\U0001F4CD", "\U0001F465", "\U0001F4CA" };
+                case "Proveedores": return new[] { "\U0001F69A", "\U0001F4E6", "\U0001F4C4", "\U0001F4CD" };
+                case "Inventarios": return new[] { "\U0001F4E6", "\U0001F4CA", "\U0001F6E0", "\U0001F4CD" };
+                default: return Ic;
+            }
+        }
+
         public static ModuloCfg Obtener(string nombre, string icono, int tab)
         {
             var c = new ModuloCfg { Nombre = nombre, Plural = nombre.ToLower(), Icono = icono, StatIco = Ic };
@@ -131,6 +153,19 @@ namespace SistemaPublicidad.Formularios
             c.ColumnasPropiedades = propiedades.Split(';');
             c.Campos = campos.Split(';');
             c.Cols = Cols(columnas);
+            if (c.Nombre == "Compras")
+            {
+                var proveedor = c.Cols.First(x => x.Titulo == "Proveedor");
+                var material = c.Cols.First(x => x.Titulo == "Material");
+                proveedor.Tipo = material.Tipo = "texto";
+                proveedor.Peso = material.Peso = 1.6f;
+            }
+            else if (c.Nombre == "Facturaciones")
+            {
+                var orden = c.Cols.First(x => x.Titulo == "Orden de trabajo");
+                orden.Tipo = "texto";
+                orden.Peso = 1.5f;
+            }
             c.Filas = new string[0][];
             c.Total = 0;
             c.Tabs = new[] { "Consultar", "Gestionar", "Resumen" };
@@ -145,7 +180,7 @@ namespace SistemaPublicidad.Formularios
             c.StatTit = new[] { "Total", "Activos", "Inactivos", "Registros" };
             c.StatVal = new[] { "0", "0", "0", "0" };
             c.StatTend = new[] { "", "", "", "" };
-            c.StatIco = Ic;
+            c.StatIco = IconosResumen(c.Nombre);
         }
     }
 }

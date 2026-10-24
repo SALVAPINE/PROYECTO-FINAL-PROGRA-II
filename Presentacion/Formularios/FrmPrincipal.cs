@@ -27,6 +27,7 @@ namespace SistemaPublicidad.Formularios
 
         public FrmPrincipal(string usuario, string rol)
         {
+            SuspendLayout();
             Text = "Publicidad Multisucursal"; ClientSize = new Size(1366, 768); MinimumSize = new Size(1300, 720);
             StartPosition = FormStartPosition.CenterScreen; BackColor = Tema.Fondo; DoubleBuffered = true;
             SetStyle(ControlStyles.ResizeRedraw | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
@@ -80,6 +81,8 @@ namespace SistemaPublicidad.Formularios
             contenido.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             Controls.Add(contenido);
 
+            ResumeLayout(true);
+            WindowState = FormWindowState.Maximized;
             Seleccionar(items[0]);
         }
 

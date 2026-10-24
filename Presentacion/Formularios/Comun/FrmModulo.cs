@@ -53,14 +53,30 @@ namespace SistemaPublicidad.Formularios
     public class CampoFecha : Tarjeta
     {
         public DateTimePicker Fecha;
+        public bool EstaVacia { get; private set; } = true;
         public CampoFecha(string rotulo)
         {
             Radio = 12; C1 = C2 = Tema.Campo; Vidrio = false; Height = 52;
-            Fecha = new DateTimePicker { Format = DateTimePickerFormat.Short, Value = DateTime.Today,
+            Fecha = new DateTimePicker { Format = DateTimePickerFormat.Custom, CustomFormat = " ", Value = DateTime.Today,
                 CalendarMonthBackground = Tema.Campo, CalendarForeColor = Color.White,
                 Font = Tema.F(10.5f), Left = 10, Top = 22, Width = Width - 20,
                 Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top };
+            Fecha.CloseUp += (s, e) => { EstaVacia = false; Fecha.Format = DateTimePickerFormat.Short; };
             Controls.Add(Fecha); Controls.Add(Tema.L(rotulo, 8, Tema.Sub, 12, 4));
+        }
+
+        public void Limpiar()
+        {
+            EstaVacia = true;
+            Fecha.Format = DateTimePickerFormat.Custom;
+            Fecha.CustomFormat = " ";
+        }
+
+        public void Establecer(DateTime valor)
+        {
+            Fecha.Value = valor;
+            EstaVacia = false;
+            Fecha.Format = DateTimePickerFormat.Short;
         }
     }
 
@@ -134,18 +150,30 @@ namespace SistemaPublicidad.Formularios
     // Pantalla de módulo: encabezado, pestañas, 4 resúmenes y tres vistas (Consultar / Gestionar / Resumen).
     public class FrmModulo : Form
     {
+        // Pinta el fondo compartido antes que las vistas para evitar un destello negro.
+        sealed class PanelVistas : Tarjeta
+        {
+            public PanelVistas()
+            {
+                SetStyle(ControlStyles.Opaque | ControlStyles.AllPaintingInWmPaint |
+                         ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            }
+
+            protected override void OnPaintBackground(PaintEventArgs e)
+            {
+                Tema.PintarFondo(e.Graphics, this);
+            }
+        }
+
         sealed class CargaModulo
         {
             public List<object> Registros;
             public Dictionary<string, List<ModuloCrud.Opcion>> Opciones = new Dictionary<string, List<ModuloCrud.Opcion>>();
-            public List<string> Columnas;
-            public List<string> ColumnasDetalle;
-            public List<object> Detalles;
         }
 
         public Tabla Tabla, TablaDet, TablaGes; public Pestanas Tabs; public TextBox Buscar; public List<Selector> Combos = new List<Selector>();
         public Boton Anadir, Editar, Eliminar; public TarjetaStat[] Stats = new TarjetaStat[4]; public Label Pie;
-        Label lblTit, lblSub, lblDet; Totales totDet; BarrasEstado barraResumen; Panel vC, vG, vR, filaStats; readonly List<Control> inputs = new List<Control>(); readonly Dictionary<Selector, List<string>> opcionesFijas = new Dictionary<Selector, List<string>>(); CampoTexto eDesc; CampoNumero eCant, ePrecio, eSubLin, eSubt, eDescto, eTot; readonly ModuloCfg cfg;
+        Label lblTit, lblSub, lblDet; Totales totDet; BarrasEstado barraResumen; Panel panelVistas, vC, vG, vR, filaStats, vistaActual; readonly List<Control> inputs = new List<Control>(); readonly Dictionary<Selector, List<string>> opcionesFijas = new Dictionary<Selector, List<string>>(); CampoTexto eDesc; CampoNumero eCant, ePrecio, eSubLin, eSubt, eDescto, eTot; readonly ModuloCfg cfg;
         int codigoEnEdicion; bool datosCargados, datosCargando, nuevoRegistroSolicitado;
         int solicitudBusquedaDetalle;
         int solicitudFiltro;
@@ -177,16 +205,17 @@ namespace SistemaPublicidad.Formularios
 
         public FrmModulo(ModuloCfg c)
         {
+            SuspendLayout();
             cfg = c; cfg.Filas = new string[0][]; cfg.Total = 0;
             TopLevel = false; FormBorderStyle = FormBorderStyle.None; Dock = DockStyle.Fill; BackColor = Tema.Fondo; DoubleBuffered = true;
             SetStyle(ControlStyles.ResizeRedraw | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
 
-            var head = P(DockStyle.Top, 86, new Padding(0));
+            var head = P(DockStyle.Top, 100, new Padding(0));
             var tl2 = c.TileImg == null ? null : Recursos.Img(c.TileImg);
-            if (tl2 != null) head.Controls.Add(new ImgBox { Imagen = tl2, Left = 0, Top = 4, Width = 88, Height = 84 });
-            else head.Controls.Add(new IconoBox { Emoji = c.Icono, Left = 0, Top = 6, Width = 80, Height = 80, A = Color.FromArgb(150, 70, 255), B = Color.FromArgb(255, 70, 210) });
-            head.Controls.Add(Tema.L(c.Nombre.ToUpper(), 10, Tema.Cian, 98, 6, true));
-            lblTit = Tema.L("", 24, Color.White, 96, 22, true); lblSub = Tema.L("", 11.5f, Tema.Cian, 104, 62);
+            if (tl2 != null) head.Controls.Add(new ImgBox { Imagen = tl2, Left = 0, Top = 10, Width = 88, Height = 80 });
+            else head.Controls.Add(new IconoBox { Emoji = c.Icono, Left = 0, Top = 10, Width = 80, Height = 80, A = Color.FromArgb(150, 70, 255), B = Color.FromArgb(255, 70, 210) });
+            head.Controls.Add(Tema.L(c.Nombre.ToUpper(), 10, Tema.Cian, 98, 8, true));
+            lblTit = Tema.L("", 24, Color.White, 98, 26, true); lblSub = Tema.L("", 11.5f, Tema.Cian, 98, 68);
             head.Controls.Add(lblTit); head.Controls.Add(lblSub);
 
             var tabs = P(DockStyle.Top, 56, new Padding(0));
@@ -194,7 +223,7 @@ namespace SistemaPublicidad.Formularios
             Tabs.Seleccion = c.Tab; tabs.Controls.Add(Tabs);
 
             bool det = c.Detalle != null;
-            var fila = P(DockStyle.Top, 118, new Padding(0)); filaStats = fila;
+            var fila = P(DockStyle.Top, 128, new Padding(0)); filaStats = fila;
             var tl = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 4, RowCount = 1, BackColor = Color.Transparent };
             for (int i = 0; i < 4; i++) tl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
             for (int i = 0; i < 4; i++)
@@ -205,7 +234,13 @@ namespace SistemaPublicidad.Formularios
             }
             fila.Controls.Add(tl);
 
-            var host = P(DockStyle.Fill, 0, new Padding(0, 2, 0, 0));
+            var host = new PanelVistas { Dock = DockStyle.Fill, Padding = new Padding(0, 2, 0, 0), C1 = Color.Transparent, C2 = Color.Transparent, ColorBorde = Color.Transparent, Radio = 0 };
+            panelVistas = host;
+            host.Resize += (s, e) =>
+            {
+                if (vistaActual != null && vistaActual.Visible)
+                    vistaActual.Bounds = host.DisplayRectangle;
+            };
             vC = P(DockStyle.Fill, 0, new Padding(0)); vG = P(DockStyle.Fill, 0, new Padding(0)); vR = P(DockStyle.Fill, 0, new Padding(0));
             // La primera entrada solo necesita Consultar. Las demás vistas se crean
             // cuando se abren por primera vez para reducir el trabajo al navegar.
@@ -220,22 +255,6 @@ namespace SistemaPublicidad.Formularios
                 {
                     EnsureLoaded();
                     if (datosCargando || !datosCargados) return;
-                    if (codigoEnEdicion <= 0 && !nuevoRegistroSolicitado)
-                    {
-                        if (Tabla.Seleccion < 0 && Tabla.Filas.Count > 0)
-                            Tabla.Seleccion = 0;
-                        object entidad = BuscarEntidadSeleccionada();
-                        if (entidad == null)
-                        {
-                            LimpiarCamposEncabezado();
-                        }
-                        else
-                        {
-                            codigoEnEdicion = Convert.ToInt32(
-                                entidad.GetType().GetProperty(cfg.Clave).GetValue(entidad, null));
-                            CargarCampos(entidad);
-                        }
-                    }
                     if (editorDetalle != null)
                     {
                         int codigoPadre = 0;
@@ -248,6 +267,7 @@ namespace SistemaPublicidad.Formularios
                 }
             };
             Vistas(); Aplicar();
+            ResumeLayout(true);
         }
 
         void Vistas()
@@ -264,8 +284,30 @@ namespace SistemaPublicidad.Formularios
                 ConstruirResumen(vR);
                 resumenConstruido = true;
             }
+            Panel activa = t == 0 ? vC : t == 1 ? vG : vR;
+            Panel anterior = vistaActual;
+            if (anterior != null && anterior != activa)
+            {
+                // Conserva la vista anterior durante el ajuste de tamaño y el cambio
+                // de estadísticas; así el fondo no queda expuesto en negro.
+                anterior.Visible = false;
+                vistaActual = null;
+                anterior.Dock = DockStyle.None;
+            }
             if (cfg.Detalle != null && filaStats != null) filaStats.Visible = t != 1;
-            vC.Visible = t == 0; vG.Visible = t == 1; vR.Visible = t == 2;
+
+            activa.Dock = DockStyle.None;
+            activa.Bounds = panelVistas.DisplayRectangle;
+            activa.Visible = true;
+            activa.BringToFront();
+            foreach (Panel vista in new[] { vC, vG, vR })
+            {
+                if (vista == activa) continue;
+                vista.Visible = false;
+                vista.Dock = DockStyle.None;
+            }
+            vistaActual = activa;
+
             string n = cfg.Nombre, p = cfg.Plural;
             switch (t)
             {
@@ -273,7 +315,6 @@ namespace SistemaPublicidad.Formularios
                 case 1: lblTit.Text = "Gestionar " + n; lblSub.Text = "Agrega, edita y elimina " + p + " del sistema."; break;
                 default: lblTit.Text = "Resumen de " + n; lblSub.Text = "Consulta estadísticas y actividad de " + p + "."; break;
             }
-            if (t == 2) vR.Invalidate(true);
         }
 
         // ---------------- Consultar ----------------
@@ -549,11 +590,8 @@ namespace SistemaPublicidad.Formularios
                 registros = carga.Registros;
                 opcionesRelaciones = carga.Opciones;
                 if (gestionarConstruido) ActualizarRelaciones(opcionesRelaciones);
-                ActualizarTitulosDesdeBaseDatos(carga.Columnas, carga.ColumnasDetalle);
-                Dictionary<string, string[][]> detallesPreparados = await Task.Run(() =>
-                    PrepararDetalles(carga.Detalles, cfg.Nombre, cfg.ColumnasDetallePropiedades));
-                if (IsDisposed || Disposing) return;
-                CargarDetalles(detallesPreparados);
+                // Facturaciones carga el detalle al elegir una factura, de forma asíncrona.
+                CargarDetalles(null);
                 string[] columnasFila = cfg.ColumnasPropiedades;
                 CultureInfo cultura = CultureInfo.CurrentCulture;
                 cfg.Filas = await Task.Run(() =>
@@ -564,7 +602,7 @@ namespace SistemaPublicidad.Formularios
                         string[] fila = new string[columnasFila.Length + 2];
                         fila[0] = string.Empty;
                         for (int j = 0; j < columnasFila.Length; j++)
-                            fila[j + 1] = Formatear(registros[i], columnasFila[j], cultura);
+                            fila[j + 1] = FormatearParaTabla(registros[i], columnasFila[j], cultura);
                         fila[fila.Length - 1] = string.Empty;
                         filas[i] = fila;
                     }
@@ -584,19 +622,10 @@ namespace SistemaPublicidad.Formularios
                 // de carga; así el pie y la tabla no quedan desincronizados.
                 await AplicarAsync(false, false);
 
-                // Si la persona abrió Gestionar mientras se consultaban los datos, cargar la selección ahora.
-                if (Tabs.Seleccion == 1 && !nuevoRegistroSolicitado)
-                {
-                    if (Tabla.Seleccion < 0 && Tabla.Filas.Count > 0)
-                        Tabla.Seleccion = 0;
-                    object entidad = BuscarEntidadSeleccionada();
-                    if (entidad == null) LimpiarCamposEncabezado();
-                    else
-                    {
-                        codigoEnEdicion = Convert.ToInt32(entidad.GetType().GetProperty(cfg.Clave).GetValue(entidad, null));
-                        CargarCampos(entidad);
-                    }
-                }
+                // Si Gestionar esta abierto mientras termina la consulta inicial,
+                // conserva el formulario nuevo vacio y sin seleccionar una fila.
+                if (Tabs.Seleccion == 1 && !nuevoRegistroSolicitado && codigoEnEdicion <= 0)
+                    LimpiarCamposEncabezado();
             }
             catch (Exception ex)
             {
@@ -630,13 +659,8 @@ namespace SistemaPublicidad.Formularios
         {
             var carga = new CargaModulo();
             Task<List<object>> tareaRegistros = Task.Run(() => ModuloCrud.Listar(cfg.Nombre));
-            Task<List<string>> tareaColumnas = Task.Run(() => ModuloCrud.ListarColumnasBaseDatos(cfg.Nombre, false));
-            Task<List<string>> tareaColumnasDetalle = cfg.Detalle == null
-                ? Task.FromResult<List<string>>(null)
-                : Task.Run(() => ModuloCrud.ListarColumnasBaseDatos(cfg.Nombre, true));
-            Task<List<object>> tareaDetalles = cfg.Detalle == null || cfg.Nombre == "Compras"
-                ? Task.FromResult<List<object>>(null)
-                : Task.Run(() => ModuloCrud.ListarDetalles(cfg.Nombre));
+            // Los detalles se piden cuando se selecciona un encabezado; no cargamos
+            // todas las líneas al abrir Facturaciones.
 
             var tareasOpciones = new Dictionary<string, Task<List<ModuloCrud.Opcion>>>();
             foreach (string campo in cfg.Campos)
@@ -646,14 +670,11 @@ namespace SistemaPublicidad.Formularios
                     tareasOpciones.Add(propiedad, Task.Run(() => ModuloCrud.Opciones(propiedad)));
             }
 
-            var todasLasTareas = new List<Task> { tareaRegistros, tareaColumnas, tareaColumnasDetalle, tareaDetalles };
+            var todasLasTareas = new List<Task> { tareaRegistros };
             todasLasTareas.AddRange(tareasOpciones.Values);
             await Task.WhenAll(todasLasTareas);
 
             carga.Registros = tareaRegistros.Result;
-            carga.Columnas = tareaColumnas.Result;
-            carga.ColumnasDetalle = tareaColumnasDetalle.Result;
-            carga.Detalles = tareaDetalles.Result;
             foreach (var tarea in tareasOpciones)
                 carga.Opciones.Add(tarea.Key, tarea.Value.Result);
             return carga;
@@ -677,6 +698,29 @@ namespace SistemaPublicidad.Formularios
             return Convert.ToString(valor, cultura);
         }
 
+        string FormatearParaTabla(object entidad, string propiedad, CultureInfo cultura)
+        {
+            bool mostrarRelacion = (cfg.Nombre == "Compras" &&
+                (propiedad == "CodigoProveedor" || propiedad == "CodigoMaterial")) ||
+                (cfg.Nombre == "Facturaciones" && propiedad == "CodigoOrdenTrabajo");
+            if (mostrarRelacion)
+            {
+                var propiedadInfo = entidad.GetType().GetProperty(propiedad);
+                if (propiedadInfo != null)
+                {
+                    int codigo = Convert.ToInt32(propiedadInfo.GetValue(entidad, null), CultureInfo.InvariantCulture);
+                    List<ModuloCrud.Opcion> opciones;
+                    if (opcionesRelaciones.TryGetValue(propiedad, out opciones))
+                    {
+                        ModuloCrud.Opcion opcion = opciones.FirstOrDefault(x => x.Codigo == codigo);
+                        if (opcion != null) return opcion.Texto;
+                    }
+                    return "Código " + codigo.ToString(cultura);
+                }
+            }
+            return Formatear(entidad, propiedad, cultura);
+        }
+
         void ActualizarRelaciones(Dictionary<string, List<ModuloCrud.Opcion>> opciones)
         {
             for (int i = 0; i < cfg.Campos.Length; i++)
@@ -695,7 +739,9 @@ namespace SistemaPublicidad.Formularios
                     selector.Codigos.Add(opcion.Codigo);
                 }
                 opcionesFijas[selector] = selector.Items.ToList();
-                selector.Seleccion = lista.Count > 0 ? 0 : -1;
+                // Las relaciones quedan sin seleccionar en un formulario nuevo.
+                // CargarCampos elige la relacion cuando se pulsa Editar.
+                selector.Seleccion = -1;
             }
         }
 
@@ -724,9 +770,10 @@ namespace SistemaPublicidad.Formularios
         void CargarDetalles(Dictionary<string, string[][]> detalles)
         {
             // Compras carga sus detalles al seleccionar una compra, no al iniciar el módulo.
-            if (cfg.Detalle == null || cfg.Nombre == "Compras") return;
+            if (cfg.Detalle == null) return;
             cfg.Detalle.Clear();
-            foreach (var par in detalles ?? new Dictionary<string, string[][]>())
+            if (detalles == null) return;
+            foreach (var par in detalles)
                 cfg.Detalle.Add(par.Key, par.Value);
         }
 
@@ -747,44 +794,6 @@ namespace SistemaPublicidad.Formularios
                 if (IsDisposed || Disposing) return;
                 MessageBox.Show("No se pudo actualizar el detalle:\n" + ex.Message,
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // Los encabezados visibles se toman del nombre real de cada columna en SQL Server.
-        void ActualizarTitulosDesdeBaseDatos(List<string> columnas, List<string> columnasDetalle)
-        {
-            AplicarTitulosDeBaseDatos(cfg.ColumnasPropiedades, cfg.Cols, columnas, 1);
-            Tabla.Columnas.Clear();
-            Tabla.Columnas.AddRange(cfg.Cols);
-            Tabla.InvalidarAnchosColumnas();
-            Tabla.Invalidate();
-
-            if (cfg.Detalle == null) return;
-            AplicarTitulosDeBaseDatos(cfg.ColumnasDetallePropiedades, cfg.ColsDet, columnasDetalle, 0);
-            if (TablaDet != null)
-            {
-                TablaDet.Columnas.Clear();
-                TablaDet.Columnas.AddRange(cfg.ColsDet);
-                TablaDet.InvalidarAnchosColumnas();
-                TablaDet.Invalidate();
-            }
-            if (editorDetalle != null) editorDetalle.ActualizarTitulos(columnasDetalle);
-        }
-
-        static void AplicarTitulosDeBaseDatos(string[] propiedades, Tabla.Col[] columnasVisibles,
-            List<string> columnasBaseDatos, int desplazamiento)
-        {
-            if (propiedades == null || columnasVisibles == null) return;
-            for (int i = 0; i < propiedades.Length; i++)
-            {
-                string nombreDb = columnasBaseDatos.FirstOrDefault(x =>
-                    string.Equals(x, propiedades[i], StringComparison.OrdinalIgnoreCase));
-                if (nombreDb == null)
-                    throw new InvalidOperationException("La columna " + propiedades[i] + " no existe en la tabla de SQL Server.");
-                int indice = i + desplazamiento;
-                if (indice >= columnasVisibles.Length)
-                    throw new InvalidOperationException("La tabla visible no tiene una columna para " + nombreDb + ".");
-                // Se valida la columna, pero se conserva el encabezado legible del diseño.
             }
         }
 
@@ -852,7 +861,13 @@ namespace SistemaPublicidad.Formularios
                 else if (p.PropertyType == typeof(int?)) valor = string.IsNullOrWhiteSpace(texto) ? null : (object)int.Parse(texto, CultureInfo.CurrentCulture);
                 else if (p.PropertyType == typeof(int)) valor = int.Parse(texto, CultureInfo.CurrentCulture);
                 else if (p.PropertyType == typeof(decimal)) valor = decimal.Parse(texto, CultureInfo.CurrentCulture);
-                else if (control is CampoFecha) valor = ((CampoFecha)control).Fecha.Value.Date;
+                else if (control is CampoFecha)
+                {
+                    var fecha = (CampoFecha)control;
+                    if (fecha.EstaVacia)
+                        throw new ArgumentException("Selecciona una fecha para " + especificacion.Substring(0, dosPuntos) + ".");
+                    valor = fecha.Fecha.Value.Date;
+                }
                 else if (p.PropertyType == typeof(DateTime)) valor = DateTime.Parse(texto, CultureInfo.CurrentCulture);
                 else if (p.PropertyType == typeof(TimeSpan)) valor = TimeSpan.Parse(texto, CultureInfo.CurrentCulture);
                 else valor = texto;
@@ -902,7 +917,11 @@ namespace SistemaPublicidad.Formularios
                 var selector = inputs[i] as Selector;
                 if (texto != null) texto.Caja.Text = valor == null ? string.Empty : Convert.ToString(valor, CultureInfo.CurrentCulture);
                 if (numero != null) numero.Valor = valor == null ? 0 : Convert.ToDecimal(valor, CultureInfo.CurrentCulture);
-                if (fecha != null && valor != null) fecha.Fecha.Value = Convert.ToDateTime(valor, CultureInfo.CurrentCulture);
+                if (fecha != null)
+                {
+                    if (valor == null) fecha.Limpiar();
+                    else fecha.Establecer(Convert.ToDateTime(valor, CultureInfo.CurrentCulture));
+                }
                 if (selector != null)
                 {
                     if (valor == null)
@@ -1043,7 +1062,7 @@ namespace SistemaPublicidad.Formularios
                 var selector = inputs[i] as Selector;
                 if (texto != null) texto.Caja.Clear();
                 if (numero != null) numero.Limpiar();
-                if (fecha != null) fecha.Fecha.Value = DateTime.Today;
+                if (fecha != null) fecha.Limpiar();
                 if (selector != null)
                 {
                     selector.Seleccion = -1;
@@ -1061,10 +1080,10 @@ namespace SistemaPublicidad.Formularios
                 if (cfg.Nombre != "Compras") cfg.Detalle.TryGetValue(id, out d);
             }
             int codigoCompraSeleccionada = 0;
+            int.TryParse(id, out codigoCompraSeleccionada);
             string[][] detalleCompleto = d;
             if (cfg.Nombre == "Compras" && editorDetalle != null)
             {
-                int.TryParse(id, out codigoCompraSeleccionada);
                 editorDetalle.CambiarPadre(codigoCompraSeleccionada);
                 detalleCompleto = editorDetalle.ObtenerFilasDetalle();
                 d = detalleCompleto;
@@ -1226,6 +1245,8 @@ namespace SistemaPublicidad.Formularios
                     card.Height = Math.Max(alturaMinima, host.ClientSize.Height);
                 };
                 host.Controls.Add(card);
+                // El formulario de alta inicia vacio; los datos se cargan solo al pulsar Editar.
+                Nueva(false);
                 return;
             }
 
@@ -1329,7 +1350,7 @@ namespace SistemaPublicidad.Formularios
             {
                 string tp = cfg.Campos[i].Substring(cfg.Campos[i].IndexOf(':') + 1);
                 var ct = inputs[i] as CampoTexto; var sl = inputs[i] as Selector;
-                var cf = inputs[i] as CampoFecha; if (cf != null) cf.Fecha.Value = DateTime.Today;
+                var cf = inputs[i] as CampoFecha; if (cf != null) cf.Limpiar();
                 if (ct != null) ct.Caja.Clear();
                 if (sl != null) sl.Seleccion = -1;
                 var cn = inputs[i] as CampoNumero; if (cn != null) cn.Limpiar();

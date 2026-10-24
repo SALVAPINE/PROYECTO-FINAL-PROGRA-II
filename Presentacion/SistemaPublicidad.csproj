@@ -6,6 +6,7 @@
     <RootNamespace>SistemaPublicidad</RootNamespace>
     <AssemblyName>SistemaPublicidad</AssemblyName>
     <LangVersion>latest</LangVersion>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Recursos\*.png" LogicalName="SistemaPublicidad.Recursos.%(Filename)%(Extension)" />

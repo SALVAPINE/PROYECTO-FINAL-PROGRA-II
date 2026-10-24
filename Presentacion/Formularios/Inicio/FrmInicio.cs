@@ -15,8 +15,9 @@ namespace SistemaPublicidad.Formularios
         {
             TopLevel = false; FormBorderStyle = FormBorderStyle.None; Dock = DockStyle.Fill; BackColor = Tema.Fondo; DoubleBuffered = true; SetStyle(ControlStyles.ResizeRedraw, true);
             var t = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 20, RowCount = 4, BackColor = Color.Transparent };
+            t.SuspendLayout();
             for (int i = 0; i < 20; i++) t.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5));
-            t.RowStyles.Add(new RowStyle(SizeType.Absolute, 120)); t.RowStyles.Add(new RowStyle(SizeType.Absolute, 118));
+            t.RowStyles.Add(new RowStyle(SizeType.Absolute, 120)); t.RowStyles.Add(new RowStyle(SizeType.Absolute, 128));
             t.RowStyles.Add(new RowStyle(SizeType.Percent, 46)); t.RowStyles.Add(new RowStyle(SizeType.Percent, 54));
 
             Add(t, new Bienvenida(), 0, 0, 20, 0);
@@ -35,6 +36,7 @@ namespace SistemaPublicidad.Formularios
             Actividad = new ListaActividad { Opacidad = 225, C1 = Color.FromArgb(10, 24, 96), C2 = Color.FromArgb(14, 30, 116), Brillo = Color.FromArgb(50, 60, 110, 255), Brillo2 = Color.FromArgb(25, 0, 230, 200) };
             Add(t, Grafica, 0, 3, 12, 6); Add(t, Actividad, 12, 3, 8, 6);
             Controls.Add(t);
+            t.ResumeLayout(true);
 
             // ---- DATOS DE EJEMPLO (solo para ver el diseño). Reemplácelos con sus datos reales. ----
             StUsuarios.Valor = "7"; StUsuarios.Sub = "Activos: 7"; StUsuarios.Delta = "▲ +2";

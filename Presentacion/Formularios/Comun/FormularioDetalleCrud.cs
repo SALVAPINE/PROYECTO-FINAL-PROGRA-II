@@ -96,14 +96,14 @@ namespace SistemaPublicidad.Formularios
             // El detalle se guarda junto con su compra/factura desde el botón
             // principal; los campos quedan arriba y la lista ocupa la franja inferior.
             var raiz = new TableLayoutPanel { Dock = DockStyle.Fill, BackColor = Color.Transparent, ColumnCount = 1, RowCount = 2, Padding = new Padding(4) };
-            raiz.RowStyles.Add(new RowStyle(SizeType.Percent, esCompra ? 52 : 58));
-            raiz.RowStyles.Add(new RowStyle(SizeType.Percent, esCompra ? 48 : 42));
+            raiz.RowStyles.Add(new RowStyle(SizeType.Absolute, 122));
+            raiz.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             Controls.Add(raiz);
 
             var campos = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 3, RowCount = 2, BackColor = Color.Transparent, Padding = new Padding(2, 2, 2, 0) };
             for (int i = 0; i < 3; i++) campos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
-            campos.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            campos.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            campos.RowStyles.Add(new RowStyle(SizeType.Absolute, 56));
+            campos.RowStyles.Add(new RowStyle(SizeType.Absolute, 56));
             txtTipo.Margin = txtDescripcion.Margin = new Padding(5, 2, 5, 2);
             numCantidad.Margin = numPrecio.Margin = numSubtotal.Margin = numDescuento.Margin = new Padding(5, 2, 5, 2);
             cmbEstado.Margin = new Padding(5, 2, 5, 2);

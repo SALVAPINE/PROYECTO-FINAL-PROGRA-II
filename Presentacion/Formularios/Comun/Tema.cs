@@ -178,7 +178,7 @@ namespace SistemaPublicidad.Formularios
         {
             if (Width < 4 || Height < 4) return;
             var g = e.Graphics; g.SmoothingMode = SmoothingMode.AntiAlias; g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             var r = new RectangleF(0.5f, 0.5f, Width - 2, Height - 2);
             using (var p = Tema.Ruta(r, radio))
             {
@@ -206,7 +206,7 @@ namespace SistemaPublicidad.Formularios
         public string Emoji { get; set; } = ""; public Color A { get; set; } = Tema.Azul; public Color B { get; set; } = Tema.Morado;
         public IconoBox() { SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true); BackColor = Color.Transparent; }
         protected override void OnPaint(PaintEventArgs e)
-        { e.Graphics.SmoothingMode = SmoothingMode.AntiAlias; Tema.Icono(e.Graphics, new Rectangle(0, 0, Width - 1, Height - 1), A, B, Emoji); }
+        { e.Graphics.SmoothingMode = SmoothingMode.AntiAlias; e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit; Tema.Icono(e.Graphics, new Rectangle(0, 0, Width - 1, Height - 1), A, B, Emoji); }
     }
 
     public class Boton : Tarjeta
@@ -275,7 +275,7 @@ namespace SistemaPublicidad.Formularios
                 Iconos.Dibujar(g, Icono, new RectangleF(Width - Height * 0.95f, Height * 0.2f, Height * 0.8f, Height * 0.8f), Color.FromArgb(34, 255, 255, 255), Height * 0.07f);
                 g.Restore(estadoClip);
             }
-            int sz = Math.Max(30, Math.Min(64, Height - 30));
+            int sz = Math.Max(32, Math.Min(68, Height - 30));
             var ir = new Rectangle(16, (Height - sz) / 2, sz, sz);
             if (Glifo != null)
             {
@@ -285,18 +285,18 @@ namespace SistemaPublicidad.Formularios
             }
             else Tema.Icono(g, ir, Color.FromArgb(70, 255, 255, 255), Color.FromArgb(35, 255, 255, 255), Icono, Circulo);
             int x = 16 + sz + 16;
-            using (var f = Tema.F(10)) g.DrawString(Titulo, f, Brushes.White, x, Height * (Tendencia != "" ? 0.08f : 0.12f));
-            float vs = 28f;
+            using (var f = Tema.F(10.5f)) g.DrawString(Titulo, f, Brushes.White, x, Height * (Tendencia != "" ? 0.08f : 0.12f));
+            float vs = 30f;
             for (; vs > 12f; vs -= 1f) using (var fm = Tema.F(vs, true)) if (g.MeasureString(Valor, fm).Width <= Width - x - 14) break;
             using (var f = Tema.F(vs, true)) g.DrawString(Valor, f, Brushes.White, x, Height * (Tendencia != "" ? 0.24f : 0.32f));
             if (Tendencia != "")
             {
                 float ay = Height * 0.62f;
                 using (var pn = new Pen(Color.White, 2f) { StartCap = LineCap.Round, EndCap = LineCap.Round }) { g.DrawLines(pn, new[] { new PointF(x, ay + 8), new PointF(x + 4, ay + 3), new PointF(x + 8, ay + 8) }); g.DrawLine(pn, x + 4, ay + 3, x + 4, ay + 14); }
-                using (var f = Tema.F(9, true)) g.DrawString(Tendencia, f, Brushes.White, x + 14, ay);
-                using (var f = Tema.F(8.5f)) using (var b = new SolidBrush(Color.FromArgb(225, 255, 255, 255))) g.DrawString(Sub, f, b, x, Height * 0.79f);
+                using (var f = Tema.F(9.5f, true)) g.DrawString(Tendencia, f, Brushes.White, x + 14, ay);
+                using (var f = Tema.F(9)) using (var b = new SolidBrush(Color.FromArgb(225, 255, 255, 255))) g.DrawString(Sub, f, b, x, Height * 0.79f);
             }
-            else using (var f = Tema.F(9)) using (var b = new SolidBrush(Color.FromArgb(220, 255, 255, 255))) g.DrawString(Sub, f, b, x, Height * 0.74f);
+            else using (var f = Tema.F(9.5f)) using (var b = new SolidBrush(Color.FromArgb(220, 255, 255, 255))) g.DrawString(Sub, f, b, x, Height * 0.74f);
             if (d != "" && DeltaLinea) using (var f = Tema.F(11, true)) { var m2 = g.MeasureString(d, f); g.DrawString(d, f, Brushes.White, Width - m2.Width - 18, Height * 0.5f); }
             else if (d != "")
                 using (var f = Tema.F(9, true))

@@ -102,12 +102,14 @@ namespace SistemaPublicidad.Formularios
             bool muestraH = totalX > Width - (barraVertical.Visible ? vBar : 0);
             bool muestraV = Filas.Count * Alto > Height - Enc - (muestraH ? hBar : 0);
             muestraH = totalX > Width - (muestraV ? vBar : 0);
-            barraHorizontal.Visible = muestraH;
-            barraVertical.Visible = muestraV;
+            if (barraHorizontal.Visible != muestraH) barraHorizontal.Visible = muestraH;
+            if (barraVertical.Visible != muestraV) barraVertical.Visible = muestraV;
             int anchoVista = Math.Max(1, Width - (muestraV ? vBar : 0));
             int altoVista = Math.Max(1, Height - (muestraH ? hBar : 0));
-            barraHorizontal.Bounds = new Rectangle(0, Math.Max(0, Height - hBar), anchoVista, hBar);
-            barraVertical.Bounds = new Rectangle(Math.Max(0, Width - vBar), 0, vBar, altoVista);
+            Rectangle boundsHorizontal = new Rectangle(0, Math.Max(0, Height - hBar), anchoVista, hBar);
+            Rectangle boundsVertical = new Rectangle(Math.Max(0, Width - vBar), 0, vBar, altoVista);
+            if (barraHorizontal.Bounds != boundsHorizontal) barraHorizontal.Bounds = boundsHorizontal;
+            if (barraVertical.Bounds != boundsVertical) barraVertical.Bounds = boundsVertical;
             ConfigurarBarra(barraHorizontal, Math.Max(0, (int)Math.Ceiling(totalX) - anchoVista), anchoVista);
             ConfigurarBarra(barraVertical, Math.Max(0, Filas.Count * Alto - (altoVista - Enc)), Math.Max(1, altoVista - Enc));
             scrollHorizontal = Math.Min(scrollHorizontal, Math.Max(0, (int)Math.Ceiling(totalX) - anchoVista));
@@ -116,11 +118,13 @@ namespace SistemaPublicidad.Formularios
 
         static void ConfigurarBarra(BarraDeslizamiento barra, int maximo, int visible)
         {
-            barra.Minimum = 0;
-            barra.LargeChange = Math.Max(1, visible);
-            barra.SmallChange = 32;
-            barra.Maximum = Math.Max(0, maximo) + barra.LargeChange - 1;
-            int valorMaximo = Math.Max(0, barra.Maximum - barra.LargeChange + 1);
+            int cambioGrande = Math.Max(1, visible);
+            int valorMaximo = Math.Max(0, maximo) + cambioGrande - 1;
+            if (barra.Minimum != 0) barra.Minimum = 0;
+            if (barra.LargeChange != cambioGrande) barra.LargeChange = cambioGrande;
+            if (barra.SmallChange != 32) barra.SmallChange = 32;
+            if (barra.Maximum != valorMaximo) barra.Maximum = valorMaximo;
+            valorMaximo = Math.Max(0, barra.Maximum - barra.LargeChange + 1);
             if (barra.Value > valorMaximo) barra.Value = valorMaximo;
         }
 
@@ -217,7 +221,7 @@ namespace SistemaPublicidad.Formularios
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            var g = e.Graphics; g.SmoothingMode = SmoothingMode.AntiAlias; g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+            var g = e.Graphics; g.SmoothingMode = SmoothingMode.AntiAlias; g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             if (Width < 50 || Height < 60) return;
             ActualizarBarras();
             int anchoVista = Math.Max(1, Width - (barraVertical.Visible ? barraVertical.Width : 0));
@@ -482,11 +486,23 @@ namespace SistemaPublicidad.Formularios
     {
         public string[] Textos = { "Consultar", "Gestionar", "Resumen" }; public string[] Claves = { "\U0001F50D", "\u2699", "\U0001F4CA" };
         int sel; public event EventHandler Cambio;
-        public int Seleccion { get { return sel; } set { sel = value; Invalidate(); if (Cambio != null) Cambio(this, EventArgs.Empty); } }
+        public int Seleccion
+        {
+            get { return sel; }
+            set
+            {
+                int maximo = Math.Max(0, (Textos == null ? 1 : Textos.Length) - 1);
+                int nueva = Math.Max(0, Math.Min(maximo, value));
+                if (sel == nueva) return;
+                sel = nueva;
+                Invalidate();
+                if (Cambio != null) Cambio(this, EventArgs.Empty);
+            }
+        }
         public Pestanas() { SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true); BackColor = Color.Transparent; Cursor = Cursors.Hand; }
         protected override void OnPaint(PaintEventArgs e)
         {
-            var g = e.Graphics; g.SmoothingMode = SmoothingMode.AntiAlias; g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+            var g = e.Graphics; g.SmoothingMode = SmoothingMode.AntiAlias; g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             if (Width < 30 || Height < 20) return;
             using (var p = Tema.Ruta(new RectangleF(0.5f, 0.5f, Width - 2, Height - 2), 14))
             { using (var b = new SolidBrush(Color.FromArgb(90, 14, 28, 100))) g.FillPath(b, p); using (var pn = new Pen(Color.FromArgb(110, 70, 100, 230))) g.DrawPath(pn, p); }
@@ -504,6 +520,6 @@ namespace SistemaPublicidad.Formularios
                 }
             }
         }
-        protected override void OnMouseDown(MouseEventArgs e) { base.OnMouseDown(e); int i = Math.Min(Textos.Length - 1, e.X * Textos.Length / Math.Max(1, Width)); if (i != sel) Seleccion = i; }
+        protected override void OnMouseDown(MouseEventArgs e) { base.OnMouseDown(e); if (Textos == null || Textos.Length == 0) return; int i = Math.Min(Textos.Length - 1, e.X * Textos.Length / Math.Max(1, Width)); if (i != sel) Seleccion = i; }
     }
 }
