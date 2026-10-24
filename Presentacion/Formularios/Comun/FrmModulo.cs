@@ -52,31 +52,76 @@ namespace SistemaPublicidad.Formularios
     // Campo de fecha con selector de calendario para evitar capturar fechas como texto.
     public class CampoFecha : Tarjeta
     {
-        public DateTimePicker Fecha;
-        public bool EstaVacia { get; private set; } = true;
+        public DateTime Fecha { get; private set; }
+        readonly TextBox textoFecha;
+        readonly Button botonCalendario;
+
         public CampoFecha(string rotulo)
         {
             Radio = 12; C1 = C2 = Tema.Campo; Vidrio = false; Height = 52;
-            Fecha = new DateTimePicker { Format = DateTimePickerFormat.Custom, CustomFormat = " ", Value = DateTime.Today,
-                CalendarMonthBackground = Tema.Campo, CalendarForeColor = Color.White,
-                Font = Tema.F(10.5f), Left = 10, Top = 22, Width = Width - 20,
-                Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top };
-            Fecha.CloseUp += (s, e) => { EstaVacia = false; Fecha.Format = DateTimePickerFormat.Short; };
-            Controls.Add(Fecha); Controls.Add(Tema.L(rotulo, 8, Tema.Sub, 12, 4));
+            ColorBorde = Color.FromArgb(100, 0, 210, 230);
+            Fecha = DateTime.Today;
+            textoFecha = new TextBox { BorderStyle = BorderStyle.None, BackColor = Tema.Campo, ForeColor = Color.White,
+                Font = Tema.F(10.5f), ReadOnly = true, Cursor = Cursors.Hand, Left = 10, Top = 23,
+                Width = Width - 58, Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top,
+                TabStop = false };
+            botonCalendario = new Button { Text = "▦", FlatStyle = FlatStyle.Flat, BackColor = Color.FromArgb(35, 55, 135),
+                ForeColor = Tema.Cian, Font = Tema.F(11, true), Cursor = Cursors.Hand,
+                Width = 30, Height = 25, Left = Width - 40, Top = 20,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right, TabStop = false };
+            botonCalendario.FlatAppearance.BorderSize = 0;
+            botonCalendario.FlatAppearance.MouseOverBackColor = Color.FromArgb(55, 75, 165);
+            textoFecha.Click += (s, e) => AbrirCalendario();
+            botonCalendario.Click += (s, e) => AbrirCalendario();
+            Controls.Add(textoFecha);
+            Controls.Add(botonCalendario);
+            Controls.Add(Tema.L("▦  " + rotulo.ToUpper(), 8, Tema.Cian, 12, 4, true));
+            ActualizarTexto();
         }
 
         public void Limpiar()
         {
-            EstaVacia = true;
-            Fecha.Format = DateTimePickerFormat.Custom;
-            Fecha.CustomFormat = " ";
+            Establecer(DateTime.Today);
         }
 
         public void Establecer(DateTime valor)
         {
-            Fecha.Value = valor;
-            EstaVacia = false;
-            Fecha.Format = DateTimePickerFormat.Short;
+            Fecha = valor.Date;
+            ActualizarTexto();
+        }
+
+        void ActualizarTexto()
+        {
+            textoFecha.Text = Fecha.ToString("dd 'de' MMMM 'de' yyyy", CultureInfo.GetCultureInfo("es-GT"));
+        }
+
+        void AbrirCalendario()
+        {
+            using (var ventana = new Form())
+            using (var calendario = new MonthCalendar())
+            {
+                ventana.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+                ventana.StartPosition = FormStartPosition.Manual;
+                ventana.ShowInTaskbar = false;
+                ventana.AutoSize = true;
+                ventana.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                calendario.MaxSelectionCount = 1;
+                calendario.SelectionStart = Fecha;
+                calendario.BackColor = Tema.Campo;
+                calendario.ForeColor = Color.White;
+                calendario.TitleBackColor = Tema.Morado;
+                calendario.TitleForeColor = Color.White;
+                calendario.TrailingForeColor = Tema.Sub;
+                calendario.DateSelected += (s, e) =>
+                {
+                    Establecer(e.Start);
+                    ventana.Close();
+                };
+                ventana.Controls.Add(calendario);
+                Point ubicacion = PointToScreen(new Point(botonCalendario.Left, botonCalendario.Bottom));
+                ventana.Location = ubicacion;
+                ventana.ShowDialog(FindForm());
+            }
         }
     }
 
@@ -864,9 +909,7 @@ namespace SistemaPublicidad.Formularios
                 else if (control is CampoFecha)
                 {
                     var fecha = (CampoFecha)control;
-                    if (fecha.EstaVacia)
-                        throw new ArgumentException("Selecciona una fecha para " + especificacion.Substring(0, dosPuntos) + ".");
-                    valor = fecha.Fecha.Value.Date;
+                    valor = fecha.Fecha.Date;
                 }
                 else if (p.PropertyType == typeof(DateTime)) valor = DateTime.Parse(texto, CultureInfo.CurrentCulture);
                 else if (p.PropertyType == typeof(TimeSpan)) valor = TimeSpan.Parse(texto, CultureInfo.CurrentCulture);
