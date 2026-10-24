@@ -215,6 +215,18 @@ namespace SistemaPublicidad.Formularios
             if (modulo != null) modulo.EnsureLoaded();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // Las vistas retiradas del contenedor también pertenecen a esta ventana.
+                foreach (Form vista in cache.Values)
+                    vista.Dispose();
+                cache.Clear();
+            }
+            base.Dispose(disposing);
+        }
+
         protected override void OnPaintBackground(PaintEventArgs e) { Tema.PintarFondo(e.Graphics, this); }
     }
 }

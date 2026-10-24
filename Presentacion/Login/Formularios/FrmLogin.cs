@@ -22,6 +22,8 @@ namespace Login.Formularios
         RoleCard[] roles;
         bool verClave;
         Bitmap bg;
+        readonly Timer fade = new Timer { Interval = 15 };
+        readonly Timer anim = new Timer { Interval = 33 };
         double t;
         int foco;
         const int N = 52;
@@ -113,9 +115,7 @@ namespace Login.Formularios
             txtClave.KeyDown += EnterKey;
 
             Opacity = 0;
-            var fade = new Timer { Interval = 15 };
-            fade.Tick += (s, e) => { Opacity += 0.08; if (Opacity >= 1) { Opacity = 1; fade.Stop(); } };
-            var anim = new Timer { Interval = 33 };
+            fade.Tick += (s, e) => { Opacity = Math.Min(1, Opacity + 0.08); if (Opacity >= 1) fade.Stop(); };
             anim.Tick += (s, e) =>
             {
                 t += 0.033;
@@ -199,10 +199,15 @@ namespace Login.Formularios
             if (e.Button == MouseButtons.Left) { ReleaseCapture(); SendMessage(Handle, 0xA1, 2, 0); }
         }
 
-        protected override void OnFormClosed(FormClosedEventArgs e)
+        protected override void Dispose(bool disposing)
         {
-            if (bg != null) bg.Dispose();
-            base.OnFormClosed(e);
+            if (disposing)
+            {
+                fade.Dispose();
+                anim.Dispose();
+                if (bg != null) { bg.Dispose(); bg = null; }
+            }
+            base.Dispose(disposing);
         }
 
         static void Calidad(Graphics g)
