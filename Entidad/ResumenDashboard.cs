@@ -15,6 +15,7 @@ namespace Entidad
         public List<ItemGrafico> MontoPorMes { get; set; }
         public List<ItemGrafico> UsuariosPorRol { get; set; }
         public List<ItemGrafico> ClientesPorEstado { get; set; }
+        public List<ItemActividad> ActividadReciente { get; set; }
 
         public ResumenDashboard()
         {
@@ -22,6 +23,15 @@ namespace Entidad
             MontoPorMes = new List<ItemGrafico>();
             UsuariosPorRol = new List<ItemGrafico>();
             ClientesPorEstado = new List<ItemGrafico>();
+            ActividadReciente = new List<ItemActividad>();
         }
+    }
+
+    public class ItemActividad
+    {
+        public string Tipo { get; set; }
+        public string Titulo { get; set; }
+        public string Descripcion { get; set; }
+        public System.DateTime Fecha { get; set; }
     }
 }

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>SistemaPublicidad</RootNamespace>
+    <AssemblyName>SistemaPublicidad</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Recursos\*.png" LogicalName="SistemaPublicidad.Recursos.%(Filename)%(Extension)" />
+    <!-- El login se usa como formulario, no como segundo punto de entrada. -->
+    <Compile Remove="Login\Program.cs" />
+    <!-- Evita compilar los archivos generados por el proyecto de login anidado. -->
+    <Compile Remove="Login\bin\**\*.cs;Login\obj\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Entidad\Entidad.csproj" />
+    <ProjectReference Include="..\Negocio\Negocio.csproj" />
+  </ItemGroup>
+</Project>

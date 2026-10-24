@@ -34,6 +34,24 @@ namespace Negocio
             r.ClientesPorEstado = Contar(listaClientes.Select(c => c.Estado ? "Activo" : "Inactivo"), new[] { "Activo", "Inactivo" });
             r.UsuariosPorRol = Contar(listaUsuarios.Select(u => u.TipoUsuario), new[] { "Administrador", "Supervisor", "Usuario" });
             r.MontoPorMes = MontoUltimosMeses(listaCotizaciones, 6);
+            r.ActividadReciente = listaCotizaciones
+                .Select(c => new ItemActividad
+                {
+                    Tipo = "Cotizacion",
+                    Titulo = "Nueva cotización",
+                    Descripcion = "COT-" + c.CodigoCotizacion + " · Q" + c.Total.ToString("N2"),
+                    Fecha = c.FechaEmision
+                })
+                .Concat(listaUsuarios.Select(u => new ItemActividad
+                {
+                    Tipo = "Usuario",
+                    Titulo = "Nuevo usuario",
+                    Descripcion = "Se registró el usuario: " + u.NombreUsuario,
+                    Fecha = u.FechaCreacion
+                }))
+                .OrderByDescending(a => a.Fecha)
+                .Take(5)
+                .ToList();
             return r;
         }
 

@@ -11,6 +11,32 @@ namespace Datos
     {
         public List<Usuario> Listar() { return Consultar(string.Empty, "Todos", "Todos"); }
 
+        /// <summary>Valida por parámetros un usuario activo.</summary>
+        public Usuario Autenticar(string nombreUsuario, string clave)
+        {
+            const string sql = @"SELECT CodigoUsuario, CodigoSucursal, NombreUsuario,
+                    Clave, FechaCreacion, TipoUsuario, Estado
+                FROM dbo.Tbl_Usuarios
+                WHERE NombreUsuario = @usuario AND Clave = @clave AND Estado = 1";
+            try
+            {
+                using (SqlConnection conexion = ConexionDatos.CrearConexion())
+                using (SqlCommand comando = new SqlCommand(sql, conexion))
+                {
+                    comando.Parameters.Add("@usuario", SqlDbType.VarChar, 45).Value = nombreUsuario;
+                    comando.Parameters.Add("@clave", SqlDbType.VarChar, 255).Value = clave;
+                    conexion.Open();
+                    using (SqlDataReader lector = comando.ExecuteReader())
+                        if (lector.Read()) return MapearUsuario(lector);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo validar el usuario: " + ex.Message, ex);
+            }
+        }
+
         public List<Usuario> Buscar(string texto, string tipo, string estado)
         {
             return Consultar(texto, tipo, estado);

@@ -58,6 +58,7 @@
     <Compile Include="DetalleCompraNegocio.cs" />
     <Compile Include="DashboardNegocio.cs" />
     <Compile Include="ResumenHelper.cs" />
+    <Compile Include="EsquemaNegocio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
