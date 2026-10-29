@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Negocio;
 
 namespace SistemaPublicidad.Formularios
 {
@@ -22,6 +23,8 @@ namespace SistemaPublicidad.Formularios
         readonly HashSet<ItemMenu> abiertos = new HashSet<ItemMenu>();
         ItemMenu actual; Tarjeta menuPanel; readonly Dictionary<string, Form> cache = new Dictionary<string, Form>();
         Form vistaActiva;
+        readonly string rolActual;
+        readonly HashSet<string> modulosPermitidos;
         public TextBox BuscarGlobal;
         public bool CerrarSesionSolicitado { get; private set; }
 
@@ -32,6 +35,11 @@ namespace SistemaPublicidad.Formularios
             Text = "Publicidad Multisucursal"; ClientSize = new Size(1366, 768); MinimumSize = new Size(1300, 720);
             StartPosition = FormStartPosition.CenterScreen; BackColor = Tema.Fondo; DoubleBuffered = true;
             SetStyle(ControlStyles.ResizeRedraw | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            rolActual = rol;
+            FrmModulo.UsuarioActual = usuario;
+            FrmModulo.RolActual = rol;
+            var listaPermisos = new RolNegocio().ListarModulosPermitidos(rol);
+            modulosPermitidos = new HashSet<string>(listaPermisos, StringComparer.OrdinalIgnoreCase);
 
             // ---- Menú lateral ----
             var menu = new Lateral { Left = 16, Top = 16, Width = 250, Height = ClientSize.Height - 32, Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left,
@@ -42,7 +50,7 @@ namespace SistemaPublicidad.Formularios
             menu.Controls.Add(Tema.L("Ideas que se ven", 10f, Color.FromArgb(215, 225, 255), 85, 58));
             foreach (var o in Opciones)
             {
-                if (!Permitido(o[1], rol)) continue;
+                if (!Permitido(o[1])) continue;
                 var it = Nuevo(o[0], o[1], 0, null, menu);
                 if (o[2] == "sub")
                 {
@@ -87,14 +95,11 @@ namespace SistemaPublicidad.Formularios
             Seleccionar(items[0]);
         }
 
-        static bool Permitido(string modulo, string rol)
+        bool Permitido(string modulo)
         {
-            if (string.Equals(rol, "Administrador", StringComparison.OrdinalIgnoreCase)) return true;
-            if (string.Equals(rol, "Diseñador", StringComparison.OrdinalIgnoreCase))
-                return new[] { "Inicio", "Clientes", "Cotizaciones", "Materiales", "Diseños", "Órdenes de Trabajo", "Sucursales" }.Contains(modulo);
-            if (string.Equals(rol, "Operador", StringComparison.OrdinalIgnoreCase))
-                return new[] { "Inicio", "Clientes", "Cotizaciones", "Tipo de Servicio", "Materiales", "Diseños", "Órdenes de Trabajo", "Facturaciones", "Inventarios", "Compras" }.Contains(modulo);
-            return modulo == "Inicio";
+            if (string.Equals(modulo, "Inicio", StringComparison.OrdinalIgnoreCase)) return true;
+            if (modulosPermitidos != null && modulosPermitidos.Contains(modulo)) return true;
+            return false;
         }
 
         static string Slug(string t)
@@ -146,11 +151,11 @@ namespace SistemaPublicidad.Formularios
         }
 
         // Un formulario por apartado (carpeta del mismo nombre dentro de Formularios)
-        static Form Crear(string nombre, string icono)
+        Form Crear(string nombre, string icono)
         {
             switch (nombre)
             {
-                case "Inicio": return new FrmInicio();
+                case "Inicio": return new FrmInicio(rolActual);
                 case "Usuarios": return new FrmUsuarios();
                 case "Clientes": return new FrmClientes();
                 case "Cotizaciones": return new FrmCotizaciones();

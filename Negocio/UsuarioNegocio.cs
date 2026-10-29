@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Datos;
@@ -10,6 +10,16 @@ namespace Negocio
     public class UsuarioNegocio
     {
         private readonly UsuarioDatos datos = new UsuarioDatos();
+
+        public static string ObtenerClavePorDefecto(string tipoUsuario)
+        {
+            if (string.IsNullOrWhiteSpace(tipoUsuario)) return string.Empty;
+            if (tipoUsuario.Equals("Administrador", StringComparison.OrdinalIgnoreCase)) return "Admin123";
+            if (tipoUsuario.Equals("Operador", StringComparison.OrdinalIgnoreCase)) return "Operador123";
+            if (tipoUsuario.Equals("Diseñador", StringComparison.OrdinalIgnoreCase) ||
+                tipoUsuario.Equals("Disenador", StringComparison.OrdinalIgnoreCase)) return "Disenador123";
+            return string.Empty;
+        }
 
         public Usuario Autenticar(string nombreUsuario, string clave)
         {

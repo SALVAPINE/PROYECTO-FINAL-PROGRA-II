@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Entidad;
+using Negocio;
 
 namespace SistemaPublicidad.Formularios
 {
@@ -216,6 +217,8 @@ namespace SistemaPublicidad.Formularios
             public Dictionary<string, List<ModuloCrud.Opcion>> Opciones = new Dictionary<string, List<ModuloCrud.Opcion>>();
         }
 
+        public static string UsuarioActual { get; set; }
+        public static string RolActual { get; set; }
         public Tabla Tabla, TablaDet, TablaGes; public Pestanas Tabs; public TextBox Buscar; public List<Selector> Combos = new List<Selector>();
         public Boton Anadir, Editar, Eliminar; public TarjetaStat[] Stats = new TarjetaStat[4]; public Label Pie;
         Label lblTit, lblSub, lblDet; Totales totDet; BarrasEstado barraResumen; Panel panelVistas, vC, vG, vR, filaStats, vistaActual; readonly List<Control> inputs = new List<Control>(); readonly Dictionary<Selector, List<string>> opcionesFijas = new Dictionary<Selector, List<string>>(); CampoTexto eDesc; CampoNumero eCant, ePrecio, eSubLin, eSubt, eDescto, eTot; readonly ModuloCfg cfg;
@@ -263,6 +266,27 @@ namespace SistemaPublicidad.Formularios
             head.Controls.Add(Tema.L(c.Nombre.ToUpper(), 10, Tema.Cian, 98, 8, true));
             lblTit = Tema.L("", 24, Color.White, 98, 26, true); lblSub = Tema.L("", 11.5f, Tema.Cian, 98, 68);
             head.Controls.Add(lblTit); head.Controls.Add(lblSub);
+
+            // Muestra el usuario y rol conectado en el panel superior de cada módulo CRUD
+            if (!string.IsNullOrWhiteSpace(UsuarioActual))
+            {
+                var badgeUsr = new Tarjeta
+                {
+                    Width = 220,
+                    Height = 44,
+                    Radio = 14,
+                    C1 = Color.FromArgb(16, 26, 80),
+                    C2 = Color.FromArgb(28, 38, 105),
+                    ColorBorde = Color.FromArgb(80, 110, 240),
+                    Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                    Left = Math.Max(700, ClientSize.Width - 230),
+                    Top = 16
+                };
+                badgeUsr.Controls.Add(new IconoLinea { Key = "\U0001F464", Left = 10, Top = 10, Width = 24, Height = 24, Color = Color.White });
+                badgeUsr.Controls.Add(Tema.L(UsuarioActual, 10f, Color.White, 40, 5, true));
+                badgeUsr.Controls.Add(Tema.L(RolActual, 8.5f, Tema.Cian, 40, 22));
+                head.Controls.Add(badgeUsr);
+            }
 
             var tabs = P(DockStyle.Top, 56, new Padding(0));
             Tabs = new Pestanas { Left = 0, Top = 4, Width = 214 * c.Tabs.Length, Height = 48, Textos = c.Tabs, Claves = new[] { "\U0001F50D", "\u2699", "\U0001F4CA" }.Take(c.Tabs.Length).ToArray() };
@@ -1549,6 +1573,40 @@ namespace SistemaPublicidad.Formularios
                 if (selector != null && !ModuloCrud.EsRelacion(PropiedadCampo(cfg.Campos[i])))
                     opcionesFijas[selector] = selector.Items.ToList();
                 grid.Controls.Add(ctl, i % cols, i / cols);
+            }
+
+            if (cfg.Nombre == "Usuarios")
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    if (PropiedadCampo(cfg.Campos[i]) == "TipoUsuario")
+                    {
+                        var selTipo = inputs[i] as Selector;
+                        if (selTipo != null)
+                        {
+                            selTipo.Cambio += (s, e) =>
+                            {
+                                if (codigoEnEdicion <= 0)
+                                {
+                                    string tipo = selTipo.Texto;
+                                    for (int j = 0; j < n; j++)
+                                    {
+                                        if (PropiedadCampo(cfg.Campos[j]) == "Clave")
+                                        {
+                                            var txtClave = inputs[j] as CampoTexto;
+                                            if (txtClave != null)
+                                            {
+                                                txtClave.Caja.Text = UsuarioNegocio.ObtenerClavePorDefecto(tipo);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            };
+                        }
+                        break;
+                    }
+                }
             }
 
             if (!det)
