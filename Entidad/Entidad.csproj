@@ -61,6 +61,7 @@
     <Compile Include="ItemGrafico.cs" />
     <Compile Include="ResumenDashboard.cs" />
     <Compile Include="ResumenModulo.cs" />
+    <Compile Include="RolAcceso.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

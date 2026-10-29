@@ -42,6 +42,8 @@
     <ProjectReference Include="..\SistemaPublicidad.csproj">
       <Aliases>SistemaPublicidadCompartida</Aliases>
     </ProjectReference>
+    <ProjectReference Include="..\..\Entidad\Entidad.csproj" />
+    <ProjectReference Include="..\..\Negocio\Negocio.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />

@@ -8,6 +8,8 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Entidad;
+using Negocio;
 using Login.Controles;
 #if LOGIN_STANDALONE
 using AppDialog = SistemaPublicidadCompartida::SistemaPublicidad.Formularios.AppDialog;
@@ -183,25 +185,44 @@ namespace Login.Formularios
             }
 
             string usuario = txtUsuario.Text.Trim();
+            string clave = txtClave.Text;
             string rol = RolSeleccionado;
-            bool credencialesValidas =
-                (rol == "Administrador" && usuario.Equals("admin", StringComparison.OrdinalIgnoreCase)) ||
-                (rol == "Diseñador" && (usuario.Equals("disenador", StringComparison.OrdinalIgnoreCase) || usuario.Equals("diseñador", StringComparison.OrdinalIgnoreCase))) ||
-                (rol == "Operador" && usuario.Equals("operador", StringComparison.OrdinalIgnoreCase));
 
-            if (!credencialesValidas || txtClave.Text != "123")
+            try
             {
-                AppDialog.Error(this, "No se pudo iniciar sesión",
-                    "Verifica el usuario, la contraseña y el perfil seleccionado.");
-                txtClave.Clear();
-                txtClave.Focus();
-                return;
-            }
+                var negocio = new UsuarioNegocio();
+                Usuario cuenta = negocio.Autenticar(usuario, clave);
 
-            UsuarioAutenticado = usuario;
-            RolAutenticado = rol;
-            DialogResult = DialogResult.OK;
-            Close();
+                if (cuenta == null)
+                {
+                    AppDialog.Error(this, "No se pudo iniciar sesión",
+                        "El usuario o la contraseña son incorrectos, o la cuenta está inactiva.");
+                    txtClave.Clear();
+                    txtClave.Focus();
+                    return;
+                }
+
+                string tipo = cuenta.TipoUsuario ?? string.Empty;
+                bool rolCoincide = string.Equals(tipo, rol, StringComparison.OrdinalIgnoreCase) ||
+                    (rol == "Diseñador" && tipo.Equals("Disenador", StringComparison.OrdinalIgnoreCase));
+
+                if (!rolCoincide)
+                {
+                    AppDialog.Warning(this, "Perfil no coincide",
+                        "La cuenta '" + usuario + "' pertenece al perfil '" + cuenta.TipoUsuario + "'. Selecciona la tarjeta correspondiente.");
+                    return;
+                }
+
+                UsuarioAutenticado = cuenta.NombreUsuario;
+                RolAutenticado = cuenta.TipoUsuario;
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                AppDialog.Error(this, "Error de autenticación",
+                    "No se pudo validar el usuario con la base de datos: " + ex.Message);
+            }
         }
 
         protected override void OnMouseDown(MouseEventArgs e)

@@ -61,6 +61,7 @@
     <Compile Include="CompraDatos.cs" />
     <Compile Include="DetalleCompraDatos.cs" />
     <Compile Include="EsquemaDatos.cs" />
+    <Compile Include="RolDatos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

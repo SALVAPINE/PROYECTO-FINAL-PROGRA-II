@@ -11,7 +11,9 @@ namespace SistemaPublicidad.Formularios
         public Dona DonaCotizaciones, DonaClientes;
         public GraficaMes Grafica; public ListaActividad Actividad;
 
-        public FrmInicio()
+        public FrmInicio() : this("Administrador") { }
+
+        public FrmInicio(string rol)
         {
             AutoScaleMode = AutoScaleMode.None;
             TopLevel = false; FormBorderStyle = FormBorderStyle.None; Dock = DockStyle.Fill; BackColor = Tema.Fondo; DoubleBuffered = true; SetStyle(ControlStyles.ResizeRedraw, true);
@@ -39,18 +41,52 @@ namespace SistemaPublicidad.Formularios
             Controls.Add(t);
             t.ResumeLayout(true);
 
-            // ---- DATOS DE EJEMPLO (solo para ver el diseño). Reemplácelos con sus datos reales. ----
-            StUsuarios.Valor = "7"; StUsuarios.Sub = "Activos: 7"; StUsuarios.Delta = "▲ +2";
-            StClientes.Valor = "6"; StClientes.Sub = "Registrados"; StClientes.Delta = "▲ +1";
-            StCotizaciones.Valor = "6"; StCotizaciones.Sub = "Totales"; StCotizaciones.Delta = "▲ +3";
-            StMonto.Valor = "Q10,900.00"; StMonto.Sub = "Total cotizado"; StMonto.Delta = "▲ +8%";
-            DonaCotizaciones.Activos = 6; DonaClientes.Activos = 6;
-            var es = new CultureInfo("es-ES"); Grafica.Meses = new string[6]; Grafica.Valores = new decimal[] { 600, 1900, 1100, 2200, 1800, 3900 };
+            // Personalización según el rol autenticado
+            var es = new CultureInfo("es-ES");
+            Grafica.Meses = new string[6];
+            Grafica.Valores = new decimal[] { 600, 1900, 1100, 2200, 1800, 3900 };
             for (int i = 0; i < 6; i++) Grafica.Meses[i] = DateTime.Now.AddMonths(i - 5).ToString("MMM yy", es).Replace(".", "");
-            Actividad.Items.Add(new[] { "Nueva cotización", "Q10,900.00 · Cliente: Cliente Demo", "Hoy 10:24" });
-            Actividad.Items.Add(new[] { "Nuevo usuario", "Se registró el usuario: juanperez", "Hoy 09:15" });
-            Actividad.Items.Add(new[] { "Factura generada", "#FAC-0008 · Q3,450.00", "Ayer 16:30" });
-            Actividad.Items.Add(new[] { "Material actualizado", "Se agregó nuevo material: Vinil adhesivo", "Ayer 14:12" });
+
+            if (string.Equals(rol, "Diseñador", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(rol, "Disenador", StringComparison.OrdinalIgnoreCase))
+            {
+                StUsuarios.Titulo = "Diseños"; StUsuarios.Icono = "🎨"; StUsuarios.Valor = "5"; StUsuarios.Sub = "En proceso"; StUsuarios.Delta = "▲ +2";
+                StClientes.Valor = "6"; StClientes.Sub = "Clientes asignados"; StClientes.Delta = "▲ +1";
+                StCotizaciones.Valor = "6"; StCotizaciones.Sub = "En revisión"; StCotizaciones.Delta = "▲ +3";
+                StMonto.Valor = "Q10,900.00"; StMonto.Sub = "Presupuestado"; StMonto.Delta = "▲ +8%";
+                DonaCotizaciones.Titulo = "Diseños por estado"; DonaClientes.Titulo = "Órdenes de trabajo";
+                DonaCotizaciones.Activos = 5; DonaClientes.Activos = 6;
+                Actividad.Items.Add(new[] { "Diseño aprobado", "Campaña exterior · Cliente: Farmacias", "Hoy 11:20" });
+                Actividad.Items.Add(new[] { "Nueva cotización", "Q10,900.00 · Cotizador Central", "Hoy 10:24" });
+                Actividad.Items.Add(new[] { "Orden de trabajo", "Lona 3x2m · En producción", "Ayer 15:40" });
+                Actividad.Items.Add(new[] { "Material asignado", "Vinil brillante cortado", "Ayer 12:10" });
+            }
+            else if (string.Equals(rol, "Operador", StringComparison.OrdinalIgnoreCase))
+            {
+                StUsuarios.Titulo = "Facturaciones"; StUsuarios.Icono = "🧾"; StUsuarios.Valor = "8"; StUsuarios.Sub = "Generadas"; StUsuarios.Delta = "▲ +4";
+                StClientes.Valor = "6"; StClientes.Sub = "Atendidos"; StClientes.Delta = "▲ +1";
+                StCotizaciones.Valor = "6"; StCotizaciones.Sub = "Procesadas"; StCotizaciones.Delta = "▲ +2";
+                StMonto.Valor = "Q10,900.00"; StMonto.Sub = "Total cotizado"; StMonto.Delta = "▲ +8%";
+                DonaCotizaciones.Titulo = "Cotizaciones por estado"; DonaClientes.Titulo = "Inventario y stock";
+                DonaCotizaciones.Activos = 6; DonaClientes.Activos = 8;
+                Actividad.Items.Add(new[] { "Factura emitida", "#FAC-0008 · Q3,450.00", "Hoy 11:05" });
+                Actividad.Items.Add(new[] { "Compra registrada", "Lote de tintas y vinil", "Hoy 09:30" });
+                Actividad.Items.Add(new[] { "Orden finalizada", "Rótulo luminoso entregado", "Ayer 16:15" });
+                Actividad.Items.Add(new[] { "Inventario actualizado", "Entrada de acrílico 3mm", "Ayer 14:00" });
+            }
+            else
+            {
+                // Vista Administrador: métricas globales del sistema
+                StUsuarios.Valor = "8"; StUsuarios.Sub = "Activos: 8"; StUsuarios.Delta = "▲ +2";
+                StClientes.Valor = "6"; StClientes.Sub = "Registrados"; StClientes.Delta = "▲ +1";
+                StCotizaciones.Valor = "6"; StCotizaciones.Sub = "Totales"; StCotizaciones.Delta = "▲ +3";
+                StMonto.Valor = "Q10,900.00"; StMonto.Sub = "Total cotizado"; StMonto.Delta = "▲ +8%";
+                DonaCotizaciones.Activos = 6; DonaClientes.Activos = 6;
+                Actividad.Items.Add(new[] { "Nueva cotización", "Q10,900.00 · Cliente: Cliente Demo", "Hoy 10:24" });
+                Actividad.Items.Add(new[] { "Nuevo usuario", "Se registró el usuario: Jdaniel", "Hoy 09:15" });
+                Actividad.Items.Add(new[] { "Factura generada", "#FAC-0008 · Q3,450.00", "Ayer 16:30" });
+                Actividad.Items.Add(new[] { "Material actualizado", "Se agregó nuevo material: Vinil adhesivo", "Ayer 14:12" });
+            }
         }
 
         protected override void OnPaintBackground(PaintEventArgs e) { Tema.PintarFondo(e.Graphics, this); }
