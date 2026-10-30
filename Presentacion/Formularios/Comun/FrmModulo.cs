@@ -1365,17 +1365,15 @@ public decimal Valor
                         var numFac = inputs[i] as CampoNumero;
                         if (numFac != null && numFac.Valor == 0)
                         {
-                            var numerosUsados = new HashSet<int>();
+                            int ultimoNumero = 100;
                             foreach (var obj in registros)
                             {
                                 var f = obj as Factura;
-                                if (f != null && f.NoFactura > 0) numerosUsados.Add(f.NoFactura);
+                                if (f != null && f.NoFactura > ultimoNumero) ultimoNumero = f.NoFactura;
                             }
 
-                            // Reutiliza el primer número libre para no saltar a 1000 por el máximo histórico.
-                            int siguiente = 1;
-                            while (numerosUsados.Contains(siguiente)) siguiente++;
-                            numFac.Valor = siguiente;
+                            // Mantiene la secuencia y propone el número posterior al último utilizado.
+                            numFac.Valor = ultimoNumero + 1;
                         }
                         break;
                     }
