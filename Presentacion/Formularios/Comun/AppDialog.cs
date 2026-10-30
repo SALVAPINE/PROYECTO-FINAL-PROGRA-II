@@ -170,6 +170,8 @@ namespace SistemaPublicidad.Formularios
                 ForeColor = Color.White;
                 Text = titulo ?? string.Empty;
                 DoubleBuffered = true;
+                SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint |
+                    ControlStyles.OptimizedDoubleBuffer, true);
 
                 Rectangle area = ObtenerAreaTrabajo(owner);
                 anchoObjetivo = Math.Max(340, Math.Min(AnchoBase, area.Width - 32));
@@ -240,6 +242,11 @@ namespace SistemaPublicidad.Formularios
                 base.OnShown(e);
                 Opacity = 1;
                 botonPrincipal.Focus();
+            }
+
+            protected override void OnPaintBackground(PaintEventArgs e)
+            {
+                e.Graphics.Clear(BackColor);
             }
 
             protected override void OnPaint(PaintEventArgs e)
@@ -336,6 +343,8 @@ namespace SistemaPublicidad.Formularios
                 BackColor = Tema.Fondo;
                 ClientSize = new Size(396, 124);
                 DoubleBuffered = true;
+                SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint |
+                    ControlStyles.OptimizedDoubleBuffer, true);
                 Opacity = 0;
 
                 Controls.Add(new DialogGlyph
@@ -367,6 +376,11 @@ namespace SistemaPublicidad.Formularios
                 temporizador.Tick += AnimarNotificacion;
             }
 
+            protected override void OnPaintBackground(PaintEventArgs e)
+            {
+                e.Graphics.Clear(Tema.Fondo);
+            }
+
             protected override void OnPaint(PaintEventArgs e)
             {
                 base.OnPaint(e);
@@ -393,16 +407,15 @@ namespace SistemaPublicidad.Formularios
             public void ShowToast(Form owner)
             {
                 propietario = owner != null && !owner.IsDisposed ? owner : null;
+                Reubicar();
                 if (propietario == null)
                 {
                     Show();
-                    Reubicar();
                     temporizador.Start();
                     return;
                 }
 
                 Show(propietario);
-                Reubicar();
                 temporizador.Start();
             }
 
@@ -418,11 +431,9 @@ namespace SistemaPublicidad.Formularios
                     : Screen.PrimaryScreen == null
                         ? new Rectangle(0, 0, 1024, 768)
                         : Screen.PrimaryScreen.WorkingArea;
-                int derecha = propietario != null ? propietario.Bounds.Right : area.Right;
-                int arriba = propietario != null ? propietario.Bounds.Top : area.Top;
                 Location = new Point(
-                    Math.Max(area.Left + 8, Math.Min(derecha - Width - 18, area.Right - Width - 8)),
-                    Math.Max(area.Top + 8, Math.Min(arriba + 18, area.Bottom - Height - 8)));
+                    Math.Max(area.Left, Math.Min(area.Left + (area.Width - Width) / 2, area.Right - Width)),
+                    Math.Max(area.Top, Math.Min(area.Top + (area.Height - Height) / 2, area.Bottom - Height)));
 
             }
 
