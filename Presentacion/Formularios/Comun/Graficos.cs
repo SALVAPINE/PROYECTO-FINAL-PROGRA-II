@@ -74,20 +74,23 @@ namespace SistemaPublicidad.Formularios
     public class GraficaMes : Tarjeta
     {
         public string[] Meses = new string[0]; public decimal[] Valores = new decimal[0];
+        public string Titulo { get; set; } = "Monto cotizado por mes";
+        public bool EsMoneda { get; set; } = true;
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e); var g = e.Graphics;
             if (!Recursos.Tile(g, "t_grafica", new Rectangle(14, 10, 42, 42))) Tema.Icono(g, new Rectangle(16, 14, 34, 34), Tema.Azul, Tema.Morado, "📊");
-            using (var f = Tema.F(12, true)) g.DrawString("Monto cotizado por mes", f, Brushes.White, 60, 19);
+            using (var f = Tema.F(12, true)) g.DrawString(Titulo, f, Brushes.White, 60, 19);
             int n = Meses.Length; if (n < 2 || Valores.Length != n) return;
-            decimal max = Valores.Max(); decimal top = Math.Max(4000, Math.Ceiling(max / 4000m) * 4000m);
+            decimal max = Valores.Max(); decimal salto = EsMoneda ? 4000m : 5m;
+            decimal top = Math.Max(salto, Math.Ceiling(max / salto) * salto);
             var pl = new RectangleF(86, 70, Width - 86 - 30, Height - 70 - 44);
             if (pl.Width < 50 || pl.Height < 30) return;
             for (int k = 0; k <= 4; k++)
             {
                 float y = pl.Bottom - pl.Height * k / 4f;
                 using (var p = new Pen(Color.FromArgb(35, 255, 255, 255))) g.DrawLine(p, pl.X, y, pl.Right, y);
-                using (var f = Tema.F(9)) using (var b = new SolidBrush(Tema.Sub)) g.DrawString("Q" + (top * k / 4).ToString("N0"), f, b, 16, y - 10);
+                using (var f = Tema.F(9)) using (var b = new SolidBrush(Tema.Sub)) g.DrawString((EsMoneda ? "Q" : "") + (top * k / 4).ToString("N0"), f, b, 16, y - 10);
             }
             var pts = new PointF[n];
             for (int k = 0; k < n; k++)
@@ -104,7 +107,7 @@ namespace SistemaPublicidad.Formularios
             using (var p = new Pen(Color.FromArgb(55, Tema.Rosa), 10)) g.DrawCurve(p, pts, 0.3f);
             using (var gb = new LinearGradientBrush(new PointF(pl.X, 0), new PointF(pl.Right, 0), Tema.Rosa, Tema.Cian)) using (var p = new Pen(gb, 3.5f)) g.DrawCurve(p, pts, 0.3f);
             foreach (var pt in pts) { g.FillEllipse(Brushes.White, pt.X - 5, pt.Y - 5, 10, 10); using (var p = new Pen(Tema.Morado, 2)) g.DrawEllipse(p, pt.X - 5, pt.Y - 5, 10, 10); }
-            string t = "Q" + Valores[n - 1].ToString("N0"); var l = pts[n - 1];
+            string t = (EsMoneda ? "Q" : "") + Valores[n - 1].ToString("N0"); var l = pts[n - 1];
             using (var f = Tema.F(9, true)) { var m = g.MeasureString(t, f); var r = new RectangleF(l.X - m.Width - 6, l.Y - 34, m.Width + 12, 24);
                 using (var p = Tema.Ruta(r, 12)) using (var b = new SolidBrush(Tema.Rosa)) g.FillPath(b, p); g.DrawString(t, f, Brushes.White, r.X + 6, r.Y + 3); }
         }

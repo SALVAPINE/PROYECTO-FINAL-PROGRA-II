@@ -1,7 +1,10 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
+using Entidad;
+using Negocio;
 
 namespace SistemaPublicidad.Formularios
 {
@@ -41,52 +44,131 @@ namespace SistemaPublicidad.Formularios
             Controls.Add(t);
             t.ResumeLayout(true);
 
-            // Personalización según el rol autenticado
-            var es = new CultureInfo("es-ES");
-            Grafica.Meses = new string[6];
-            Grafica.Valores = new decimal[] { 600, 1900, 1100, 2200, 1800, 3900 };
-            for (int i = 0; i < 6; i++) Grafica.Meses[i] = DateTime.Now.AddMonths(i - 5).ToString("MMM yy", es).Replace(".", "");
+            CargarResumen(rol);
+        }
 
-            if (string.Equals(rol, "Diseñador", StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(rol, "Disenador", StringComparison.OrdinalIgnoreCase))
+        void CargarResumen(string rol)
+        {
+            ResumenDashboard resumen;
+            try
             {
-                StUsuarios.Titulo = "Diseños"; StUsuarios.Icono = "🎨"; StUsuarios.Valor = "5"; StUsuarios.Sub = "En proceso"; StUsuarios.Delta = "▲ +2";
-                StClientes.Valor = "6"; StClientes.Sub = "Clientes asignados"; StClientes.Delta = "▲ +1";
-                StCotizaciones.Valor = "6"; StCotizaciones.Sub = "En revisión"; StCotizaciones.Delta = "▲ +3";
-                StMonto.Valor = "Q10,900.00"; StMonto.Sub = "Presupuestado"; StMonto.Delta = "▲ +8%";
-                DonaCotizaciones.Titulo = "Diseños por estado"; DonaClientes.Titulo = "Órdenes de trabajo";
-                DonaCotizaciones.Activos = 5; DonaClientes.Activos = 6;
-                Actividad.Items.Add(new[] { "Diseño aprobado", "Campaña exterior · Cliente: Farmacias", "Hoy 11:20" });
-                Actividad.Items.Add(new[] { "Nueva cotización", "Q10,900.00 · Cotizador Central", "Hoy 10:24" });
-                Actividad.Items.Add(new[] { "Orden de trabajo", "Lona 3x2m · En producción", "Ayer 15:40" });
-                Actividad.Items.Add(new[] { "Material asignado", "Vinil brillante cortado", "Ayer 12:10" });
+                resumen = new DashboardNegocio().ObtenerResumen();
             }
-            else if (string.Equals(rol, "Operador", StringComparison.OrdinalIgnoreCase))
+            catch
             {
-                StUsuarios.Titulo = "Facturaciones"; StUsuarios.Icono = "🧾"; StUsuarios.Valor = "8"; StUsuarios.Sub = "Generadas"; StUsuarios.Delta = "▲ +4";
-                StClientes.Valor = "6"; StClientes.Sub = "Atendidos"; StClientes.Delta = "▲ +1";
-                StCotizaciones.Valor = "6"; StCotizaciones.Sub = "Procesadas"; StCotizaciones.Delta = "▲ +2";
-                StMonto.Valor = "Q10,900.00"; StMonto.Sub = "Total cotizado"; StMonto.Delta = "▲ +8%";
-                DonaCotizaciones.Titulo = "Cotizaciones por estado"; DonaClientes.Titulo = "Inventario y stock";
-                DonaCotizaciones.Activos = 6; DonaClientes.Activos = 8;
-                Actividad.Items.Add(new[] { "Factura emitida", "#FAC-0008 · Q3,450.00", "Hoy 11:05" });
-                Actividad.Items.Add(new[] { "Compra registrada", "Lote de tintas y vinil", "Hoy 09:30" });
-                Actividad.Items.Add(new[] { "Orden finalizada", "Rótulo luminoso entregado", "Ayer 16:15" });
-                Actividad.Items.Add(new[] { "Inventario actualizado", "Entrada de acrílico 3mm", "Ayer 14:00" });
+                MarcarNoDisponible();
+                return;
+            }
+
+            bool esDisenador = string.Equals(rol, "Diseñador", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(rol, "Disenador", StringComparison.OrdinalIgnoreCase);
+            bool esOperador = string.Equals(rol, "Operador", StringComparison.OrdinalIgnoreCase);
+            if (esDisenador)
+            {
+                EstablecerTarjeta(StUsuarios, "Diseños", "🎨", resumen.TotalDisenos, resumen.DisenosActivos, "Activos");
+                EstablecerTarjeta(StClientes, "Órdenes de trabajo", "🛠", resumen.TotalOrdenesTrabajo, resumen.OrdenesTrabajoActivas, "Activas");
+                EstablecerTarjeta(StCotizaciones, "Cotizaciones", "📄", resumen.TotalCotizaciones, resumen.TotalCotizaciones, "Registradas");
+                EstablecerMonto("Monto cotizado", resumen.MontoTotalCotizado);
+                DonaCotizaciones.Titulo = "Diseños por estado";
+                DonaClientes.Titulo = "Órdenes de trabajo";
+                AsignarDona(DonaCotizaciones, resumen.TotalDisenos, resumen.DisenosActivos);
+                AsignarDona(DonaClientes, resumen.TotalOrdenesTrabajo, resumen.OrdenesTrabajoActivas);
+                AsignarGrafica(resumen.DisenosPorMes, "Diseños creados por mes", false);
+                CargarActividad(resumen.ActividadReciente, "Diseno", "Orden", "Cotizacion");
+            }
+            else if (esOperador)
+            {
+                EstablecerTarjeta(StUsuarios, "Facturaciones", "🧾", resumen.TotalFacturas, resumen.FacturasActivas, "Activas");
+                EstablecerTarjeta(StClientes, "Compras", "🛒", resumen.TotalCompras, resumen.TotalCompras, "Registradas");
+                EstablecerTarjeta(StCotizaciones, "Inventarios", "📦", resumen.TotalInventarios, resumen.InventariosActivos, "Activos");
+                EstablecerMonto("Monto facturado", resumen.MontoTotalFacturado);
+                DonaCotizaciones.Titulo = "Facturaciones por estado";
+                DonaClientes.Titulo = "Inventarios por estado";
+                AsignarDona(DonaCotizaciones, resumen.TotalFacturas, resumen.FacturasActivas);
+                AsignarDona(DonaClientes, resumen.TotalInventarios, resumen.InventariosActivos);
+                AsignarGrafica(resumen.FacturadoPorMes, "Monto facturado por mes");
+                CargarActividad(resumen.ActividadReciente, "Factura", "Compra", "Orden");
             }
             else
             {
-                // Vista Administrador: métricas globales del sistema
-                StUsuarios.Valor = "8"; StUsuarios.Sub = "Activos: 8"; StUsuarios.Delta = "▲ +2";
-                StClientes.Valor = "6"; StClientes.Sub = "Registrados"; StClientes.Delta = "▲ +1";
-                StCotizaciones.Valor = "6"; StCotizaciones.Sub = "Totales"; StCotizaciones.Delta = "▲ +3";
-                StMonto.Valor = "Q10,900.00"; StMonto.Sub = "Total cotizado"; StMonto.Delta = "▲ +8%";
-                DonaCotizaciones.Activos = 6; DonaClientes.Activos = 6;
-                Actividad.Items.Add(new[] { "Nueva cotización", "Q10,900.00 · Cliente: Cliente Demo", "Hoy 10:24" });
-                Actividad.Items.Add(new[] { "Nuevo usuario", "Se registró el usuario: Jdaniel", "Hoy 09:15" });
-                Actividad.Items.Add(new[] { "Factura generada", "#FAC-0008 · Q3,450.00", "Ayer 16:30" });
-                Actividad.Items.Add(new[] { "Material actualizado", "Se agregó nuevo material: Vinil adhesivo", "Ayer 14:12" });
+                EstablecerTarjeta(StUsuarios, "Usuarios", "👤", resumen.TotalUsuarios, resumen.UsuariosActivos, "Activos");
+                EstablecerTarjeta(StClientes, "Clientes", "👥", resumen.TotalClientes, resumen.TotalClientes, "Registrados");
+                EstablecerTarjeta(StCotizaciones, "Cotizaciones", "📄", resumen.TotalCotizaciones, resumen.TotalCotizaciones, "Registradas");
+                EstablecerMonto("Monto cotizado", resumen.MontoTotalCotizado);
+                AsignarDona(DonaCotizaciones, resumen.TotalCotizaciones,
+                    (int)resumen.CotizacionesPorEstado.Where(x => x.Etiqueta == "Activo").Sum(x => x.Valor));
+                AsignarDona(DonaClientes, resumen.TotalClientes,
+                    (int)resumen.ClientesPorEstado.Where(x => x.Etiqueta == "Activo").Sum(x => x.Valor));
+                CargarActividad(resumen.ActividadReciente, "Cotizacion", "Usuario", "Factura");
             }
+
+            if (!esDisenador && !esOperador)
+                AsignarGrafica(resumen.MontoPorMes, "Monto cotizado por mes");
+        }
+
+        void EstablecerTarjeta(TarjetaStat tarjeta, string titulo, string icono, int total, int activos, string etiqueta)
+        {
+            tarjeta.Titulo = titulo;
+            tarjeta.Icono = icono;
+            tarjeta.Valor = total.ToString("N0", CultureInfo.CurrentCulture);
+            tarjeta.Sub = etiqueta + ": " + activos.ToString("N0", CultureInfo.CurrentCulture);
+            tarjeta.Delta = "";
+        }
+
+        void EstablecerMonto(string titulo, decimal monto)
+        {
+            StMonto.Titulo = titulo;
+            StMonto.Valor = "Q" + monto.ToString("N2", CultureInfo.CurrentCulture);
+            StMonto.Sub = "Total registrado";
+            StMonto.Delta = "";
+        }
+
+        static void AsignarDona(Dona dona, int total, int activos)
+        {
+            dona.Activos = activos;
+            dona.Inactivos = Math.Max(0, total - activos);
+        }
+
+        void AsignarGrafica(System.Collections.Generic.List<ItemGrafico> datos, string titulo, bool esMoneda = true)
+        {
+            Grafica.Titulo = titulo;
+            Grafica.EsMoneda = esMoneda;
+            Grafica.Meses = datos.Select(x => x.Etiqueta).ToArray();
+            Grafica.Valores = datos.Select(x => x.Valor).ToArray();
+        }
+
+        void CargarActividad(System.Collections.Generic.List<ItemActividad> actividades, params string[] tipos)
+        {
+            Actividad.Items.Clear();
+            var filtradas = actividades.Where(a => tipos.Contains(a.Tipo)).Take(4).ToList();
+            foreach (ItemActividad actividad in filtradas)
+                Actividad.Items.Add(new[] { actividad.Titulo, actividad.Descripcion, TextoFecha(actividad.Fecha) });
+            if (filtradas.Count == 0)
+                Actividad.Items.Add(new[] { "Sin actividad reciente", "No hay registros para mostrar", "" });
+        }
+
+        static string TextoFecha(DateTime fecha)
+        {
+            if (fecha.Date == DateTime.Today) return "Hoy " + fecha.ToString("HH:mm");
+            if (fecha.Date == DateTime.Today.AddDays(-1)) return "Ayer " + fecha.ToString("HH:mm");
+            return fecha.ToString("dd/MM/yyyy");
+        }
+
+        void MarcarNoDisponible()
+        {
+            foreach (TarjetaStat tarjeta in new[] { StUsuarios, StClientes, StCotizaciones, StMonto })
+            {
+                tarjeta.Valor = "—";
+                tarjeta.Sub = "No disponible";
+                tarjeta.Delta = "";
+            }
+            DonaCotizaciones.Activos = DonaCotizaciones.Inactivos = 0;
+            DonaClientes.Activos = DonaClientes.Inactivos = 0;
+            Grafica.Meses = new string[0];
+            Grafica.Valores = new decimal[0];
+            Grafica.EsMoneda = true;
+            Actividad.Items.Clear();
+            Actividad.Items.Add(new[] { "Dashboard no disponible", "No se pudieron cargar los datos", "" });
         }
 
         protected override void OnPaintBackground(PaintEventArgs e) { Tema.PintarFondo(e.Graphics, this); }
