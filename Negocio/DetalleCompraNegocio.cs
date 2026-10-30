@@ -61,11 +61,22 @@ namespace Negocio
         public int ActualizarCompraConDetalle(Compra compra, DetalleCompra detalle)
         {
             ValidarCompra(compra);
+            if (detalle == null)
+                throw new ArgumentException("No se recibieron los datos del detalle de compra.");
+            detalle.Subtotal = CompraNegocio.CalcularSubtotalDetalle(
+                compra.CantidadComprada, detalle.PrecioUnitario, detalle.DescuentoCompra);
             Validar(detalle);
             if (compra.CodigoCompra <= 0 || detalle.CodigoDetalleCompra <= 0)
                 throw new ArgumentException("Selecciona una compra y un detalle válidos para editar.");
             if (detalle.CodigoCompra != compra.CodigoCompra)
                 throw new ArgumentException("El detalle seleccionado no pertenece a esta compra.");
+
+            List<DetalleCompra> existentes = datos.ListarPorCompra(compra.CodigoCompra) ?? new List<DetalleCompra>();
+            compra.TotalCompra = existentes
+                .Where(x => x.CodigoDetalleCompra != detalle.CodigoDetalleCompra)
+                .Sum(x => x.Subtotal)
+                + detalle.Subtotal;
+            ValidarCompra(compra);
             return new CompraDatos().ActualizarConDetalle(compra, detalle);
         }
 
@@ -76,6 +87,7 @@ namespace Negocio
             int filasAfectadas = datos.Eliminar(codigoDetalle, codigoCompra);
             if (filasAfectadas != 1)
                 throw new InvalidOperationException("El detalle no existe o no pertenece a esta compra.");
+            new CompraNegocio().RecalcularTotalDesdeDetalles(codigoCompra);
             return filasAfectadas;
         }
 

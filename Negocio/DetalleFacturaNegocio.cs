@@ -67,6 +67,7 @@ namespace Negocio
             int filasAfectadas = datos.Eliminar(codigoDetalle, codigoFacturacion);
             if (filasAfectadas != 1)
                 throw new InvalidOperationException("El concepto no existe o no pertenece a esta factura.");
+            new FacturaNegocio().RecalcularTotalesDesdeDetalles(codigoFacturacion);
             return filasAfectadas;
         }
 

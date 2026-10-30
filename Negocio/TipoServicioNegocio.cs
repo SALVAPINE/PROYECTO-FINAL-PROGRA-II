@@ -56,6 +56,8 @@ namespace Negocio
 
             ValidarDecimal(tipoServicio.CostoServicio, "costo");
             ValidarDecimal(tipoServicio.RecargoServicio, "recargo");
+            tipoServicio.TotalServicio = decimal.Round(
+                tipoServicio.CostoServicio + tipoServicio.RecargoServicio, 2);
             ValidarDecimal(tipoServicio.TotalServicio, "total");
         }
 

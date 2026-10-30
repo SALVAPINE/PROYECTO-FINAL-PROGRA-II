@@ -37,7 +37,16 @@ namespace SistemaPublicidad.Formularios
     {
         public NumericUpDown Num;
         public bool EstaVacio { get { return string.IsNullOrWhiteSpace(Num.Text); } }
-        public decimal Valor { get { return Num.Value; } set { Num.Value = Math.Max(Num.Minimum, Math.Min(Num.Maximum, value)); } }
+        public decimal Valor
+        {
+            get { return Num.Value; }
+            set
+            {
+                Num.Value = Math.Max(Num.Minimum, Math.Min(Num.Maximum, value));
+                if (string.IsNullOrWhiteSpace(Num.Text))
+                    Num.Text = Num.Value.ToString("N" + Num.DecimalPlaces, CultureInfo.CurrentCulture);
+            }
+        }
         public void Limpiar() { Num.Value = Num.Minimum; Num.Text = string.Empty; }
         public CampoNumero(string rotulo, int decimales, bool moneda, bool soloLectura)
         {
@@ -238,6 +247,7 @@ namespace SistemaPublicidad.Formularios
         Label textoPaginacionDetalle;
         FormularioDetalleCrud editorDetalle;
         bool cargandoCamposFormulario;
+        bool calculandoCamposCalculados;
         bool gestionarConstruido, resumenConstruido;
         Dictionary<string, List<ModuloCrud.Opcion>> opcionesRelaciones = new Dictionary<string, List<ModuloCrud.Opcion>>();
         static readonly Color[][] Cs = {
@@ -1316,6 +1326,7 @@ namespace SistemaPublicidad.Formularios
                     }
                 }
             }
+            RecalcularCamposCalculados();
         }
 
         void GuardarFormulario()
@@ -1445,6 +1456,97 @@ namespace SistemaPublicidad.Formularios
             {
                 cargandoCamposFormulario = false;
             }
+            RecalcularCamposCalculados();
+        }
+
+        CampoNumero ObtenerCampoNumero(string propiedad)
+        {
+            for (int i = 0; i < cfg.Campos.Length; i++)
+            {
+                if (PropiedadCampo(cfg.Campos[i]) == propiedad)
+                    return inputs[i] as CampoNumero;
+            }
+            return null;
+        }
+
+        void ConfigurarCalculosAutomaticos()
+        {
+            string[] propiedadesOrigen;
+            switch (cfg.Nombre)
+            {
+                case "Tipo de Servicio":
+                    propiedadesOrigen = new[] { "CostoServicio", "RecargoServicio" };
+                    break;
+                case "Cotizaciones":
+                    propiedadesOrigen = new[] { "Cantidad", "Precio" };
+                    break;
+                case "Facturaciones":
+                    propiedadesOrigen = new[] { "Subtotal" };
+                    break;
+                case "Compras":
+                    propiedadesOrigen = new string[0];
+                    break;
+                default:
+                    return;
+            }
+
+            for (int i = 0; i < cfg.Campos.Length; i++)
+            {
+                if (!propiedadesOrigen.Contains(PropiedadCampo(cfg.Campos[i]))) continue;
+                var numero = inputs[i] as CampoNumero;
+                if (numero != null)
+                    numero.Num.ValueChanged += (s, e) => RecalcularCamposCalculados();
+            }
+            RecalcularCamposCalculados();
+        }
+
+        void RecalcularCamposCalculados()
+        {
+            if (cargandoCamposFormulario || calculandoCamposCalculados) return;
+            calculandoCamposCalculados = true;
+            try
+            {
+                if (cfg.Nombre == "Tipo de Servicio")
+                {
+                    CampoNumero costo = ObtenerCampoNumero("CostoServicio");
+                    CampoNumero recargo = ObtenerCampoNumero("RecargoServicio");
+                    CampoNumero total = ObtenerCampoNumero("TotalServicio");
+                    if (costo != null && recargo != null && total != null)
+                        total.Valor = decimal.Round(costo.Valor + recargo.Valor, 2);
+                }
+                else if (cfg.Nombre == "Cotizaciones")
+                {
+                    CampoNumero cantidad = ObtenerCampoNumero("Cantidad");
+                    CampoNumero precio = ObtenerCampoNumero("Precio");
+                    CampoNumero subtotal = ObtenerCampoNumero("Subtotal");
+                    CampoNumero total = ObtenerCampoNumero("Total");
+                    if (cantidad != null && precio != null && subtotal != null && total != null)
+                    {
+                        subtotal.Valor = decimal.Round(cantidad.Valor * precio.Valor, 2);
+                        total.Valor = subtotal.Valor;
+                    }
+                }
+                else if (cfg.Nombre == "Facturaciones")
+                {
+                    CampoNumero subtotal = ObtenerCampoNumero("Subtotal");
+                    CampoNumero impuesto = ObtenerCampoNumero("Impuesto");
+                    CampoNumero total = ObtenerCampoNumero("TotalPagar");
+                    if (subtotal != null && impuesto != null && total != null)
+                    {
+                        impuesto.Valor = decimal.Round(subtotal.Valor * 0.12m, 2);
+                        total.Valor = subtotal.Valor + impuesto.Valor;
+                    }
+                }
+                else if (cfg.Nombre == "Compras" && codigoEnEdicion <= 0)
+                {
+                    CampoNumero total = ObtenerCampoNumero("TotalCompra");
+                    if (total != null) total.Valor = 0;
+                }
+            }
+            finally
+            {
+                calculandoCamposCalculados = false;
+            }
         }
 
         void ActualizarTotalesEnVivo(decimal totalVivo, int cantViva)
@@ -1489,39 +1591,28 @@ namespace SistemaPublicidad.Formularios
             if (cfg.Nombre == "Facturaciones")
             {
                 decimal totalDetalles = editorDetalle.ObtenerSumaSubtotales();
-                if (totalDetalles > 0)
+                for (int i = 0; i < inputs.Count; i++)
                 {
-                    for (int i = 0; i < inputs.Count; i++)
+                    if (PropiedadCampo(cfg.Campos[i]) == "Subtotal")
                     {
-                        if (PropiedadCampo(cfg.Campos[i]) == "Subtotal")
-                        {
-                            var numSub = inputs[i] as CampoNumero;
-                            if (numSub != null && numSub.Valor != totalDetalles)
-                            {
-                                numSub.Valor = totalDetalles;
-                            }
-                            break;
-                        }
+                        var numSub = inputs[i] as CampoNumero;
+                        if (numSub != null && numSub.Valor != totalDetalles)
+                            numSub.Valor = totalDetalles;
+                        break;
                     }
                 }
             }
             else if (cfg.Nombre == "Compras")
             {
                 decimal totalDetalles = editorDetalle.ObtenerSumaSubtotales();
-                if (totalDetalles > 0)
+                for (int i = 0; i < inputs.Count; i++)
                 {
-                    for (int i = 0; i < inputs.Count; i++)
+                    if (PropiedadCampo(cfg.Campos[i]) == "TotalCompra")
                     {
-                        string prop = PropiedadCampo(cfg.Campos[i]);
-                        if (prop == "TotalCompra")
-                        {
-                            var numTot = inputs[i] as CampoNumero;
-                            if (numTot != null && numTot.Valor != totalDetalles)
-                            {
-                                numTot.Valor = totalDetalles;
-                            }
-                            break;
-                        }
+                        var numTot = inputs[i] as CampoNumero;
+                        if (numTot != null && numTot.Valor != totalDetalles)
+                            numTot.Valor = totalDetalles;
+                        break;
                     }
                 }
             }
@@ -1683,6 +1774,7 @@ namespace SistemaPublicidad.Formularios
                     opcionesFijas[selector] = selector.Items.ToList();
                 grid.Controls.Add(ctl, i % cols, i / cols);
             }
+            ConfigurarCalculosAutomaticos();
 
             if (cfg.Nombre == "Usuarios")
             {
@@ -1719,92 +1811,27 @@ namespace SistemaPublicidad.Formularios
             }
             else if (cfg.Nombre == "Facturaciones")
             {
-                CampoNumero numSubtotal = null, numImpuesto = null, numTotalPagar = null, numFactura = null;
-                Selector selOrden = null, selEstado = null;
+                Selector selEstado = null;
                 for (int i = 0; i < n; i++)
                 {
-                    string prop = PropiedadCampo(cfg.Campos[i]);
-                    if (prop == "Subtotal") numSubtotal = inputs[i] as CampoNumero;
-                    else if (prop == "Impuesto") numImpuesto = inputs[i] as CampoNumero;
-                    else if (prop == "TotalPagar") numTotalPagar = inputs[i] as CampoNumero;
-                    else if (prop == "CodigoOrdenTrabajo") selOrden = inputs[i] as Selector;
-                    else if (prop == "Estado") selEstado = inputs[i] as Selector;
-                    else if (prop == "NoFactura") numFactura = inputs[i] as CampoNumero;
+                    if (PropiedadCampo(cfg.Campos[i]) == "Estado")
+                        selEstado = inputs[i] as Selector;
                 }
 
                 if (selEstado != null && selEstado.Seleccion < 0)
                 {
                     selEstado.Seleccion = 1; // Activo por defecto
                 }
-
-
-
-                if (numSubtotal != null && numImpuesto != null && numTotalPagar != null)
-                {
-                    bool calculandoFactura = false;
-
-                    // Al cambiar Subtotal: Impuesto = 12% IVA, Total = Subtotal + Impuesto
-                    numSubtotal.Num.ValueChanged += (s, e) =>
-                    {
-                        if (calculandoFactura || cargandoCamposFormulario) return;
-                        calculandoFactura = true;
-                        try
-                        {
-                            decimal sub = numSubtotal.Valor;
-                            decimal imp = Math.Round(sub * 0.12m, 2);
-                            numImpuesto.Valor = imp;
-                            numTotalPagar.Valor = sub + imp;
-                        }
-                        finally
-                        {
-                            calculandoFactura = false;
-                        }
-                    };
-
-                    // Al cambiar Impuesto: Total = Subtotal + Impuesto
-                    numImpuesto.Num.ValueChanged += (s, e) =>
-                    {
-                        if (calculandoFactura || cargandoCamposFormulario) return;
-                        calculandoFactura = true;
-                        try
-                        {
-                            numTotalPagar.Valor = numSubtotal.Valor + numImpuesto.Valor;
-                        }
-                        finally
-                        {
-                            calculandoFactura = false;
-                        }
-                    };
-
-                    // Al cambiar Total a pagar: se divide entre 1.12 para desglosar el Subtotal (base sin IVA) y el Impuesto
-                    numTotalPagar.Num.ValueChanged += (s, e) =>
-                    {
-                        if (calculandoFactura || cargandoCamposFormulario) return;
-                        calculandoFactura = true;
-                        try
-                        {
-                            decimal tot = numTotalPagar.Valor;
-                            decimal sub = Math.Round(tot / 1.12m, 2);
-                            numSubtotal.Valor = sub;
-                            numImpuesto.Valor = tot - sub;
-                        }
-                        finally
-                        {
-                            calculandoFactura = false;
-                        }
-                    };
-                }
             }
             else if (cfg.Nombre == "Compras")
             {
                 Selector selEstado = null;
-                CampoNumero numCantComprada = null, numTotalCompra = null;
+                CampoNumero numCantComprada = null;
                 for (int i = 0; i < n; i++)
                 {
                     string prop = PropiedadCampo(cfg.Campos[i]);
                     if (prop == "Estado") selEstado = inputs[i] as Selector;
                     else if (prop == "CantidadComprada") numCantComprada = inputs[i] as CampoNumero;
-                    else if (prop == "TotalCompra") numTotalCompra = inputs[i] as CampoNumero;
                 }
 
                 if (selEstado != null && selEstado.Seleccion < 0)
@@ -1975,6 +2002,7 @@ namespace SistemaPublicidad.Formularios
             }
             if (eDescto != null) eDescto.Valor = 0;
             if (TablaGes != null) { TablaGes.Filas.Clear(); TablaGes.InvalidarAnchosColumnas(); TablaGes.Seleccion = -1; Recalcular(); }
+            RecalcularCamposCalculados();
             if (ir) Tabs.Seleccion = 1;
         }
 
@@ -2008,7 +2036,11 @@ namespace SistemaPublicidad.Formularios
             if (tp == "f") return new CampoFecha(rot) { Dock = DockStyle.Fill, Margin = new Padding(0, 4, 12, 8) };
             if (tp == "n" && ModuloCrud.EsRelacion(propiedad))
                 return new Selector { Dock = DockStyle.Fill, Rotulo = rot, Margin = new Padding(0, 4, 12, 8) };
-            if (tp == "n" || tp == "m") return new CampoNumero(rot, tp == "m" ? 2 : 0, tp == "m", false) { Dock = DockStyle.Fill, Margin = new Padding(0, 4, 12, 8) };
+            if (tp == "n" || tp == "m")
+            {
+                bool calculado = new[] { "TotalServicio", "Subtotal", "Total", "Impuesto", "TotalPagar", "TotalCompra" }.Contains(propiedad);
+                return new CampoNumero(rot, tp == "m" ? 2 : 0, tp == "m", calculado) { Dock = DockStyle.Fill, Margin = new Padding(0, 4, 12, 8) };
+            }
             string v = tp == "f" ? DateTime.Today.ToString("dd/MM/yyyy") : tp == "h" ? "08:00" : "";
             var campoTexto = new CampoTexto(rot, v) { Dock = DockStyle.Fill, Margin = new Padding(0, 4, 12, 8) };
             if (propiedad == "Clave") campoTexto.Caja.UseSystemPasswordChar = true;

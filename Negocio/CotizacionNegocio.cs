@@ -64,8 +64,14 @@ namespace Negocio
                 throw new ArgumentException("La descripcion es obligatoria y admite hasta 150 caracteres.");
             if (cotizacion.Cantidad <= 0)
                 throw new ArgumentException("La cantidad debe ser mayor que cero.");
-            if (cotizacion.Precio < 0 || cotizacion.Subtotal < 0 || cotizacion.Total < 0)
-                throw new ArgumentException("Precio, subtotal y total no pueden ser negativos.");
+            if (cotizacion.Precio < 0 || cotizacion.Precio > 99999999.99m ||
+                decimal.Round(cotizacion.Precio, 2) != cotizacion.Precio)
+                throw new ArgumentException("El precio debe tener hasta 8 enteros y 2 decimales.");
+
+            cotizacion.Subtotal = decimal.Round(cotizacion.Cantidad * cotizacion.Precio, 2);
+            cotizacion.Total = cotizacion.Subtotal;
+            if (cotizacion.Subtotal > 99999999.99m)
+                throw new ArgumentException("El total de la cotización supera el máximo permitido.");
         }
 
         /// <summary>El resumen se calcula sobre toda la tabla, sin paginacion.</summary>

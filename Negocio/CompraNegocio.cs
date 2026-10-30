@@ -58,7 +58,16 @@ namespace Negocio
 
             detalle.TipoDeCompra = detalle.TipoDeCompra.Trim();
             detalle.Descripcion = detalle.Descripcion.Trim();
+            detalle.Subtotal = CalcularSubtotalDetalle(
+                compra.CantidadComprada, detalle.PrecioUnitario, detalle.DescuentoCompra);
+            compra.TotalCompra = detalle.Subtotal;
+            Validar(compra);
             return datos.InsertarConDetalle(compra, detalle);
+        }
+
+        internal static decimal CalcularSubtotalDetalle(int cantidad, decimal precioUnitario, decimal descuento)
+        {
+            return Math.Max(0, decimal.Round(cantidad * precioUnitario - descuento, 2));
         }
 
         public int Actualizar(Compra compra)
@@ -76,6 +85,22 @@ namespace Negocio
             return datos.Eliminar(codigo);
         }
 
+        public void RecalcularTotalDesdeDetalles(int codigoCompra)
+        {
+            if (codigoCompra <= 0)
+                throw new ArgumentException("Selecciona una compra válida para recalcular.");
+
+            Compra compra = datos.Listar().FirstOrDefault(x => x.CodigoCompra == codigoCompra);
+            if (compra == null)
+                throw new InvalidOperationException("No se encontró la compra que se debe recalcular.");
+
+            List<DetalleCompra> detalles = new DetalleCompraDatos().ListarPorCompra(codigoCompra)
+                ?? new List<DetalleCompra>();
+            compra.TotalCompra = detalles.Sum(x => x.Subtotal);
+            Validar(compra);
+            datos.Actualizar(compra);
+        }
+
         private static void Validar(Compra compra)
         {
             if (compra == null)
@@ -86,8 +111,9 @@ namespace Negocio
                 throw new ArgumentException("Selecciona un material.");
             if (compra.CantidadComprada <= 0)
                 throw new ArgumentException("La cantidad comprada debe ser mayor que cero.");
-            if (compra.TotalCompra < 0)
-                throw new ArgumentException("El total de la compra no puede ser negativo.");
+            if (compra.TotalCompra < 0 || compra.TotalCompra > 99999999.99m ||
+                decimal.Round(compra.TotalCompra, 2) != compra.TotalCompra)
+                throw new ArgumentException("El total de la compra debe tener hasta 8 enteros y 2 decimales.");
             if (compra.FechaEntrega.Date < compra.FechaCompra.Date)
                 throw new ArgumentException("La fecha de entrega no puede ser anterior a la fecha de compra.");
         }
