@@ -418,10 +418,10 @@ namespace SistemaPublicidad.Formularios
 
         void ConfigurarEventosCalculo()
         {
-            numCantidad.Num.ValueChanged += (s, e) => RecalcularDetalleDesdeCantidadOPrecio();
-            numPrecio.Num.ValueChanged += (s, e) => RecalcularDetalleDesdeCantidadOPrecio();
-            numDescuento.Num.ValueChanged += (s, e) => RecalcularDetalleDesdeCantidadOPrecio();
-            numSubtotal.Num.ValueChanged += (s, e) => RecalcularDetalleDesdeSubtotal();
+            numCantidad.EnVivo += (s, e) => RecalcularDetalleDesdeCantidadOPrecio();
+            numPrecio.EnVivo += (s, e) => RecalcularDetalleDesdeCantidadOPrecio();
+            numDescuento.EnVivo += (s, e) => RecalcularDetalleDesdeCantidadOPrecio();
+            numSubtotal.EnVivo += (s, e) => RecalcularDetalleDesdeSubtotal();
         }
 
         void RecalcularDetalleDesdeCantidadOPrecio()

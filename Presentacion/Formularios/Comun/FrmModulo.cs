@@ -36,18 +36,48 @@ namespace SistemaPublicidad.Formularios
     public class CampoNumero : Tarjeta
     {
         public NumericUpDown Num;
+        public event EventHandler EnVivo;
+        bool disparandoEnVivo = false;
+
         public bool EstaVacio { get { return string.IsNullOrWhiteSpace(Num.Text); } }
-        public decimal Valor
+public decimal Valor
         {
-            get { return Num.Value; }
+            get
+            {
+                string txt = (Num.Text ?? "").Replace("Q", "").Replace(",", "").Trim();
+                if (string.IsNullOrWhiteSpace(txt)) return Num.Minimum;
+                decimal val;
+                if (decimal.TryParse(txt, NumberStyles.Any, CultureInfo.InvariantCulture, out val))
+                    return Math.Max(Num.Minimum, Math.Min(Num.Maximum, val));
+                if (decimal.TryParse(txt, NumberStyles.Any, CultureInfo.CurrentCulture, out val))
+                    return Math.Max(Num.Minimum, Math.Min(Num.Maximum, val));
+                return Num.Value;
+            }
             set
             {
-                Num.Value = Math.Max(Num.Minimum, Math.Min(Num.Maximum, value));
-                if (string.IsNullOrWhiteSpace(Num.Text))
-                    Num.Text = Num.Value.ToString("N" + Num.DecimalPlaces, CultureInfo.CurrentCulture);
+                decimal v = Math.Max(Num.Minimum, Math.Min(Num.Maximum, value));
+                if (Num.Value != v)
+                {
+                    Num.Value = v;
+                }
             }
         }
         public void Limpiar() { Num.Value = Num.Minimum; Num.Text = string.Empty; }
+
+        public void NotificarEnVivo()
+        {
+            if (disparandoEnVivo) return;
+            disparandoEnVivo = true;
+            try
+            {
+                if (EnVivo != null) EnVivo(this, EventArgs.Empty);
+            }
+            finally
+            {
+                disparandoEnVivo = false;
+            }
+        }
+
         public CampoNumero(string rotulo, int decimales, bool moneda, bool soloLectura)
         {
             Radio = 12; C1 = C2 = Tema.Campo; Vidrio = false; Height = 52;
@@ -55,6 +85,27 @@ namespace SistemaPublicidad.Formularios
                 Left = moneda ? 30 : 12, Top = 23, Width = Width - (moneda ? 42 : 24), Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top, ReadOnly = soloLectura };
             if (soloLectura) { try { Num.Controls[0].Visible = false; } catch (Exception) { } Num.TabStop = false; }
             Controls.Add(Num); Controls.Add(Tema.L(rotulo, 8, Tema.Sub, 12, 4)); if (moneda) Controls.Add(Tema.L("Q", 10.5f, Tema.Sub, 12, 24));
+
+            // Respuesta en vivo inmediata al teclear sin clics ni demoras
+            Num.ValueChanged += (s, e) => NotificarEnVivo();
+            Num.KeyUp += (s, e) => NotificarEnVivo();
+            foreach (Control c in Num.Controls)
+            {
+                c.TextChanged += (s, e) => NotificarEnVivo();
+                c.KeyUp += (s, e) => NotificarEnVivo();
+            }
+            Num.ControlAdded += (s, e) =>
+            {
+                if (e.Control != null)
+                {
+                    e.Control.TextChanged += (s2, e2) => NotificarEnVivo();
+                    e.Control.KeyUp += (s2, e2) => NotificarEnVivo();
+                }
+            };
+            Num.Leave += (s, e) =>
+            {
+                try { Num.Value = Valor; } catch { }
+            };
         }
         public void Color2(Color c) { C1 = C2 = c; Num.BackColor = c; }
     }
@@ -1809,18 +1860,233 @@ namespace SistemaPublicidad.Formularios
                     }
                 }
             }
-            else if (cfg.Nombre == "Facturaciones")
+            else if (cfg.Nombre == "Cotizaciones")
             {
+                CampoNumero numCantidad = null, numPrecio = null, numSubtotal = null, numTotal = null;
                 Selector selEstado = null;
                 for (int i = 0; i < n; i++)
                 {
-                    if (PropiedadCampo(cfg.Campos[i]) == "Estado")
-                        selEstado = inputs[i] as Selector;
+                    string prop = PropiedadCampo(cfg.Campos[i]);
+                    if (prop == "Cantidad") numCantidad = inputs[i] as CampoNumero;
+                    else if (prop == "Precio") numPrecio = inputs[i] as CampoNumero;
+                    else if (prop == "Subtotal") numSubtotal = inputs[i] as CampoNumero;
+                    else if (prop == "Total") numTotal = inputs[i] as CampoNumero;
+                    else if (prop == "Estado") selEstado = inputs[i] as Selector;
                 }
 
                 if (selEstado != null && selEstado.Seleccion < 0)
                 {
                     selEstado.Seleccion = 1; // Activo por defecto
+                }
+
+                if (numCantidad != null && numPrecio != null && numSubtotal != null && numTotal != null)
+                {
+                    bool calculandoCotizacion = false;
+
+                    // Al cambiar Cantidad o Precio: Subtotal = Cantidad * Precio, Total = Subtotal
+                    Action recalcularDesdeCantOPrecio = () =>
+                    {
+                        if (calculandoCotizacion || cargandoCamposFormulario) return;
+                        calculandoCotizacion = true;
+                        try
+                        {
+                            decimal cant = numCantidad.Valor;
+                            decimal prec = numPrecio.Valor;
+                            decimal sub = Math.Round(cant * prec, 2);
+                            numSubtotal.Valor = sub;
+                            numTotal.Valor = sub;
+                        }
+                        finally
+                        {
+                            calculandoCotizacion = false;
+                        }
+                    };
+
+                    numCantidad.EnVivo += (s, e) => recalcularDesdeCantOPrecio();
+                    numPrecio.EnVivo += (s, e) => recalcularDesdeCantOPrecio();
+
+                    // Al cambiar Subtotal en vivo: Total = Subtotal; y si Cantidad > 0: Precio = Subtotal / Cantidad
+                    numSubtotal.EnVivo += (s, e) =>
+                    {
+                        if (calculandoCotizacion || cargandoCamposFormulario) return;
+                        calculandoCotizacion = true;
+                        try
+                        {
+                            decimal sub = numSubtotal.Valor;
+                            numTotal.Valor = sub;
+                            decimal cant = numCantidad.Valor;
+                            if (cant > 0)
+                            {
+                                numPrecio.Valor = Math.Round(sub / cant, 2);
+                            }
+                        }
+                        finally
+                        {
+                            calculandoCotizacion = false;
+                        }
+                    };
+
+                    // Al cambiar Total en vivo: Subtotal = Total; y si Cantidad > 0: Precio = Total / Cantidad
+                    numTotal.EnVivo += (s, e) =>
+                    {
+                        if (calculandoCotizacion || cargandoCamposFormulario) return;
+                        calculandoCotizacion = true;
+                        try
+                        {
+                            decimal tot = numTotal.Valor;
+                            numSubtotal.Valor = tot;
+                            decimal cant = numCantidad.Valor;
+                            if (cant > 0)
+                            {
+                                numPrecio.Valor = Math.Round(tot / cant, 2);
+                            }
+                        }
+                        finally
+                        {
+                            calculandoCotizacion = false;
+                        }
+                    };
+                }
+            }
+            else if (cfg.Nombre == "Tipo de Servicio")
+            {
+                CampoNumero numCosto = null, numRecargo = null, numTotal = null;
+                Selector selEstado = null;
+                for (int i = 0; i < n; i++)
+                {
+                    string prop = PropiedadCampo(cfg.Campos[i]);
+                    if (prop == "CostoServicio") numCosto = inputs[i] as CampoNumero;
+                    else if (prop == "RecargoServicio") numRecargo = inputs[i] as CampoNumero;
+                    else if (prop == "TotalServicio") numTotal = inputs[i] as CampoNumero;
+                    else if (prop == "Estado") selEstado = inputs[i] as Selector;
+                }
+
+                if (selEstado != null && selEstado.Seleccion < 0)
+                {
+                    selEstado.Seleccion = 1; // Activo por defecto
+                }
+
+                if (numCosto != null && numRecargo != null && numTotal != null)
+                {
+                    bool calculandoServicio = false;
+
+                    // Al cambiar Costo o Recargo en vivo: Total = Costo + Recargo
+                    Action recalcularTotal = () =>
+                    {
+                        if (calculandoServicio || cargandoCamposFormulario) return;
+                        calculandoServicio = true;
+                        try
+                        {
+                            numTotal.Valor = Math.Round(numCosto.Valor + numRecargo.Valor, 2);
+                        }
+                        finally
+                        {
+                            calculandoServicio = false;
+                        }
+                    };
+
+                    numCosto.EnVivo += (s, e) => recalcularTotal();
+                    numRecargo.EnVivo += (s, e) => recalcularTotal();
+
+                    // Al cambiar Total en vivo: Recargo = Total - Costo
+                    numTotal.EnVivo += (s, e) =>
+                    {
+                        if (calculandoServicio || cargandoCamposFormulario) return;
+                        calculandoServicio = true;
+                        try
+                        {
+                            decimal costo = numCosto.Valor;
+                            decimal tot = numTotal.Valor;
+                            if (tot >= costo)
+                            {
+                                numRecargo.Valor = Math.Round(tot - costo, 2);
+                            }
+                            else
+                            {
+                                numRecargo.Valor = 0;
+                                numCosto.Valor = tot;
+                            }
+                        }
+                        finally
+                        {
+                            calculandoServicio = false;
+                        }
+                    };
+                }
+            }
+            else if (cfg.Nombre == "Facturaciones")
+            {
+                CampoNumero numSubtotal = null, numImpuesto = null, numTotalPagar = null, numFactura = null;
+                Selector selOrden = null, selEstado = null;
+                for (int i = 0; i < n; i++)
+                {
+                    string prop = PropiedadCampo(cfg.Campos[i]);
+                    if (prop == "Subtotal") numSubtotal = inputs[i] as CampoNumero;
+                    else if (prop == "Impuesto") numImpuesto = inputs[i] as CampoNumero;
+                    else if (prop == "TotalPagar") numTotalPagar = inputs[i] as CampoNumero;
+                    else if (prop == "CodigoOrdenTrabajo") selOrden = inputs[i] as Selector;
+                    else if (prop == "Estado") selEstado = inputs[i] as Selector;
+                    else if (prop == "NoFactura") numFactura = inputs[i] as CampoNumero;
+                }
+
+                if (selEstado != null && selEstado.Seleccion < 0)
+                {
+                    selEstado.Seleccion = 1; // Activo por defecto
+                }
+if (numSubtotal != null && numImpuesto != null && numTotalPagar != null)
+                {
+                    bool calculandoFactura = false;
+
+                    // Al cambiar Subtotal en vivo: Impuesto = 12% IVA, Total = Subtotal + Impuesto
+                    numSubtotal.EnVivo += (s, e) =>
+                    {
+                        if (calculandoFactura || cargandoCamposFormulario) return;
+                        calculandoFactura = true;
+                        try
+                        {
+                            decimal sub = numSubtotal.Valor;
+                            decimal imp = Math.Round(sub * 0.12m, 2);
+                            numImpuesto.Valor = imp;
+                            numTotalPagar.Valor = sub + imp;
+                        }
+                        finally
+                        {
+                            calculandoFactura = false;
+                        }
+                    };
+
+                    // Al cambiar Impuesto en vivo: Total = Subtotal + Impuesto
+                    numImpuesto.EnVivo += (s, e) =>
+                    {
+                        if (calculandoFactura || cargandoCamposFormulario) return;
+                        calculandoFactura = true;
+                        try
+                        {
+                            numTotalPagar.Valor = numSubtotal.Valor + numImpuesto.Valor;
+                        }
+                        finally
+                        {
+                            calculandoFactura = false;
+                        }
+                    };
+
+                    // Al cambiar Total a pagar en vivo: desglosa Subtotal (base sin IVA) y el Impuesto
+                    numTotalPagar.EnVivo += (s, e) =>
+                    {
+                        if (calculandoFactura || cargandoCamposFormulario) return;
+                        calculandoFactura = true;
+                        try
+                        {
+                            decimal tot = numTotalPagar.Valor;
+                            decimal sub = Math.Round(tot / 1.12m, 2);
+                            numSubtotal.Valor = sub;
+                            numImpuesto.Valor = tot - sub;
+                        }
+                        finally
+                        {
+                            calculandoFactura = false;
+                        }
+                    };
                 }
             }
             else if (cfg.Nombre == "Compras")
@@ -1842,7 +2108,7 @@ namespace SistemaPublicidad.Formularios
                 if (numCantComprada != null)
                 {
                     if (numCantComprada.Valor <= 0) numCantComprada.Valor = 1;
-                    numCantComprada.Num.ValueChanged += (s, e) =>
+                    numCantComprada.EnVivo += (s, e) =>
                     {
                         if (cargandoCamposFormulario) return;
                         if (editorDetalle != null)
@@ -1850,6 +2116,32 @@ namespace SistemaPublicidad.Formularios
                             editorDetalle.CantidadExterna = (int)Math.Max(1, numCantComprada.Valor);
                         }
                     };
+                }
+            }
+            else if (cfg.Nombre == "Inventarios")
+            {
+                Selector selEstado = null;
+                for (int i = 0; i < n; i++)
+                {
+                    string prop = PropiedadCampo(cfg.Campos[i]);
+                    if (prop == "Estado") selEstado = inputs[i] as Selector;
+                }
+                if (selEstado != null && selEstado.Seleccion < 0)
+                {
+                    selEstado.Seleccion = 1; // Activo por defecto
+                }
+            }
+            else if (cfg.Nombre == "Órdenes de Trabajo")
+            {
+                Selector selEstado = null;
+                for (int i = 0; i < n; i++)
+                {
+                    string prop = PropiedadCampo(cfg.Campos[i]);
+                    if (prop == "Estado") selEstado = inputs[i] as Selector;
+                }
+                if (selEstado != null && selEstado.Seleccion < 0)
+                {
+                    selEstado.Seleccion = 1; // Activo por defecto
                 }
             }
 
@@ -1901,7 +2193,7 @@ namespace SistemaPublicidad.Formularios
             eCant = new CampoNumero("Cantidad", 0, false, false) { Dock = DockStyle.Fill, Margin = mg }; eCant.Num.Minimum = 1; eCant.Valor = 1;
             ePrecio = new CampoNumero(compra ? "Costo unitario" : "Precio unitario", 2, true, false) { Dock = DockStyle.Fill, Margin = mg };
             eSubLin = new CampoNumero("Subtotal (calculado)", 2, true, true) { Dock = DockStyle.Fill, Margin = mg };
-            eCant.Num.ValueChanged += (s, e) => eSubLin.Valor = eCant.Valor * ePrecio.Valor; ePrecio.Num.ValueChanged += (s, e) => eSubLin.Valor = eCant.Valor * ePrecio.Valor;
+            eCant.EnVivo += (s, e) => eSubLin.Valor = eCant.Valor * ePrecio.Valor; ePrecio.EnVivo += (s, e) => eSubLin.Valor = eCant.Valor * ePrecio.Valor;
             var ba = new Boton { Texto = "Agregar", Icono = "\u2795", C1 = Color.FromArgb(0, 190, 150), C2 = Color.FromArgb(0, 215, 125), Dock = DockStyle.Fill, Margin = new Padding(0, 10, 0, 10) };
             ba.Click += (s, e) => AgregarLinea();
             if (cfg.DetalleSoloLectura) { le.Visible = false; ba.Enabled = false; }
@@ -1931,7 +2223,7 @@ namespace SistemaPublicidad.Formularios
             var tt = new TableLayoutPanel { Dock = DockStyle.Left, Width = 560, ColumnCount = 3, RowCount = 1, BackColor = Color.Transparent };
             tt.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); for (int z = 0; z < 3; z++) tt.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
             eSubt = new CampoNumero("Subtotal (calculado)", 2, true, true) { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 10, 0) };
-            eDescto = new CampoNumero("Descuento", 2, true, false) { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 10, 0) }; eDescto.Num.ValueChanged += (s, e) => Recalcular();
+            eDescto = new CampoNumero("Descuento", 2, true, false) { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 10, 0) }; eDescto.EnVivo += (s, e) => Recalcular();
             eTot = new CampoNumero("Total (calculado)", 2, true, true) { Dock = DockStyle.Fill, Margin = new Padding(0) }; eTot.Color2(Color.FromArgb(95, 60, 215)); eTot.Num.Font = Tema.F(10.5f, true);
             tt.Controls.Add(eSubt, 0, 0); tt.Controls.Add(eDescto, 1, 0); tt.Controls.Add(eTot, 2, 0); pie.Controls.Add(tt);
             if (cfg.DetalleSoloLectura) tt.Visible = false;
