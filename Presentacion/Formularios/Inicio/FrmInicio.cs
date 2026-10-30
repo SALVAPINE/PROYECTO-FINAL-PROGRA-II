@@ -110,6 +110,7 @@ namespace SistemaPublicidad.Formularios
         {
             tarjeta.Titulo = titulo;
             tarjeta.Icono = icono;
+            tarjeta.Glifo = null;
             tarjeta.Valor = total.ToString("N0", CultureInfo.CurrentCulture);
             tarjeta.Sub = etiqueta + ": " + activos.ToString("N0", CultureInfo.CurrentCulture);
             tarjeta.Delta = "";
