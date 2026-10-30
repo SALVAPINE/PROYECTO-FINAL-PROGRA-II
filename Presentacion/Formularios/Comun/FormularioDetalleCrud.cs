@@ -31,7 +31,22 @@ namespace SistemaPublicidad.Formularios
         readonly CampoNumero numDescuento = new CampoNumero("Descuento", 2, true, false);
         readonly Selector cmbEstado = new Selector { Rotulo = "Estado" };
         int codigoEdicion;
+        bool calculandoDetalle;
+        int cantidadExterna = 1;
+        public int CantidadExterna
+        {
+            get { return cantidadExterna; }
+            set
+            {
+                cantidadExterna = Math.Max(1, value);
+                if (esCompra)
+                {
+                    RecalcularDetalleDesdeCantidadOPrecio();
+                }
+            }
+        }
         public event EventHandler DatosCambiados;
+        public event Action<decimal, int> SubtotalEnVivoCambiado;
 
         public FormularioDetalleCrud(string modulo, int codigo)
         {
@@ -47,6 +62,7 @@ namespace SistemaPublicidad.Formularios
 
             ConfigurarTabla();
             ConstruirControles();
+            ConfigurarEventosCalculo();
             tabla.TituloVacio = esCompra ? "Selecciona una compra existente" : "Selecciona una factura existente";
             tabla.TextoVacio = "El detalle se cargará al seleccionar el registro.";
         }
@@ -123,11 +139,14 @@ namespace SistemaPublicidad.Formularios
             {
                 txtDescripcion.Dock = numCantidad.Dock = numPrecio.Dock = numDescuento.Dock = cmbEstado.Dock = DockStyle.Fill;
                 txtDescripcion.Margin = numCantidad.Margin = numPrecio.Margin = numDescuento.Margin = cmbEstado.Margin = new Padding(5, 2, 5, 2);
+                numSubtotal.Dock = DockStyle.Fill;
+                numSubtotal.Margin = new Padding(5, 2, 5, 2);
                 campos.Controls.Add(txtDescripcion, 0, 0);
                 campos.Controls.Add(numCantidad, 1, 0);
                 campos.Controls.Add(numPrecio, 2, 0);
                 campos.Controls.Add(numDescuento, 0, 1);
                 campos.Controls.Add(cmbEstado, 1, 1);
+                campos.Controls.Add(numSubtotal, 2, 1);
             }
             contenedorTabla = new Panel { Dock = DockStyle.Fill, BackColor = Color.Transparent,
                 Padding = esCompra ? new Padding(0, 3, 0, 0) : new Padding(0) };
@@ -136,6 +155,7 @@ namespace SistemaPublicidad.Formularios
             raiz.Controls.Add(contenedorTabla, 0, 1);
 
             cmbEstado.Items.AddRange(new[] { "Inactivo", "Activo" });
+            cmbEstado.Seleccion = 1;
         }
 
         /// <summary>Prepara el concepto que se guarda desde el botón principal de Facturaciones.</summary>
@@ -351,31 +371,208 @@ namespace SistemaPublicidad.Formularios
         {
             int indice = tabla.Seleccion;
             if (indice < 0 || indice >= filasDetalle.Count) return;
-            if (esCompra)
+            calculandoDetalle = true;
+            try
             {
-                var d = (DetalleCompra)filasDetalle[indice];
-                codigoEdicion = d.CodigoDetalleCompra; txtTipo.Caja.Text = d.TipoDeCompra; txtDescripcion.Caja.Text = d.Descripcion;
-                numPrecio.Valor = d.PrecioUnitario; numSubtotal.Valor = d.Subtotal; numDescuento.Valor = d.DescuentoCompra;
-                cmbEstado.Seleccion = d.Estado ? 1 : 0;
+                if (esCompra)
+                {
+                    var d = (DetalleCompra)filasDetalle[indice];
+                    codigoEdicion = d.CodigoDetalleCompra; txtTipo.Caja.Text = d.TipoDeCompra; txtDescripcion.Caja.Text = d.Descripcion;
+                    numPrecio.Valor = d.PrecioUnitario; numSubtotal.Valor = d.Subtotal; numDescuento.Valor = d.DescuentoCompra;
+                    cmbEstado.Seleccion = d.Estado ? 1 : 0;
+                }
+                else
+                {
+                    var d = (DetalleFactura)filasDetalle[indice];
+                    codigoEdicion = d.CodigoDetalleFactura; txtDescripcion.Caja.Text = d.Descripcion; numCantidad.Valor = d.Cantidad;
+                    numPrecio.Valor = d.Precio; numDescuento.Valor = d.DescuentoAplicado; cmbEstado.Seleccion = d.Estado ? 1 : 0;
+                    numSubtotal.Valor = Math.Max(0, (d.Cantidad * d.Precio) - d.DescuentoAplicado);
+                }
             }
-            else
+            finally
             {
-                var d = (DetalleFactura)filasDetalle[indice];
-                codigoEdicion = d.CodigoDetalleFactura; txtDescripcion.Caja.Text = d.Descripcion; numCantidad.Valor = d.Cantidad;
-                numPrecio.Valor = d.Precio; numDescuento.Valor = d.DescuentoAplicado; cmbEstado.Seleccion = d.Estado ? 1 : 0;
+                calculandoDetalle = false;
             }
         }
 
         void Limpiar()
         {
-            codigoEdicion = 0; txtTipo.Caja.Clear(); txtDescripcion.Caja.Clear(); numCantidad.Limpiar();
-            numPrecio.Limpiar(); numSubtotal.Limpiar(); numDescuento.Limpiar(); cmbEstado.Seleccion = -1;
+            calculandoDetalle = true;
+            try
+            {
+                codigoEdicion = 0; txtTipo.Caja.Clear(); txtDescripcion.Caja.Clear(); numCantidad.Limpiar();
+                numCantidad.Valor = 1;
+                numPrecio.Limpiar(); numSubtotal.Limpiar(); numDescuento.Limpiar(); cmbEstado.Seleccion = 1;
+            }
+            finally
+            {
+                calculandoDetalle = false;
+            }
         }
 
         /// <summary>Deja vacíos los campos al entrar a Gestionar sin iniciar una edición.</summary>
         public void LimpiarCampos()
         {
             Limpiar();
+        }
+
+        void ConfigurarEventosCalculo()
+        {
+            numCantidad.Num.ValueChanged += (s, e) => RecalcularDetalleDesdeCantidadOPrecio();
+            numPrecio.Num.ValueChanged += (s, e) => RecalcularDetalleDesdeCantidadOPrecio();
+            numDescuento.Num.ValueChanged += (s, e) => RecalcularDetalleDesdeCantidadOPrecio();
+            numSubtotal.Num.ValueChanged += (s, e) => RecalcularDetalleDesdeSubtotal();
+        }
+
+        void RecalcularDetalleDesdeCantidadOPrecio()
+        {
+            if (calculandoDetalle) return;
+            calculandoDetalle = true;
+            try
+            {
+                if (esCompra)
+                {
+                    // Subtotal = (CantidadComprada * PrecioUnitario) - DescuentoCompra
+                    int cant = Math.Max(1, cantidadExterna);
+                    decimal totalBruto = cant * numPrecio.Valor;
+                    numSubtotal.Valor = Math.Max(0, totalBruto - numDescuento.Valor);
+                }
+                else
+                {
+                    // Subtotal = (Cantidad * Precio) - DescuentoAplicado
+                    decimal totalBruto = numCantidad.Valor * numPrecio.Valor;
+                    numSubtotal.Valor = Math.Max(0, totalBruto - numDescuento.Valor);
+                }
+            }
+            finally
+            {
+                calculandoDetalle = false;
+            }
+            NotificarCambioEnVivo();
+        }
+
+        void RecalcularDetalleDesdeSubtotal()
+        {
+            if (calculandoDetalle) return;
+            calculandoDetalle = true;
+            try
+            {
+                if (esCompra)
+                {
+                    // Si se ajusta el subtotal directamente, se divide entre CantidadComprada para obtener el PrecioUnitario
+                    int cant = Math.Max(1, cantidadExterna);
+                    decimal montoTotal = numSubtotal.Valor + numDescuento.Valor;
+                    numPrecio.Valor = Math.Round(montoTotal / cant, 2);
+                }
+                else
+                {
+                    // Si se ajusta el subtotal directamente y se tiene cantidad > 0, se divide para obtener el precio
+                    if (numCantidad.Valor > 0)
+                    {
+                        decimal montoTotal = numSubtotal.Valor + numDescuento.Valor;
+                        numPrecio.Valor = Math.Round(montoTotal / numCantidad.Valor, 2);
+                    }
+                }
+            }
+            finally
+            {
+                calculandoDetalle = false;
+            }
+            NotificarCambioEnVivo();
+        }
+
+        void NotificarCambioEnVivo()
+        {
+            if (SubtotalEnVivoCambiado == null) return;
+            decimal totalCalculado = 0;
+            int cantidadCalculada = 0;
+
+            if (esCompra)
+            {
+                for (int i = 0; i < filasDetalle.Count; i++)
+                {
+                    if (i == tabla.Seleccion && codigoEdicion > 0) continue;
+                    var d = filasDetalle[i] as DetalleCompra;
+                    if (d != null) totalCalculado += d.Subtotal;
+                }
+                totalCalculado += numSubtotal.Valor;
+                cantidadCalculada = Math.Max(1, cantidadExterna);
+            }
+            else
+            {
+                for (int i = 0; i < filasDetalle.Count; i++)
+                {
+                    if (i == tabla.Seleccion && codigoEdicion > 0) continue;
+                    var d = filasDetalle[i] as DetalleFactura;
+                    if (d != null)
+                    {
+                        totalCalculado += Math.Max(0, (d.Cantidad * d.Precio) - d.DescuentoAplicado);
+                        cantidadCalculada += d.Cantidad;
+                    }
+                }
+                totalCalculado += numSubtotal.Valor;
+                cantidadCalculada += (int)numCantidad.Valor;
+            }
+
+            SubtotalEnVivoCambiado(totalCalculado, cantidadCalculada);
+        }
+
+        public void EstablecerDescripcionSiVacia(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(txtDescripcion.Caja.Text) && !string.IsNullOrWhiteSpace(texto))
+            {
+                txtDescripcion.Caja.Text = texto;
+            }
+        }
+
+        public void EstablecerTipoCompraSiVacio(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(txtTipo.Caja.Text) && !string.IsNullOrWhiteSpace(texto))
+            {
+                txtTipo.Caja.Text = texto;
+            }
+        }
+
+        /// <summary>Calcula la suma total de los subtotales de los detalles cargados.</summary>
+        public decimal ObtenerSumaSubtotales()
+        {
+            decimal total = 0;
+            if (esCompra)
+            {
+                foreach (var obj in filasDetalle)
+                {
+                    var d = obj as DetalleCompra;
+                    if (d != null) total += d.Subtotal;
+                }
+            }
+            else
+            {
+                foreach (var obj in filasDetalle)
+                {
+                    var d = obj as DetalleFactura;
+                    if (d != null) total += Math.Max(0, (d.Cantidad * d.Precio) - d.DescuentoAplicado);
+                }
+            }
+            return total;
+        }
+
+        /// <summary>Calcula la cantidad total de artículos o líneas en los detalles cargados.</summary>
+        public int ObtenerCantidadTotal()
+        {
+            int total = 0;
+            if (esCompra)
+            {
+                total = filasDetalle.Count;
+            }
+            else
+            {
+                foreach (var obj in filasDetalle)
+                {
+                    var d = obj as DetalleFactura;
+                    if (d != null) total += d.Cantidad;
+                }
+            }
+            return total;
         }
 
     }

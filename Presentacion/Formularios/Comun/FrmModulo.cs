@@ -237,6 +237,7 @@ namespace SistemaPublicidad.Formularios
         Boton botonDetalleAnterior, botonDetalleSiguiente;
         Label textoPaginacionDetalle;
         FormularioDetalleCrud editorDetalle;
+        bool cargandoCamposFormulario;
         bool gestionarConstruido, resumenConstruido;
         Dictionary<string, List<ModuloCrud.Opcion>> opcionesRelaciones = new Dictionary<string, List<ModuloCrud.Opcion>>();
         static readonly Color[][] Cs = {
@@ -347,36 +348,32 @@ namespace SistemaPublicidad.Formularios
             {
                 ConstruirGestionar(vG);
                 gestionarConstruido = true;
+                Tema.DobleBuffer(vG);
                 if (datosCargados) ActualizarRelaciones(opcionesRelaciones);
             }
             if (t == 2 && !resumenConstruido)
             {
                 ConstruirResumen(vR);
                 resumenConstruido = true;
+                Tema.DobleBuffer(vR);
             }
             Panel activa = t == 0 ? vC : t == 1 ? vG : vR;
-            Panel anterior = vistaActual;
-            if (anterior != null && anterior != activa)
-            {
-                // Conserva la vista anterior durante el ajuste de tamaño y el cambio
-                // de estadísticas; así el fondo no queda expuesto en negro.
-                anterior.Visible = false;
-                vistaActual = null;
-                anterior.Dock = DockStyle.None;
-            }
             if (cfg.Detalle != null && filaStats != null) filaStats.Visible = t != 1;
 
+            // Prepara y muestra la vista nueva antes de ocultar la anterior.
+            // Así el contenedor nunca queda vacío durante el cambio de pestaña.
             activa.Dock = DockStyle.None;
             activa.Bounds = panelVistas.DisplayRectangle;
             activa.Visible = true;
             activa.BringToFront();
+            vistaActual = activa;
+
             foreach (Panel vista in new[] { vC, vG, vR })
             {
                 if (vista == activa) continue;
                 vista.Visible = false;
                 vista.Dock = DockStyle.None;
             }
-            vistaActual = activa;
 
             string n = cfg.Nombre, p = cfg.Plural;
             switch (t)
@@ -982,27 +979,22 @@ namespace SistemaPublicidad.Formularios
 
         async Task<CargaModulo> LeerDatosAsync()
         {
-            var carga = new CargaModulo();
-            Task<List<object>> tareaRegistros = Task.Run(() => ModuloCrud.Listar(cfg.Nombre));
-            // Los detalles se piden cuando se selecciona un encabezado; no cargamos
-            // todas las líneas al abrir Facturaciones.
-
-            var tareasOpciones = new Dictionary<string, Task<List<ModuloCrud.Opcion>>>();
-            foreach (string campo in cfg.Campos)
+            // Una sola tarea de fondo consulta registros y catálogos en orden.
+            // Reutiliza la conexión del pool y evita cambios de hilo por cada consulta.
+            string modulo = cfg.Nombre;
+            string[] campos = cfg.Campos;
+            return await Task.Run(() =>
             {
-                string propiedad = PropiedadCampo(campo);
-                if (ModuloCrud.EsRelacion(propiedad) && !tareasOpciones.ContainsKey(propiedad))
-                    tareasOpciones.Add(propiedad, Task.Run(() => ModuloCrud.Opciones(propiedad)));
-            }
-
-            var todasLasTareas = new List<Task> { tareaRegistros };
-            todasLasTareas.AddRange(tareasOpciones.Values);
-            await Task.WhenAll(todasLasTareas);
-
-            carga.Registros = tareaRegistros.Result;
-            foreach (var tarea in tareasOpciones)
-                carga.Opciones.Add(tarea.Key, tarea.Value.Result);
-            return carga;
+                var carga = new CargaModulo();
+                carga.Registros = ModuloCrud.Listar(modulo);
+                foreach (string campo in campos)
+                {
+                    string propiedad = PropiedadCampo(campo);
+                    if (ModuloCrud.EsRelacion(propiedad) && !carga.Opciones.ContainsKey(propiedad))
+                        carga.Opciones.Add(propiedad, ModuloCrud.Opciones(propiedad));
+                }
+                return carga;
+            });
         }
 
         static string Formatear(object entidad, string propiedad)
@@ -1236,7 +1228,10 @@ namespace SistemaPublicidad.Formularios
 
         void CargarCampos(object entidad)
         {
-            for (int i = 0; i < cfg.Campos.Length; i++)
+            cargandoCamposFormulario = true;
+            try
+            {
+                for (int i = 0; i < cfg.Campos.Length; i++)
             {
                 string propiedad = PropiedadCampo(cfg.Campos[i]);
                 var propiedadInfo = entidad.GetType().GetProperty(propiedad);
@@ -1295,6 +1290,32 @@ namespace SistemaPublicidad.Formularios
             // En Compras, MostrarCompraSeleccionada carga encabezado y detalle
             // juntos para evitar consultar dos veces el mismo detalle.
             if (editorDetalle != null && cfg.Nombre != "Compras") editorDetalle.CambiarPadre(codigoEnEdicion);
+            }
+            finally
+            {
+                cargandoCamposFormulario = false;
+            }
+            if (cfg.Nombre == "Facturaciones" && codigoEnEdicion <= 0)
+            {
+                for (int i = 0; i < cfg.Campos.Length; i++)
+                {
+                    if (PropiedadCampo(cfg.Campos[i]) == "NoFactura")
+                    {
+                        var numFac = inputs[i] as CampoNumero;
+                        if (numFac != null && numFac.Valor == 0)
+                        {
+                            int maxFac = 100;
+                            foreach (var obj in registros)
+                            {
+                                var f = obj as Factura;
+                                if (f != null && f.NoFactura > maxFac) maxFac = f.NoFactura;
+                            }
+                            numFac.Valor = maxFac + 1;
+                        }
+                        break;
+                    }
+                }
+            }
         }
 
         void GuardarFormulario()
@@ -1396,7 +1417,10 @@ namespace SistemaPublicidad.Formularios
 
         void LimpiarCamposEncabezado()
         {
-            codigoEnEdicion = 0;
+            cargandoCamposFormulario = true;
+            try
+            {
+                codigoEnEdicion = 0;
             foreach (var opcion in opcionesFijas)
             {
                 opcion.Key.Items.Clear();
@@ -1413,7 +1437,92 @@ namespace SistemaPublicidad.Formularios
                 if (fecha != null) fecha.Limpiar();
                 if (selector != null)
                 {
-                    selector.Seleccion = -1;
+                    selector.Seleccion = PropiedadCampo(cfg.Campos[i]) == "Estado" ? 1 : -1;
+                }
+            }
+            }
+            finally
+            {
+                cargandoCamposFormulario = false;
+            }
+        }
+
+        void ActualizarTotalesEnVivo(decimal totalVivo, int cantViva)
+        {
+            if (cargandoCamposFormulario) return;
+            if (cfg.Nombre == "Facturaciones")
+            {
+                for (int i = 0; i < inputs.Count; i++)
+                {
+                    if (PropiedadCampo(cfg.Campos[i]) == "Subtotal")
+                    {
+                        var numSub = inputs[i] as CampoNumero;
+                        if (numSub != null && numSub.Valor != totalVivo)
+                        {
+                            numSub.Valor = totalVivo;
+                        }
+                        break;
+                    }
+                }
+            }
+            else if (cfg.Nombre == "Compras")
+            {
+                for (int i = 0; i < inputs.Count; i++)
+                {
+                    string prop = PropiedadCampo(cfg.Campos[i]);
+                    if (prop == "TotalCompra")
+                    {
+                        var numTot = inputs[i] as CampoNumero;
+                        if (numTot != null && numTot.Valor != totalVivo)
+                        {
+                            numTot.Valor = totalVivo;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        void ActualizarTotalesDesdeDetalle()
+        {
+            if (editorDetalle == null || cargandoCamposFormulario) return;
+            if (cfg.Nombre == "Facturaciones")
+            {
+                decimal totalDetalles = editorDetalle.ObtenerSumaSubtotales();
+                if (totalDetalles > 0)
+                {
+                    for (int i = 0; i < inputs.Count; i++)
+                    {
+                        if (PropiedadCampo(cfg.Campos[i]) == "Subtotal")
+                        {
+                            var numSub = inputs[i] as CampoNumero;
+                            if (numSub != null && numSub.Valor != totalDetalles)
+                            {
+                                numSub.Valor = totalDetalles;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            else if (cfg.Nombre == "Compras")
+            {
+                decimal totalDetalles = editorDetalle.ObtenerSumaSubtotales();
+                if (totalDetalles > 0)
+                {
+                    for (int i = 0; i < inputs.Count; i++)
+                    {
+                        string prop = PropiedadCampo(cfg.Campos[i]);
+                        if (prop == "TotalCompra")
+                        {
+                            var numTot = inputs[i] as CampoNumero;
+                            if (numTot != null && numTot.Valor != totalDetalles)
+                            {
+                                numTot.Valor = totalDetalles;
+                            }
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -1608,6 +1717,114 @@ namespace SistemaPublicidad.Formularios
                     }
                 }
             }
+            else if (cfg.Nombre == "Facturaciones")
+            {
+                CampoNumero numSubtotal = null, numImpuesto = null, numTotalPagar = null, numFactura = null;
+                Selector selOrden = null, selEstado = null;
+                for (int i = 0; i < n; i++)
+                {
+                    string prop = PropiedadCampo(cfg.Campos[i]);
+                    if (prop == "Subtotal") numSubtotal = inputs[i] as CampoNumero;
+                    else if (prop == "Impuesto") numImpuesto = inputs[i] as CampoNumero;
+                    else if (prop == "TotalPagar") numTotalPagar = inputs[i] as CampoNumero;
+                    else if (prop == "CodigoOrdenTrabajo") selOrden = inputs[i] as Selector;
+                    else if (prop == "Estado") selEstado = inputs[i] as Selector;
+                    else if (prop == "NoFactura") numFactura = inputs[i] as CampoNumero;
+                }
+
+                if (selEstado != null && selEstado.Seleccion < 0)
+                {
+                    selEstado.Seleccion = 1; // Activo por defecto
+                }
+
+
+
+                if (numSubtotal != null && numImpuesto != null && numTotalPagar != null)
+                {
+                    bool calculandoFactura = false;
+
+                    // Al cambiar Subtotal: Impuesto = 12% IVA, Total = Subtotal + Impuesto
+                    numSubtotal.Num.ValueChanged += (s, e) =>
+                    {
+                        if (calculandoFactura || cargandoCamposFormulario) return;
+                        calculandoFactura = true;
+                        try
+                        {
+                            decimal sub = numSubtotal.Valor;
+                            decimal imp = Math.Round(sub * 0.12m, 2);
+                            numImpuesto.Valor = imp;
+                            numTotalPagar.Valor = sub + imp;
+                        }
+                        finally
+                        {
+                            calculandoFactura = false;
+                        }
+                    };
+
+                    // Al cambiar Impuesto: Total = Subtotal + Impuesto
+                    numImpuesto.Num.ValueChanged += (s, e) =>
+                    {
+                        if (calculandoFactura || cargandoCamposFormulario) return;
+                        calculandoFactura = true;
+                        try
+                        {
+                            numTotalPagar.Valor = numSubtotal.Valor + numImpuesto.Valor;
+                        }
+                        finally
+                        {
+                            calculandoFactura = false;
+                        }
+                    };
+
+                    // Al cambiar Total a pagar: se divide entre 1.12 para desglosar el Subtotal (base sin IVA) y el Impuesto
+                    numTotalPagar.Num.ValueChanged += (s, e) =>
+                    {
+                        if (calculandoFactura || cargandoCamposFormulario) return;
+                        calculandoFactura = true;
+                        try
+                        {
+                            decimal tot = numTotalPagar.Valor;
+                            decimal sub = Math.Round(tot / 1.12m, 2);
+                            numSubtotal.Valor = sub;
+                            numImpuesto.Valor = tot - sub;
+                        }
+                        finally
+                        {
+                            calculandoFactura = false;
+                        }
+                    };
+                }
+            }
+            else if (cfg.Nombre == "Compras")
+            {
+                Selector selEstado = null;
+                CampoNumero numCantComprada = null, numTotalCompra = null;
+                for (int i = 0; i < n; i++)
+                {
+                    string prop = PropiedadCampo(cfg.Campos[i]);
+                    if (prop == "Estado") selEstado = inputs[i] as Selector;
+                    else if (prop == "CantidadComprada") numCantComprada = inputs[i] as CampoNumero;
+                    else if (prop == "TotalCompra") numTotalCompra = inputs[i] as CampoNumero;
+                }
+
+                if (selEstado != null && selEstado.Seleccion < 0)
+                {
+                    selEstado.Seleccion = 1; // Activo por defecto
+                }
+
+                if (numCantComprada != null)
+                {
+                    if (numCantComprada.Valor <= 0) numCantComprada.Valor = 1;
+                    numCantComprada.Num.ValueChanged += (s, e) =>
+                    {
+                        if (cargandoCamposFormulario) return;
+                        if (editorDetalle != null)
+                        {
+                            editorDetalle.CantidadExterna = (int)Math.Max(1, numCantComprada.Valor);
+                        }
+                    };
+                }
+            }
 
             if (!det)
             {
@@ -1665,7 +1882,21 @@ namespace SistemaPublicidad.Formularios
             var hd = P(DockStyle.Top, 42, new Padding(0)); hd.Controls.Add(Tema.L("Detalle de la " + sing, 12.5f, Color.White, 16, 10, true));
             var bq = new Boton { Texto = cfg.DetalleSoloLectura ? "Gestionar detalle" : "Quitar línea", Icono = "\U0001F5D1", C1 = Color.FromArgb(255, 50, 170), C2 = Color.FromArgb(225, 40, 130), Dock = DockStyle.Fill };
             var bw = P(DockStyle.Right, 176, new Padding(0, 3, 14, 3)); bw.Controls.Add(bq); hd.Controls.Add(bw);
-            if (cfg.DetalleSoloLectura) { bw.Visible = false; editorDetalle = new FormularioDetalleCrud(cfg.Nombre, 0) { Dock = DockStyle.Fill }; editorDetalle.DatosCambiados += (s, e) => MostrarDetalle(); tw.Controls.Add(editorDetalle); }
+            if (cfg.DetalleSoloLectura)
+            {
+                bw.Visible = false;
+                editorDetalle = new FormularioDetalleCrud(cfg.Nombre, 0) { Dock = DockStyle.Fill };
+                editorDetalle.DatosCambiados += (s, e) =>
+                {
+                    MostrarDetalle();
+                    ActualizarTotalesDesdeDetalle();
+                };
+                editorDetalle.SubtotalEnVivoCambiado += (totalVivo, cantViva) =>
+                {
+                    ActualizarTotalesEnVivo(totalVivo, cantViva);
+                };
+                tw.Controls.Add(editorDetalle);
+            }
             else bq.Click += (s, e) => { int k = TablaGes.Seleccion; if (k < 0 || k >= TablaGes.Filas.Count) k = TablaGes.Filas.Count - 1; if (k >= 0) { TablaGes.Filas.RemoveAt(k); for (int z = 0; z < TablaGes.Filas.Count; z++) TablaGes.Filas[z][0] = (z + 1).ToString(); TablaGes.InvalidarAnchosColumnas(); TablaGes.Seleccion = TablaGes.Filas.Count - 1; Recalcular(); } };
             s2.Controls.Add(tw); s2.Controls.Add(le); s2.Controls.Add(hd);
             var s2w = P(DockStyle.Fill, 0, new Padding(0)); s2w.Controls.Add(s2);

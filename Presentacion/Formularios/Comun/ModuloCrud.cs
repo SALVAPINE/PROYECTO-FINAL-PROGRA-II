@@ -16,6 +16,9 @@ namespace SistemaPublicidad.Formularios
         static readonly ConcurrentDictionary<string, List<string>> Esquemas =
             new ConcurrentDictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
 
+        static readonly ConcurrentDictionary<string, List<Opcion>> CacheOpciones =
+            new ConcurrentDictionary<string, List<Opcion>>(StringComparer.OrdinalIgnoreCase);
+
         internal sealed class Opcion
         {
             public int Codigo;
@@ -31,6 +34,18 @@ namespace SistemaPublicidad.Formularios
 
         public static List<Opcion> Opciones(string propiedad)
         {
+            // Los catálogos de relaciones cambian poco durante una sesión.
+            // Se guardan en memoria y se invalidan al guardar o eliminar datos.
+            List<Opcion> cache;
+            if (CacheOpciones.TryGetValue(propiedad, out cache)) return new List<Opcion>(cache);
+
+            List<Opcion> lista = CargarOpciones(propiedad);
+            CacheOpciones[propiedad] = lista;
+            return new List<Opcion>(lista);
+        }
+
+        static List<Opcion> CargarOpciones(string propiedad)
+        {
             switch (propiedad)
             {
                 case "CodigoSucursal": return new SucursalNegocio().Listar().Select(x => new Opcion(x.CodigoSucursal, x.NombreSucursal)).ToList();
@@ -44,6 +59,9 @@ namespace SistemaPublicidad.Formularios
                 default: return new List<Opcion>();
             }
         }
+
+        /// <summary>Descarta los catálogos guardados para que la próxima consulta los vuelva a leer.</summary>
+        public static void InvalidarOpciones() { CacheOpciones.Clear(); }
 
         public static List<object> Listar(string modulo)
         {
@@ -155,6 +173,7 @@ namespace SistemaPublicidad.Formularios
 
         public static void Guardar(string modulo, object entidad, bool editar)
         {
+            InvalidarOpciones();
             switch (modulo)
             {
                 case "Usuarios": if (editar) new UsuarioNegocio().Actualizar((Usuario)entidad); else new UsuarioNegocio().Insertar((Usuario)entidad); break;
@@ -272,6 +291,7 @@ namespace SistemaPublicidad.Formularios
 
         public static void Eliminar(string modulo, int codigo)
         {
+            InvalidarOpciones();
             switch (modulo)
             {
                 case "Usuarios": new UsuarioNegocio().Eliminar(codigo); break;
