@@ -64,27 +64,11 @@ namespace SistemaPublicidad.Formularios
             string mensaje, string textoConfirmar, bool destructivo)
         {
             Form propietario = owner != null && !owner.IsDisposed ? owner : null;
-            using (var superposicion = new DialogOverlay())
             using (var dialogo = new ModalDialog(tipo, titulo, mensaje, textoConfirmar, destructivo, propietario))
             {
-                if (propietario != null && propietario.Visible)
-                {
-                    superposicion.Bounds = propietario.Bounds;
-                    superposicion.Show(propietario);
-                    superposicion.BringToFront();
-                }
-
-                try
-                {
-                    return propietario == null
-                        ? dialogo.ShowDialog()
-                        : dialogo.ShowDialog(propietario);
-                }
-                finally
-                {
-                    if (!superposicion.IsDisposed)
-                        superposicion.Close();
-                }
+                return propietario == null
+                    ? dialogo.ShowDialog()
+                    : dialogo.ShowDialog(propietario);
             }
         }
 
@@ -147,35 +131,28 @@ namespace SistemaPublicidad.Formularios
             }
         }
 
-        sealed class DialogOverlay : Form
-        {
-            public DialogOverlay()
-            {
-                FormBorderStyle = FormBorderStyle.None;
-                ShowInTaskbar = false;
-                StartPosition = FormStartPosition.Manual;
-                BackColor = Color.Black;
-                Opacity = 0.58;
-            }
-        }
-
         sealed class ModalDialog : Form
         {
-            const int AnchoBase = 520;
-            const int AltoMinimo = 222;
-            const int AltoMaximo = 440;
-            int anchoObjetivo;
-            int altoObjetivo;
+            const int AnchoBase = 490;
+            const int AltoMinimo = 190;
+            const int AltoMaximo = 420;
+            readonly int anchoObjetivo;
+            readonly int altoObjetivo;
             readonly Color colorInicial;
             readonly Color colorFinal;
             readonly DialogActionButton botonPrincipal;
             readonly DialogActionButton botonCancelar;
-            readonly Timer animacion;
-            readonly System.Collections.Generic.Dictionary<Control, Rectangle> limitesOriginales =
-                new System.Collections.Generic.Dictionary<Control, Rectangle>();
-            DialogResult resultadoPendiente = DialogResult.Cancel;
-            float progreso;
-            bool cerrando;
+
+            void ActualizarRegion()
+            {
+                if (Width > 0 && Height > 0)
+                {
+                    using (GraphicsPath ruta = Tema.Ruta(new RectangleF(0, 0, Width, Height), 16))
+                    {
+                        Region = new Region(ruta);
+                    }
+                }
+            }
 
             public ModalDialog(AppDialogType tipo, string titulo, string mensaje,
                 string textoConfirmar, bool destructivo, Form owner)
@@ -189,24 +166,30 @@ namespace SistemaPublicidad.Formularios
                 KeyPreview = true;
                 AutoScaleMode = AutoScaleMode.Dpi;
                 AutoScaleDimensions = new SizeF(96F, 96F);
-                BackColor = Tema.Fondo;
+                BackColor = Color.FromArgb(13, 18, 44);
                 ForeColor = Color.White;
                 Text = titulo ?? string.Empty;
                 DoubleBuffered = true;
 
                 Rectangle area = ObtenerAreaTrabajo(owner);
-                anchoObjetivo = Math.Max(300, Math.Min(AnchoBase, area.Width - 32));
-                int anchoTexto = anchoObjetivo - 145;
+                anchoObjetivo = Math.Max(340, Math.Min(AnchoBase, area.Width - 32));
+                int anchoTexto = anchoObjetivo - 128;
                 Size medida = TextRenderer.MeasureText(mensaje ?? string.Empty,
                     Tema.F(10.5f), new Size(anchoTexto, AltoMaximo),
                     TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl);
-                int altoMensaje = Math.Max(38, Math.Min(AltoMaximo - 150, medida.Height));
-                altoObjetivo = Math.Max(AltoMinimo, Math.Min(AltoMaximo, 34 + 58 + altoMensaje + 36 + 52 + 28));
+                int altoMensaje = Math.Max(34, Math.Min(AltoMaximo - 140, medida.Height));
+                altoObjetivo = Math.Max(AltoMinimo, Math.Min(AltoMaximo, 26 + 32 + altoMensaje + 24 + 40 + 20));
                 ClientSize = new Size(anchoObjetivo, altoObjetivo);
+                ActualizarRegion();
+
+                Rectangle centro = ObtenerCentro(owner);
+                Location = new Point(
+                    centro.Left + Math.Max(0, (centro.Width - anchoObjetivo) / 2),
+                    centro.Top + Math.Max(0, (centro.Height - altoObjetivo) / 2));
 
                 Controls.Add(new DialogGlyph
                 {
-                    Bounds = new Rectangle(30, 30, 54, 54),
+                    Bounds = new Rectangle(24, 24, 48, 48),
                     Tipo = glifo,
                     ColorInicial = colorInicial,
                     ColorFinal = colorFinal,
@@ -215,27 +198,27 @@ namespace SistemaPublicidad.Formularios
                 Controls.Add(new Label
                 {
                     Text = titulo ?? string.Empty,
-                    Font = Tema.F(13, true),
+                    Font = Tema.F(12.5f, true),
                     ForeColor = Color.White,
                     BackColor = Color.Transparent,
                     AutoEllipsis = true,
-                    Bounds = new Rectangle(104, 31, anchoObjetivo - 138, 30)
+                    Bounds = new Rectangle(88, 25, anchoObjetivo - 110, 26)
                 });
                 Controls.Add(new Label
                 {
                     Text = mensaje ?? string.Empty,
-                    Font = Tema.F(10.5f),
-                    ForeColor = Tema.Sub,
+                    Font = Tema.F(10f),
+                    ForeColor = Color.FromArgb(205, 215, 240),
                     BackColor = Color.Transparent,
                     AutoSize = false,
-                    Bounds = new Rectangle(104, 67, anchoObjetivo - 138, altoMensaje)
+                    Bounds = new Rectangle(88, 54, anchoObjetivo - 110, altoMensaje)
                 });
 
-                int yBotones = altoObjetivo - 64;
+                int yBotones = altoObjetivo - 54;
                 if (tipo == AppDialogType.Confirmation)
                 {
                     botonCancelar = CrearBoton("Cancelar", Tema.Campo, Tema.Panel, false);
-                    botonCancelar.Bounds = new Rectangle(anchoObjetivo - 260, yBotones, 112, 42);
+                    botonCancelar.Bounds = new Rectangle(anchoObjetivo - 238, yBotones, 104, 38);
                     botonCancelar.Click += (sender, args) => CerrarConResultado(DialogResult.Cancel);
                     Controls.Add(botonCancelar);
                 }
@@ -244,27 +227,18 @@ namespace SistemaPublicidad.Formularios
                     ? textoConfirmar : "Aceptar";
                 botonPrincipal = CrearBoton(textoBoton, colorInicial, colorFinal, true);
                 botonPrincipal.Bounds = new Rectangle(
-                    anchoObjetivo - (tipo == AppDialogType.Confirmation ? 136 : 148),
+                    anchoObjetivo - (tipo == AppDialogType.Confirmation ? 124 : 132),
                     yBotones,
-                    116,
-                    42);
+                    112,
+                    38);
                 botonPrincipal.Click += (sender, args) => CerrarConResultado(DialogResult.OK);
                 Controls.Add(botonPrincipal);
-                animacion = new Timer { Interval = 15 };
-                animacion.Tick += Animar;
             }
 
             protected override void OnShown(EventArgs e)
             {
                 base.OnShown(e);
-                anchoObjetivo = ClientSize.Width;
-                altoObjetivo = ClientSize.Height;
-                foreach (Control control in Controls)
-                    limitesOriginales.Add(control, control.Bounds);
-                progreso = 0;
-                Opacity = 0;
-                AjustarEscala(0.97f);
-                animacion.Start();
+                Opacity = 1;
                 botonPrincipal.Focus();
             }
 
@@ -273,28 +247,16 @@ namespace SistemaPublicidad.Formularios
                 base.OnPaint(e);
                 Graphics g = e.Graphics;
                 g.SmoothingMode = SmoothingMode.AntiAlias;
-                RectangleF tarjeta = new RectangleF(12, 12, Width - 25, Height - 25);
+                RectangleF tarjeta = new RectangleF(0.5f, 0.5f, Width - 1f, Height - 1f);
 
-                for (int i = 5; i >= 1; i--)
+                using (GraphicsPath ruta = Tema.Ruta(tarjeta, 16))
                 {
-                    RectangleF sombra = tarjeta;
-                    sombra.Offset(0, i);
-                    sombra.Inflate(i, i);
-                    using (GraphicsPath rutaSombra = Tema.Ruta(sombra, 22 + i))
-                    using (var pincelSombra = new SolidBrush(Color.FromArgb(12 + (6 - i) * 3, 0, 0, 0)))
-                        g.FillPath(pincelSombra, rutaSombra);
-                }
+                    // Fondo limpio con degradado azul noche acorde a la aplicacion
+                    using (var fondo = new LinearGradientBrush(tarjeta, Color.FromArgb(16, 23, 56), Color.FromArgb(10, 14, 38), 65f))
+                        g.FillPath(fondo, ruta);
 
-                using (GraphicsPath ruta = Tema.Ruta(tarjeta, 22))
-                {
-                    GraphicsState estado = g.Save();
-                    g.SetClip(ruta);
-                    using (var fondo = new LinearGradientBrush(tarjeta, Tema.Panel, Tema.Panel2, 45f))
-                        g.FillRectangle(fondo, tarjeta);
-                    using (var brillo = new SolidBrush(Color.FromArgb(24, colorInicial)))
-                        g.FillEllipse(brillo, tarjeta.Right - 185, tarjeta.Top - 115, 245, 215);
-                    g.Restore(estado);
-                    using (var borde = new Pen(Color.FromArgb(150, Tema.Borde), 1f))
+                    // Borde unico, limpio y solido con el acento tematico
+                    using (var borde = new Pen(Color.FromArgb(185, colorInicial), 1.5f))
                         g.DrawPath(borde, ruta);
                 }
             }
@@ -314,59 +276,9 @@ namespace SistemaPublicidad.Formularios
                 return base.ProcessCmdKey(ref msg, keyData);
             }
 
-            protected override void OnFormClosing(FormClosingEventArgs e)
+            static Rectangle ObtenerCentro(Form owner)
             {
-                if (!cerrando && e.CloseReason == CloseReason.UserClosing)
-                    resultadoPendiente = DialogResult.Cancel;
-                base.OnFormClosing(e);
-            }
-
-            protected override void OnFormClosed(FormClosedEventArgs e)
-            {
-                animacion.Stop();
-                animacion.Dispose();
-                base.OnFormClosed(e);
-            }
-
-            void Animar(object sender, EventArgs e)
-            {
-                progreso += cerrando ? -0.22f : 0.22f;
-                progreso = Math.Max(0, Math.Min(1, progreso));
-                Opacity = progreso;
-                AjustarEscala(0.97f + progreso * 0.03f);
-                if (progreso > 0) return;
-
-                animacion.Stop();
-                if (cerrando)
-                {
-                    DialogResult = resultadoPendiente;
-                    Close();
-                }
-            }
-
-            void AjustarEscala(float escala)
-            {
-                int ancho = Math.Max(1, (int)(anchoObjetivo * escala));
-                int alto = Math.Max(1, (int)(altoObjetivo * escala));
-                Rectangle centro = ObtenerCentro();
-                ClientSize = new Size(ancho, alto);
-                foreach (var limite in limitesOriginales)
-                {
-                    Rectangle original = limite.Value;
-                    limite.Key.Bounds = new Rectangle(
-                        (int)(original.X * escala),
-                        (int)(original.Y * escala),
-                        Math.Max(1, (int)(original.Width * escala)),
-                        Math.Max(1, (int)(original.Height * escala)));
-                }
-                Location = new Point(centro.Left + (centro.Width - ancho) / 2,
-                    centro.Top + (centro.Height - alto) / 2);
-            }
-
-            Rectangle ObtenerCentro()
-            {
-                Form owner = Owner;
-                if (owner != null && !owner.IsDisposed)
+                if (owner != null && !owner.IsDisposed && owner.Visible)
                     return owner.Bounds;
                 return ObtenerAreaTrabajo(null);
             }
@@ -382,15 +294,8 @@ namespace SistemaPublicidad.Formularios
 
             void CerrarConResultado(DialogResult resultado)
             {
-                if (cerrando) return;
-                resultadoPendiente = resultado;
-                cerrando = true;
-                if (progreso <= 0)
-                {
-                    progreso = 1;
-                    Opacity = 1;
-                }
-                animacion.Start();
+                DialogResult = resultado;
+                Close();
             }
 
             static DialogActionButton CrearBoton(string texto, Color inicial, Color final, bool principal)
@@ -400,6 +305,7 @@ namespace SistemaPublicidad.Formularios
                     Texto = texto,
                     C1 = inicial,
                     C2 = final,
+                    Radio = 10,
                     ColorBorde = principal ? Color.Transparent : Color.FromArgb(110, Tema.Borde),
                     BackColor = Tema.Panel,
                     ForeColor = Color.White,
@@ -559,9 +465,9 @@ namespace SistemaPublicidad.Formularios
                 base.OnPaint(e);
                 if (!Focused) return;
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                Rectangle borde = Rectangle.Inflate(ClientRectangle, -5, -5);
-                using (GraphicsPath ruta = Tema.Ruta(borde, Math.Max(4, Radio - 3)))
-                using (var pen = new Pen(Color.FromArgb(205, Color.White), 1.4f))
+                RectangleF borde = new RectangleF(1.5f, 1.5f, Width - 3f, Height - 3f);
+                using (GraphicsPath ruta = Tema.Ruta(borde, Radio))
+                using (var pen = new Pen(Color.FromArgb(140, 255, 255, 255), 1.2f))
                     e.Graphics.DrawPath(pen, ruta);
             }
         }
