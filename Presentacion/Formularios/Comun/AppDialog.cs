@@ -24,6 +24,10 @@ namespace SistemaPublicidad.Formularios
         static readonly Color ExitoFinal = Color.FromArgb(0, 215, 125);
         static readonly Color ErrorInicial = Color.FromArgb(255, 50, 170);
         static readonly Color ErrorFinal = Color.FromArgb(225, 40, 130);
+        static readonly Color FondoMensaje = Color.FromArgb(249, 251, 255);
+        static readonly Color FondoMensajeFinal = Color.FromArgb(235, 242, 255);
+        static readonly Color TextoMensaje = Color.FromArgb(28, 39, 68);
+        static readonly Color TextoDetalle = Color.FromArgb(73, 86, 116);
 
         public static void Success(Form owner, string titulo, string mensaje)
         {
@@ -166,8 +170,8 @@ namespace SistemaPublicidad.Formularios
                 KeyPreview = true;
                 AutoScaleMode = AutoScaleMode.Dpi;
                 AutoScaleDimensions = new SizeF(96F, 96F);
-                BackColor = Color.FromArgb(13, 18, 44);
-                ForeColor = Color.White;
+                BackColor = FondoMensaje;
+                ForeColor = TextoMensaje;
                 Text = titulo ?? string.Empty;
                 DoubleBuffered = true;
                 SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint |
@@ -201,7 +205,7 @@ namespace SistemaPublicidad.Formularios
                 {
                     Text = titulo ?? string.Empty,
                     Font = Tema.F(12.5f, true),
-                    ForeColor = Color.White,
+                    ForeColor = TextoMensaje,
                     BackColor = Color.Transparent,
                     AutoEllipsis = true,
                     Bounds = new Rectangle(88, 25, anchoObjetivo - 110, 26)
@@ -210,7 +214,7 @@ namespace SistemaPublicidad.Formularios
                 {
                     Text = mensaje ?? string.Empty,
                     Font = Tema.F(10f),
-                    ForeColor = Color.FromArgb(205, 215, 240),
+                    ForeColor = TextoDetalle,
                     BackColor = Color.Transparent,
                     AutoSize = false,
                     Bounds = new Rectangle(88, 54, anchoObjetivo - 110, altoMensaje)
@@ -219,7 +223,8 @@ namespace SistemaPublicidad.Formularios
                 int yBotones = altoObjetivo - 54;
                 if (tipo == AppDialogType.Confirmation)
                 {
-                    botonCancelar = CrearBoton("Cancelar", Tema.Campo, Tema.Panel, false);
+                    botonCancelar = CrearBoton("Cancelar",
+                        Color.FromArgb(233, 239, 249), Color.FromArgb(221, 230, 245), false);
                     botonCancelar.Bounds = new Rectangle(anchoObjetivo - 238, yBotones, 104, 38);
                     botonCancelar.Click += (sender, args) => CerrarConResultado(DialogResult.Cancel);
                     Controls.Add(botonCancelar);
@@ -258,12 +263,10 @@ namespace SistemaPublicidad.Formularios
 
                 using (GraphicsPath ruta = Tema.Ruta(tarjeta, 16))
                 {
-                    // Fondo limpio con degradado azul noche acorde a la aplicacion
-                    using (var fondo = new LinearGradientBrush(tarjeta, Color.FromArgb(16, 23, 56), Color.FromArgb(10, 14, 38), 65f))
+                    using (var fondo = new LinearGradientBrush(tarjeta, FondoMensaje, FondoMensajeFinal, 65f))
                         g.FillPath(fondo, ruta);
 
-                    // Borde unico, limpio y solido con el acento tematico
-                    using (var borde = new Pen(Color.FromArgb(185, colorInicial), 1.5f))
+                    using (var borde = new Pen(Color.FromArgb(210, colorInicial), 1.5f))
                         g.DrawPath(borde, ruta);
                 }
             }
@@ -314,8 +317,8 @@ namespace SistemaPublicidad.Formularios
                     C2 = final,
                     Radio = 10,
                     ColorBorde = principal ? Color.Transparent : Color.FromArgb(110, Tema.Borde),
-                    BackColor = Tema.Panel,
-                    ForeColor = Color.White,
+                    BackColor = principal ? Tema.Panel : Color.FromArgb(233, 239, 249),
+                    ForeColor = principal ? Color.White : TextoMensaje,
                     TabStop = true,
                     AccessibleRole = AccessibleRole.PushButton
                 };
@@ -340,7 +343,7 @@ namespace SistemaPublicidad.Formularios
                 ShowInTaskbar = false;
                 AutoScaleMode = AutoScaleMode.Dpi;
                 AutoScaleDimensions = new SizeF(96F, 96F);
-                BackColor = Tema.Fondo;
+                BackColor = FondoMensaje;
                 ClientSize = new Size(396, 124);
                 DoubleBuffered = true;
                 SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint |
@@ -358,7 +361,7 @@ namespace SistemaPublicidad.Formularios
                 {
                     Text = titulo ?? string.Empty,
                     Font = Tema.F(11.5f, true),
-                    ForeColor = Color.White,
+                    ForeColor = TextoMensaje,
                     BackColor = Color.Transparent,
                     AutoEllipsis = true,
                     Bounds = new Rectangle(86, 25, 282, 26)
@@ -367,7 +370,7 @@ namespace SistemaPublicidad.Formularios
                 {
                     Text = mensaje ?? string.Empty,
                     Font = Tema.F(9.5f),
-                    ForeColor = Tema.Sub,
+                    ForeColor = TextoDetalle,
                     BackColor = Color.Transparent,
                     Bounds = new Rectangle(86, 55, 282, 52)
                 });
@@ -378,7 +381,7 @@ namespace SistemaPublicidad.Formularios
 
             protected override void OnPaintBackground(PaintEventArgs e)
             {
-                e.Graphics.Clear(Tema.Fondo);
+                e.Graphics.Clear(FondoMensaje);
             }
 
             protected override void OnPaint(PaintEventArgs e)
@@ -392,14 +395,14 @@ namespace SistemaPublicidad.Formularios
                     sombra.Offset(0, i);
                     sombra.Inflate(i, i);
                     using (GraphicsPath rutaSombra = Tema.Ruta(sombra, 18 + i))
-                    using (var pincelSombra = new SolidBrush(Color.FromArgb(15, 0, 0, 0)))
+                    using (var pincelSombra = new SolidBrush(Color.FromArgb(24, 45, 60, 90)))
                         e.Graphics.FillPath(pincelSombra, rutaSombra);
                 }
                 using (GraphicsPath ruta = Tema.Ruta(tarjeta, 18))
                 {
-                    using (var fondo = new LinearGradientBrush(tarjeta, Tema.Panel, Tema.Panel2, 45f))
+                    using (var fondo = new LinearGradientBrush(tarjeta, Color.White, FondoMensajeFinal, 45f))
                         e.Graphics.FillPath(fondo, ruta);
-                    using (var pen = new Pen(Color.FromArgb(145, colorInicial), 1f))
+                    using (var pen = new Pen(Color.FromArgb(195, colorInicial), 1.2f))
                         e.Graphics.DrawPath(pen, ruta);
                 }
             }
