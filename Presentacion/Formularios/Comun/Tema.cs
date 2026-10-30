@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -50,6 +51,19 @@ namespace SistemaPublicidad.Formularios
         static extern IntPtr SendMessage(IntPtr h, int m, IntPtr w, string l);
         public static void Cue(TextBox t, string s)
         { t.HandleCreated += (a, b) => { try { SendMessage(t.Handle, 0x1501, (IntPtr)1, s); } catch (Exception) { } }; }
+
+        // Los contenedores estándar de WinForms no usan doble búfer por defecto.
+        // Al activarlo se evita el destello negro mientras se repintan los hijos.
+        static readonly PropertyInfo PropiedadDobleBuffer =
+            typeof(Control).GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        public static void DobleBuffer(Control raiz)
+        {
+            if (raiz == null || PropiedadDobleBuffer == null) return;
+            try { PropiedadDobleBuffer.SetValue(raiz, true, null); }
+            catch (Exception) { }
+            foreach (Control hijo in raiz.Controls) DobleBuffer(hijo);
+        }
 
         public static void PintarFondo(Graphics g, Control c)
         {
@@ -153,10 +167,10 @@ namespace SistemaPublicidad.Formularios
     public class Tarjeta : Panel
     {
         Color c1 = Tema.Panel, c2 = Tema.Panel2, borde = Tema.Borde; int radio = 16;
-        public Color C1 { get { return c1; } set { c1 = value; Invalidate(); } }
-        public Color C2 { get { return c2; } set { c2 = value; Invalidate(); } }
-        public Color ColorBorde { get { return borde; } set { borde = value; Invalidate(); } }
-        public int Radio { get { return radio; } set { radio = value; Invalidate(); } }
+        public Color C1 { get { return c1; } set { c1 = value; Cambio(); } }
+        public Color C2 { get { return c2; } set { c2 = value; Cambio(); } }
+        public Color ColorBorde { get { return borde; } set { borde = value; Cambio(); } }
+        public int Radio { get { return radio; } set { radio = value; Cambio(); } }
 
         public Tarjeta()
         {
@@ -166,13 +180,20 @@ namespace SistemaPublicidad.Formularios
         }
 
         int opacidad = 255; bool vidrio = true, hover; Color brillo = Color.Transparent, brillo2 = Color.Transparent;
-        public bool Vidrio { get { return vidrio; } set { vidrio = value; Invalidate(); } }
-        public int Opacidad { get { return opacidad; } set { opacidad = Math.Max(0, Math.Min(255, value)); Invalidate(); } }
+        public bool Vidrio { get { return vidrio; } set { vidrio = value; Cambio(); } }
+        public int Opacidad { get { return opacidad; } set { opacidad = Math.Max(0, Math.Min(255, value)); Cambio(); } }
         Color Op(Color x) { return Color.FromArgb(x.A * opacidad / 255, x); }
-        public Color Brillo { get { return brillo; } set { brillo = value; Invalidate(); } }
-        public Color Brillo2 { get { return brillo2; } set { brillo2 = value; Invalidate(); } }
+        public Color Brillo { get { return brillo; } set { brillo = value; Cambio(); } }
+        public Color Brillo2 { get { return brillo2; } set { brillo2 = value; Cambio(); } }
         protected override void OnMouseEnter(EventArgs e) { base.OnMouseEnter(e); hover = true; Invalidate(); }
         protected override void OnMouseLeave(EventArgs e) { base.OnMouseLeave(e); hover = false; Invalidate(); }
+
+        // El fondo de las tarjetas con resplandor se dibuja una vez y se reutiliza.
+        // Así el hover, el foco o el tecleo no recrean degradados ni glows.
+        Bitmap cacheFondo; int cacheVersion; int version;
+        const long AreaMaximaCache = 250000;
+
+        void Cambio() { version++; Invalidate(); }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -180,9 +201,48 @@ namespace SistemaPublicidad.Formularios
             var g = e.Graphics; g.SmoothingMode = SmoothingMode.AntiAlias; g.PixelOffsetMode = PixelOffsetMode.HighQuality;
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             var r = new RectangleF(0.5f, 0.5f, Width - 2, Height - 2);
+
+            bool cachear = (brillo.A > 0 || brillo2.A > 0) && (long)Width * Height <= AreaMaximaCache;
+            if (cachear)
+            {
+                if (cacheFondo == null || cacheFondo.Width != Width || cacheFondo.Height != Height || cacheVersion != version)
+                    CrearCacheFondo();
+                g.DrawImageUnscaled(cacheFondo, 0, 0);
+            }
+            else PintarBase(g, r);
+
             using (var p = Tema.Ruta(r, radio))
             {
-                using (var b = new LinearGradientBrush(ClientRectangle, Op(c1), Op(c2), 35f)) g.FillPath(b, p);
+                if (hover && Cursor == Cursors.Hand) using (var b = new SolidBrush(Color.FromArgb(30, 255, 255, 255))) g.FillPath(b, p);
+                if (borde.A > 0)
+                    using (var b = new LinearGradientBrush(ClientRectangle, Color.FromArgb(borde.A, Math.Min(255, borde.R + 60), Math.Min(255, borde.G + 60), Math.Min(255, borde.B + 60)), Color.FromArgb(Math.Max(40, borde.A / 2), borde), 60f))
+                    using (var pen = new Pen(b, 1.4f)) g.DrawPath(pen, p);
+            }
+            base.OnPaint(e);
+        }
+
+        void CrearCacheFondo()
+        {
+            if (cacheFondo != null) cacheFondo.Dispose();
+            cacheFondo = new Bitmap(Width, Height);
+            using (var gb = Graphics.FromImage(cacheFondo))
+            {
+                gb.SmoothingMode = SmoothingMode.AntiAlias;
+                gb.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                gb.Clear(Color.Transparent);
+                PintarBase(gb, new RectangleF(0.5f, 0.5f, Width - 2, Height - 2));
+            }
+            cacheVersion = version;
+        }
+
+        void PintarBase(Graphics g, RectangleF r)
+        {
+            using (var p = Tema.Ruta(r, radio))
+            {
+                Color a = Op(c1), b2 = Op(c2);
+                // Cuando el degradado es de un solo color se evita crearlo.
+                if (a.ToArgb() == b2.ToArgb()) using (var b = new SolidBrush(a)) g.FillPath(b, p);
+                else using (var b = new LinearGradientBrush(ClientRectangle, a, b2, 35f)) g.FillPath(b, p);
                 if (vidrio && c1.A > 0) using (var b = new LinearGradientBrush(ClientRectangle, Color.FromArgb(14, 255, 255, 255), Color.FromArgb(0, 255, 255, 255), 90f)) g.FillPath(b, p);
                 if (brillo.A > 0 || brillo2.A > 0)
                 {
@@ -192,12 +252,13 @@ namespace SistemaPublicidad.Formularios
                     if (brillo2.A > 0) Tema.Glow(g, 0, 0, Width * 0.6f, Height * 0.8f, brillo2);
                     g.Restore(estadoClip);
                 }
-                if (hover && Cursor == Cursors.Hand) using (var b = new SolidBrush(Color.FromArgb(30, 255, 255, 255))) g.FillPath(b, p);
-                if (borde.A > 0)
-                    using (var b = new LinearGradientBrush(ClientRectangle, Color.FromArgb(borde.A, Math.Min(255, borde.R + 60), Math.Min(255, borde.G + 60), Math.Min(255, borde.B + 60)), Color.FromArgb(Math.Max(40, borde.A / 2), borde), 60f))
-                    using (var pen = new Pen(b, 1.4f)) g.DrawPath(pen, p);
             }
-            base.OnPaint(e);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && cacheFondo != null) { cacheFondo.Dispose(); cacheFondo = null; }
+            base.Dispose(disposing);
         }
     }
 

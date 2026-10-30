@@ -91,6 +91,7 @@ namespace SistemaPublicidad.Formularios
             Controls.Add(contenido);
 
             ResumeLayout(true);
+            Tema.DobleBuffer(this);
             WindowState = FormWindowState.Maximized;
             Seleccionar(items[0]);
         }
@@ -136,6 +137,8 @@ namespace SistemaPublicidad.Formularios
             Form f; if (cache.TryGetValue(nombre, out f)) return f;
             f = Crear(nombre, icono);
             PrepararVista(f);
+            // El doble búfer se activa una sola vez por vista, no en cada navegación.
+            Tema.DobleBuffer(f);
             f.Visible = false;
             cache[nombre] = f;
             return f;
@@ -199,18 +202,21 @@ namespace SistemaPublicidad.Formularios
             contenido.SuspendLayout();
             try
             {
+                Form anterior = vistaActiva;
                 // El contenedor aloja solo la vista activa. Las vistas ocultas permanecen en caché,
                 // pero fuera del árbol visual para evitar layouts y repintados cruzados.
-                if (vistaActiva != null && vistaActiva != f)
-                {
-                    vistaActiva.Hide();
-                    contenido.Controls.Remove(vistaActiva);
-                }
                 if (f.Parent != contenido) contenido.Controls.Add(f);
                 contenido.Controls.SetChildIndex(f, 0);
                 vistaActiva = f;
                 if (!f.Visible) f.Show();
                 f.BringToFront();
+                // Retira la vista anterior después de mostrar la nueva, para que el
+                // contenedor nunca quede vacío durante la navegación.
+                if (anterior != null && anterior != f)
+                {
+                    anterior.Hide();
+                    contenido.Controls.Remove(anterior);
+                }
             }
             finally
             {
