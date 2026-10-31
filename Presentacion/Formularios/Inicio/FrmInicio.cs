@@ -13,11 +13,13 @@ namespace SistemaPublicidad.Formularios
         public TarjetaStat StUsuarios, StClientes, StCotizaciones, StMonto;
         public Dona DonaCotizaciones, DonaClientes;
         public GraficaMes Grafica; public ListaActividad Actividad;
+        readonly string rolActual;
 
         public FrmInicio() : this("Administrador") { }
 
         public FrmInicio(string rol)
         {
+            rolActual = rol;
             AutoScaleMode = AutoScaleMode.None;
             TopLevel = false; FormBorderStyle = FormBorderStyle.None; Dock = DockStyle.Fill; BackColor = Tema.Fondo; DoubleBuffered = true; SetStyle(ControlStyles.ResizeRedraw, true);
             var t = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 20, RowCount = 4, BackColor = Color.Transparent };
@@ -44,8 +46,9 @@ namespace SistemaPublicidad.Formularios
             Controls.Add(t);
             t.ResumeLayout(true);
 
-            CargarResumen(rol);
         }
+
+        public void RefrescarResumen() { CargarResumen(rolActual); Invalidate(true); }
 
         void CargarResumen(string rol)
         {
@@ -62,7 +65,9 @@ namespace SistemaPublicidad.Formularios
 
             bool esDisenador = string.Equals(rol, "Diseñador", StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(rol, "Disenador", StringComparison.OrdinalIgnoreCase);
-            bool esOperador = string.Equals(rol, "Operador", StringComparison.OrdinalIgnoreCase);
+            bool esOperador = string.Equals(rol, "Operador", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(rol, "Gerente", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(rol, "Vendedor", StringComparison.OrdinalIgnoreCase);
             if (esDisenador)
             {
                 EstablecerTarjeta(StUsuarios, "Diseños", "🎨", resumen.TotalDisenos, resumen.DisenosActivos, "Activos");

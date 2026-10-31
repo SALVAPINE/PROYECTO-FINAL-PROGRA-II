@@ -14,7 +14,7 @@ namespace SistemaPublicidad.Formularios
         static readonly string[][] Opciones = {
             new[] {"🏠","Inicio",""}, new[] {"👤","Usuarios",""}, new[] {"👥","Clientes",""}, new[] {"📄","Cotizaciones",""}, new[] {"🛠","Tipo de Servicio",""},
             new[] {"🖼","Materiales",""}, new[] {"🎨","Diseños",""}, new[] {"✏","Diseñadores",""}, new[] {"📋","Órdenes de Trabajo",""}, new[] {"🧾","Facturaciones","sub"},
-            new[] {"📍","Sucursales",""}, new[] {"🚚","Proveedores",""}, new[] {"📦","Inventarios",""}, new[] {"🛒","Compras","sub"} };
+            new[] {"📍","Sucursales",""}, new[] {"🚚","Proveedores",""}, new[] {"📦","Inventarios",""}, new[] {"🛒","Compras","sub"}, new[] {"🔐","Roles",""} };
         static readonly string[] SubNombres = { "Consultar", "Gestionar", "Resumen" };
         static readonly string[] SubIconos = { "\U0001F50D", "\u2699", "\U0001F4CA" };
 
@@ -67,7 +67,12 @@ namespace SistemaPublicidad.Formularios
             // ---- Barra superior ----
             var bus = new Tarjeta { Left = 282, Top = 16, Width = 460, Height = 44, Radio = 22, C1 = Tema.Campo, C2 = Tema.Campo, Vidrio = false, Padding = new Padding(48, 12, 14, 4) };
             BuscarGlobal = new TextBox { Dock = DockStyle.Fill, BorderStyle = BorderStyle.None, BackColor = Tema.Campo, ForeColor = Color.White, Font = Tema.F(10.5f) };
-            Tema.Cue(BuscarGlobal, "Buscar...");
+            Tema.Cue(BuscarGlobal, "Buscar en el módulo...");
+            BuscarGlobal.TextChanged += (s, e) =>
+            {
+                var modulo = vistaActiva as FrmModulo;
+                if (modulo != null) modulo.Buscar.Text = BuscarGlobal.Text;
+            };
             bus.Controls.Add(BuscarGlobal); bus.Controls.Add(new IconoLinea { Imagen = Recursos.Img("top_buscar"), Key = "\U0001F50D", Color = Color.White, Left = 16, Top = 11, Width = 22, Height = 22 });
             Controls.Add(bus);
 
@@ -159,6 +164,7 @@ namespace SistemaPublicidad.Formularios
             switch (nombre)
             {
                 case "Inicio": return new FrmInicio(rolActual);
+                case "Roles": return new FrmRoles();
                 case "Usuarios": return new FrmUsuarios();
                 case "Clientes": return new FrmClientes();
                 case "Cotizaciones": return new FrmCotizaciones();
@@ -187,7 +193,7 @@ namespace SistemaPublicidad.Formularios
 
         void Seleccionar(ItemMenu it)
         {
-            if (it.Texto == "Cerrar sesión") { CerrarSesionSolicitado = true; Close(); return; }
+            if (it.Texto == "Cerrar sesión") { SesionActual.Cerrar(); CerrarSesionSolicitado = true; Close(); return; }
             if (it.Hijos != null)
             {
                 if (actual == it || (actual != null && actual.Padre == it)) { if (!abiertos.Remove(it)) abiertos.Add(it); Reacomodar(); Refrescar(); return; }
@@ -223,7 +229,13 @@ namespace SistemaPublicidad.Formularios
                 contenido.ResumeLayout(true);
             }
             var modulo = f as FrmModulo;
-            if (modulo != null) modulo.EnsureLoaded();
+            if (modulo != null)
+            {
+                modulo.Buscar.Text = BuscarGlobal.Text;
+                modulo.EnsureLoaded();
+            }
+            var inicio = f as FrmInicio;
+            if (inicio != null) inicio.RefrescarResumen();
         }
 
         protected override void Dispose(bool disposing)

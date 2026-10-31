@@ -17,19 +17,34 @@ namespace Datos
             const string sql = @"SELECT CodigoUsuario, CodigoSucursal, NombreUsuario,
                     Clave, FechaCreacion, TipoUsuario, Estado
                 FROM dbo.Tbl_Usuarios
-                WHERE NombreUsuario = @usuario AND Clave = @clave AND Estado = 1";
+                WHERE NombreUsuario = @usuario AND Estado = 1";
             try
             {
                 using (SqlConnection conexion = ConexionDatos.CrearConexion())
                 using (SqlCommand comando = new SqlCommand(sql, conexion))
                 {
                     comando.Parameters.Add("@usuario", SqlDbType.VarChar, 45).Value = nombreUsuario;
-                    comando.Parameters.Add("@clave", SqlDbType.VarChar, 255).Value = clave;
                     conexion.Open();
+                    Usuario cuenta = null;
                     using (SqlDataReader lector = comando.ExecuteReader())
-                        if (lector.Read()) return MapearUsuario(lector);
+                    {
+                        if (lector.Read()) cuenta = MapearUsuario(lector);
+                        if (lector.Read()) throw new InvalidOperationException("Hay nombres de usuario duplicados; consulta al administrador.");
+                    }
+                    if (cuenta == null || !SeguridadClaves.Verificar(clave, cuenta.Clave)) return null;
+                    if (!SeguridadClaves.EsHash(cuenta.Clave))
+                    {
+                        using (var migrar = new SqlCommand("UPDATE dbo.Tbl_Usuarios SET Clave = @hash WHERE CodigoUsuario = @codigo AND Clave = @anterior", conexion))
+                        {
+                            migrar.Parameters.Add("@hash", SqlDbType.VarChar, 255).Value = SeguridadClaves.Crear(clave);
+                            migrar.Parameters.Add("@codigo", SqlDbType.Int).Value = cuenta.CodigoUsuario;
+                            migrar.Parameters.Add("@anterior", SqlDbType.VarChar, 255).Value = cuenta.Clave;
+                            if (migrar.ExecuteNonQuery() != 1) return null;
+                        }
+                    }
+                    cuenta.Clave = string.Empty;
+                    return cuenta;
                 }
-                return null;
             }
             catch (Exception ex)
             {
@@ -45,7 +60,7 @@ namespace Datos
         private List<Usuario> Consultar(string texto, string tipo, string estado)
         {
             const string sql = @"SELECT CodigoUsuario, CodigoSucursal, NombreUsuario,
-                    Clave, FechaCreacion, TipoUsuario, Estado
+                    CAST('' AS varchar(255)) AS Clave, FechaCreacion, TipoUsuario, Estado
                 FROM dbo.Tbl_Usuarios
                 WHERE (@texto = '' OR
                     CONVERT(varchar(20), CodigoUsuario) LIKE @patron OR
@@ -152,7 +167,7 @@ namespace Datos
         {
             const string sql = @"UPDATE dbo.Tbl_Usuarios
                 SET CodigoSucursal = @sucursal, NombreUsuario = @nombre,
-                    Clave = @clave, FechaCreacion = @fecha,
+                    Clave = CASE WHEN @clave = '' THEN Clave ELSE @clave END, FechaCreacion = @fecha,
                     TipoUsuario = @tipo, Estado = @estado
                 WHERE CodigoUsuario = @codigo";
             try
@@ -176,7 +191,8 @@ namespace Datos
         {
             comando.Parameters.Add("@sucursal", SqlDbType.Int).Value = usuario.CodigoSucursal;
             comando.Parameters.Add("@nombre", SqlDbType.VarChar, 45).Value = usuario.NombreUsuario;
-            comando.Parameters.Add("@clave", SqlDbType.VarChar, 255).Value = usuario.Clave;
+            comando.Parameters.Add("@clave", SqlDbType.VarChar, 255).Value = string.IsNullOrEmpty(usuario.Clave)
+                ? string.Empty : SeguridadClaves.Crear(usuario.Clave);
             comando.Parameters.Add("@fecha", SqlDbType.DateTime).Value = usuario.FechaCreacion;
             comando.Parameters.Add("@tipo", SqlDbType.VarChar, 45).Value = usuario.TipoUsuario;
             comando.Parameters.Add("@estado", SqlDbType.Bit).Value = usuario.Estado;

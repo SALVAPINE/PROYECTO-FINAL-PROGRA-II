@@ -63,11 +63,18 @@ namespace SistemaPublicidad.Formularios
             string columnas = "", propiedades = "", campos = "", columnasDetalle = "", propiedadesDetalle = "";
             switch (c.Nombre)
             {
+                case "Roles":
+                    c.Clave = "CodigoRolAcceso";
+                    columnas = "Código:60:id:o;Rol:130:texto:o;Módulo:200:texto:o;Estado:80:estado:o";
+                    propiedades = "CodigoRolAcceso;TipoUsuario;NombreModulo;Estado";
+                    campos = "Rol|TipoUsuario:c=Diseñador,Operador,Gerente,Vendedor;Módulo|NombreModulo:c=" +
+                        string.Join(",", Negocio.RolNegocio.Modulos) + ";Estado|Estado:b";
+                    break;
                 case "Usuarios":
                     c.Clave = "CodigoUsuario";
                     columnas = "Código:55:id:o;Sucursal:70:num;Usuario:130:texto:o;Fecha de creación:105:fecha:o;Tipo:100:badge:o;Estado:80:estado:o";
                     propiedades = "CodigoUsuario;CodigoSucursal;NombreUsuario;FechaCreacion;TipoUsuario;Estado";
-                    campos = "Código sucursal|CodigoSucursal:n;Nombre de usuario|NombreUsuario:t;Clave|Clave:t;Fecha de creación|FechaCreacion:f;Tipo de usuario|TipoUsuario:c=Administrador,Diseñador,Operador;Estado|Estado:b";
+                    campos = "Código sucursal|CodigoSucursal:n;Nombre de usuario|NombreUsuario:t;Clave (vacía al editar: conservar)|Clave:t;Fecha de creación|FechaCreacion:f;Tipo de usuario|TipoUsuario:c=Administrador,Diseñador,Operador,Gerente,Vendedor;Estado|Estado:b";
                     break;
                 case "Clientes":
                     c.Clave = "CodigoCliente";

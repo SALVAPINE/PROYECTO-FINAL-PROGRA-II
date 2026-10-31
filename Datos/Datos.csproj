@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ConexionDatos.cs" />
     <Compile Include="UsuarioDatos.cs" />
+    <Compile Include="SeguridadClaves.cs" />
     <Compile Include="ClienteDatos.cs" />
     <Compile Include="CotizacionDatos.cs" />
     <Compile Include="TipoServicioDatos.cs" />

@@ -1206,7 +1206,7 @@ public decimal Valor
                 if (p == null) throw new InvalidOperationException("No existe el campo " + propiedad + " en la entidad.");
 
                 Control control = inputs[i];
-                string texto = control is CampoTexto ? ((CampoTexto)control).Caja.Text.Trim() :
+                string texto = control is CampoTexto ? (propiedad == "Clave" ? ((CampoTexto)control).Caja.Text : ((CampoTexto)control).Caja.Text.Trim()) :
                     control is Selector ? ((Selector)control).Texto : string.Empty;
                 object valor;
                 var numerico = control as CampoNumero;
@@ -1829,40 +1829,7 @@ public decimal Valor
             }
             ConfigurarCalculosAutomaticos();
 
-            if (cfg.Nombre == "Usuarios")
-            {
-                for (int i = 0; i < n; i++)
-                {
-                    if (PropiedadCampo(cfg.Campos[i]) == "TipoUsuario")
-                    {
-                        var selTipo = inputs[i] as Selector;
-                        if (selTipo != null)
-                        {
-                            selTipo.Cambio += (s, e) =>
-                            {
-                                if (codigoEnEdicion <= 0)
-                                {
-                                    string tipo = selTipo.Texto;
-                                    for (int j = 0; j < n; j++)
-                                    {
-                                        if (PropiedadCampo(cfg.Campos[j]) == "Clave")
-                                        {
-                                            var txtClave = inputs[j] as CampoTexto;
-                                            if (txtClave != null)
-                                            {
-                                                txtClave.Caja.Text = UsuarioNegocio.ObtenerClavePorDefecto(tipo);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            };
-                        }
-                        break;
-                    }
-                }
-            }
-            else if (cfg.Nombre == "Cotizaciones")
+            if (cfg.Nombre == "Cotizaciones")
             {
                 CampoNumero numCantidad = null, numPrecio = null, numSubtotal = null, numTotal = null;
                 Selector selEstado = null;
@@ -2333,7 +2300,9 @@ if (numSubtotal != null && numImpuesto != null && numTotalPagar != null)
             if (tp == "n" || tp == "m")
             {
                 bool calculado = new[] { "TotalServicio", "Subtotal", "Total", "Impuesto", "TotalPagar", "TotalCompra" }.Contains(propiedad);
-                return new CampoNumero(rot, tp == "m" ? 2 : 0, tp == "m", calculado) { Dock = DockStyle.Fill, Margin = new Padding(0, 4, 12, 8) };
+                var numero = new CampoNumero(rot, tp == "m" ? 2 : 0, tp == "m", calculado) { Dock = DockStyle.Fill, Margin = new Padding(0, 4, 12, 8) };
+                if (propiedad == "DPI") numero.Num.Maximum = 9999999999999m;
+                return numero;
             }
             string v = tp == "f" ? DateTime.Today.ToString("dd/MM/yyyy") : tp == "h" ? "08:00" : "";
             var campoTexto = new CampoTexto(rot, v) { Dock = DockStyle.Fill, Margin = new Padding(0, 4, 12, 8) };

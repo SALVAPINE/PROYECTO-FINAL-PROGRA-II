@@ -13,6 +13,9 @@ namespace Negocio
     public class RolNegocio
     {
         private readonly RolDatos datos = new RolDatos();
+        public static readonly string[] TiposUsuario = { "Administrador", "Diseñador", "Operador", "Gerente", "Vendedor" };
+        public static readonly string[] Modulos = { "Inicio", "Usuarios", "Clientes", "Cotizaciones", "Tipo de Servicio",
+            "Materiales", "Diseños", "Diseñadores", "Órdenes de Trabajo", "Facturaciones", "Sucursales", "Proveedores", "Inventarios", "Compras" };
 
         /// <summary>
         /// Obtiene la lista de nombres de módulos permitidos para el menú lateral según el rol.
@@ -30,23 +33,20 @@ namespace Negocio
                 {
                     "Inicio", "Usuarios", "Clientes", "Cotizaciones", "Tipo de Servicio",
                     "Materiales", "Diseños", "Diseñadores", "Órdenes de Trabajo", "Facturaciones",
-                    "Sucursales", "Proveedores", "Inventarios", "Compras"
+                    "Sucursales", "Proveedores", "Inventarios", "Compras", "Roles"
                 };
             }
 
             List<string> permitidos;
             try
             {
-                permitidos = datos.ListarModulosPermitidos(tipoUsuario);
+                if (tipoUsuario.Equals("Disenador", StringComparison.OrdinalIgnoreCase)) tipoUsuario = "Diseñador";
+                permitidos = datos.ListarModulosPermitidos(tipoUsuario).Where(m => Modulos.Contains(m)).ToList();
             }
             catch
             {
-                permitidos = ObtenerAccesosPorDefecto(tipoUsuario);
-            }
-
-            if (permitidos == null || permitidos.Count == 0)
-            {
-                permitidos = ObtenerAccesosPorDefecto(tipoUsuario);
+                // Un fallo de permisos nunca concede acceso a módulos de gestión.
+                return new List<string> { "Inicio" };
             }
 
             // Inicio siempre permanece disponible
@@ -63,6 +63,7 @@ namespace Negocio
         /// </summary>
         public List<RolAcceso> Listar()
         {
+            SesionActual.ExigirAdministrador();
             return datos.Listar();
         }
 
@@ -71,6 +72,7 @@ namespace Negocio
         /// </summary>
         public int Insertar(RolAcceso acceso)
         {
+            SesionActual.ExigirAdministrador();
             Validar(acceso);
             return datos.Insertar(acceso);
         }
@@ -80,6 +82,7 @@ namespace Negocio
         /// </summary>
         public int Actualizar(RolAcceso acceso)
         {
+            SesionActual.ExigirAdministrador();
             Validar(acceso);
             if (acceso.CodigoRolAcceso <= 0)
             {
@@ -93,6 +96,7 @@ namespace Negocio
         /// </summary>
         public int Eliminar(int codigo)
         {
+            SesionActual.ExigirAdministrador();
             if (codigo <= 0)
             {
                 throw new ArgumentException("Selecciona un permiso válido para eliminar.");
@@ -117,32 +121,14 @@ namespace Negocio
             {
                 throw new ArgumentException("Ingresa el nombre del módulo para el permiso.");
             }
+            if (!TiposUsuario.Contains(acceso.TipoUsuario) || acceso.TipoUsuario == "Administrador")
+                throw new ArgumentException("Selecciona un rol configurable. Administrador conserva acceso completo.");
+            if (!Modulos.Contains(acceso.NombreModulo))
+                throw new ArgumentException("Selecciona un módulo válido.");
+            if (datos.Listar().Any(x => x.CodigoRolAcceso != acceso.CodigoRolAcceso &&
+                x.TipoUsuario == acceso.TipoUsuario && x.NombreModulo == acceso.NombreModulo))
+                throw new ArgumentException("Ya existe un permiso para ese rol y módulo; edítalo.");
         }
 
-        /// <summary>
-        /// Accesos por defecto según la regla de roles en caso de contingencia.
-        /// </summary>
-        public static List<string> ObtenerAccesosPorDefecto(string tipoUsuario)
-        {
-            if (string.Equals(tipoUsuario, "Diseñador", StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(tipoUsuario, "Disenador", StringComparison.OrdinalIgnoreCase))
-            {
-                return new List<string>
-                {
-                    "Inicio", "Clientes", "Cotizaciones", "Materiales", "Diseños", "Órdenes de Trabajo", "Sucursales"
-                };
-            }
-
-            if (string.Equals(tipoUsuario, "Operador", StringComparison.OrdinalIgnoreCase))
-            {
-                return new List<string>
-                {
-                    "Inicio", "Clientes", "Cotizaciones", "Tipo de Servicio", "Materiales", "Diseños",
-                    "Órdenes de Trabajo", "Facturaciones", "Inventarios", "Compras"
-                };
-            }
-
-            return new List<string> { "Inicio" };
-        }
     }
 }

@@ -24,14 +24,15 @@ namespace Negocio
 
         public ResumenDashboard ObtenerResumen()
         {
-            List<Usuario> listaUsuarios = usuarios.Listar() ?? new List<Usuario>();
-            List<Cliente> listaClientes = clientes.Listar() ?? new List<Cliente>();
-            List<Cotizacion> listaCotizaciones = cotizaciones.Listar() ?? new List<Cotizacion>();
-            List<Diseno> listaDisenos = disenos.Listar() ?? new List<Diseno>();
-            List<OrdenTrabajo> listaOrdenes = ordenes.Listar() ?? new List<OrdenTrabajo>();
-            List<Factura> listaFacturas = facturas.Listar() ?? new List<Factura>();
-            List<Compra> listaCompras = compras.Listar() ?? new List<Compra>();
-            List<Inventario> listaInventarios = inventarios.Listar() ?? new List<Inventario>();
+            var permisos = new HashSet<string>(new RolNegocio().ListarModulosPermitidos(SesionActual.Rol), StringComparer.OrdinalIgnoreCase);
+            List<Usuario> listaUsuarios = permisos.Contains("Usuarios") ? usuarios.Listar() : new List<Usuario>();
+            List<Cliente> listaClientes = permisos.Contains("Clientes") ? clientes.Listar() : new List<Cliente>();
+            List<Cotizacion> listaCotizaciones = permisos.Contains("Cotizaciones") ? cotizaciones.Listar() : new List<Cotizacion>();
+            List<Diseno> listaDisenos = permisos.Contains("Diseños") ? disenos.Listar() : new List<Diseno>();
+            List<OrdenTrabajo> listaOrdenes = permisos.Contains("Órdenes de Trabajo") ? ordenes.Listar() : new List<OrdenTrabajo>();
+            List<Factura> listaFacturas = permisos.Contains("Facturaciones") ? facturas.Listar() : new List<Factura>();
+            List<Compra> listaCompras = permisos.Contains("Compras") ? compras.Listar() : new List<Compra>();
+            List<Inventario> listaInventarios = permisos.Contains("Inventarios") ? inventarios.Listar() : new List<Inventario>();
 
             ResumenDashboard r = new ResumenDashboard();
             r.TotalUsuarios = listaUsuarios.Count;
@@ -100,7 +101,6 @@ namespace Negocio
                     Fecha = c.FechaCompra
                 }))
                 .OrderByDescending(a => a.Fecha)
-                .Take(5)
                 .ToList();
             return r;
         }

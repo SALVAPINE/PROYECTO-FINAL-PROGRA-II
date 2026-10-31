@@ -37,8 +37,8 @@ namespace Negocio
                 throw new ArgumentException("El nombre es obligatorio y admite máximo 45 caracteres.");
             if (string.IsNullOrWhiteSpace(cliente.Direccion) || cliente.Direccion.Trim().Length > 150)
                 throw new ArgumentException("La dirección es obligatoria y admite máximo 150 caracteres.");
-            if (cliente.DPI <= 0 || cliente.Edad <= 0 || cliente.Telefono <= 0)
-                throw new ArgumentException("DPI, edad y teléfono deben ser enteros positivos.");
+            if (cliente.DPI <= 0 || cliente.DPI > 9999999999999L || cliente.Edad <= 0 || cliente.Telefono <= 0)
+                throw new ArgumentException("El DPI debe ser positivo y tener hasta 13 dígitos; edad y teléfono deben ser enteros positivos.");
             if (cliente.NIT.HasValue && cliente.NIT.Value <= 0)
                 throw new ArgumentException("El NIT debe ser positivo o dejarse vacío.");
             return datos.Insertar(cliente);
@@ -54,8 +54,8 @@ namespace Negocio
                 throw new ArgumentException("El nombre es obligatorio y admite máximo 45 caracteres.");
             if (string.IsNullOrWhiteSpace(cliente.Direccion) || cliente.Direccion.Trim().Length > 150)
                 throw new ArgumentException("La dirección es obligatoria y admite máximo 150 caracteres.");
-            if (cliente.DPI <= 0 || cliente.Edad <= 0 || cliente.Telefono <= 0)
-                throw new ArgumentException("DPI, edad y teléfono deben ser enteros positivos.");
+            if (cliente.DPI <= 0 || cliente.DPI > 9999999999999L || cliente.Edad <= 0 || cliente.Telefono <= 0)
+                throw new ArgumentException("El DPI debe ser positivo y tener hasta 13 dígitos; edad y teléfono deben ser enteros positivos.");
             if (cliente.NIT.HasValue && cliente.NIT.Value <= 0)
                 throw new ArgumentException("El NIT debe ser positivo o dejarse vacío.");
             return datos.Actualizar(cliente);

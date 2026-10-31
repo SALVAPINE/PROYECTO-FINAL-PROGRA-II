@@ -50,7 +50,7 @@ namespace Datos
                                 CodigoCliente = Convert.ToInt32(lector["CodigoCliente"]),
                                 NombreCliente = Convert.ToString(lector["NombreCliente"]),
                                 Direccion = Convert.ToString(lector["Direccion"]),
-                                DPI = Convert.ToInt32(lector["DPI"]),
+                                DPI = Convert.ToInt64(lector["DPI"]),
                                 Edad = Convert.ToInt32(lector["Edad"]),
                                 NIT = lector["NIT"] == DBNull.Value ? (int?)null : Convert.ToInt32(lector["NIT"]),
                                 Telefono = Convert.ToInt32(lector["Telefono"]),
@@ -84,7 +84,7 @@ namespace Datos
                 {
                     comando.Parameters.Add("@nombre", SqlDbType.VarChar, 45).Value = cliente.NombreCliente;
                     comando.Parameters.Add("@direccion", SqlDbType.VarChar, 150).Value = cliente.Direccion;
-                    comando.Parameters.Add("@dpi", SqlDbType.Int).Value = cliente.DPI;
+                    comando.Parameters.Add("@dpi", SqlDbType.BigInt).Value = cliente.DPI;
                     comando.Parameters.Add("@edad", SqlDbType.Int).Value = cliente.Edad;
                     comando.Parameters.Add("@nit", SqlDbType.Int).Value = cliente.NIT.HasValue ? (object)cliente.NIT.Value : DBNull.Value;
                     comando.Parameters.Add("@telefono", SqlDbType.Int).Value = cliente.Telefono;
@@ -110,7 +110,7 @@ namespace Datos
                 {
                     comando.Parameters.Add("@nombre", SqlDbType.VarChar, 45).Value = cliente.NombreCliente;
                     comando.Parameters.Add("@direccion", SqlDbType.VarChar, 150).Value = cliente.Direccion;
-                    comando.Parameters.Add("@dpi", SqlDbType.Int).Value = cliente.DPI;
+                    comando.Parameters.Add("@dpi", SqlDbType.BigInt).Value = cliente.DPI;
                     comando.Parameters.Add("@edad", SqlDbType.Int).Value = cliente.Edad;
                     comando.Parameters.Add("@nit", SqlDbType.Int).Value = cliente.NIT.HasValue ? (object)cliente.NIT.Value : DBNull.Value;
                     comando.Parameters.Add("@telefono", SqlDbType.Int).Value = cliente.Telefono;

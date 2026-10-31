@@ -1,48 +1,12 @@
 ﻿PUBLICIDAD MULTISUCURSAL
-Windows Forms · C# · .NET Framework 4.8 · Arquitectura por capas
 
-CÓMO ABRIRLO
-1. Abra SistemaPublicidad.sln con Visual Studio 2026.
-2. Si hace falta, establezca "Presentacion" como proyecto de inicio y presione F5.
+Abrir SistemaPublicidad.sln o src\SistemaPublicidad\SistemaPublicidad.sln.
+Ambas soluciones apuntan a Presentacion, Negocio, Datos y Entidad en la raíz.
+Los formularios se construyen en C#, sin Designer.cs ni TabControl de diseñador.
+Datos sí implementa consultas SQL parametrizadas; el Panel real es FrmPrincipal.
 
-CAPAS (4 proyectos)
-  Presentacion   Formularios y diseño (lo que se ve). Cada formulario tiene .cs, .Designer.cs y .resx.
-  Negocio        Reglas y validaciones. Llama a la capa de datos. Calcula los resúmenes y el dashboard.
-  Datos          Acceso a datos. SIN conexión ni base de datos: los métodos están vacíos (con TODO).
-  Entidad        Una clase por tabla del script SQL (mismos nombres, campos y tipos) y los DTO de los resúmenes.
-Referencias: Presentacion -> Negocio -> Datos -> Entidad (Presentacion también usa Entidad).
+Consultar README.md para compilación, pantallas y pruebas.
+Consultar database\CONEXION_DATABASE.md para conexión, respaldo y migración.
+Consultar ESTADO_DOCUMENTOS.md y MEMORY.md para resultados verificados y pendientes.
 
-FORMULARIOS (Presentacion\Formularios)
-  FrmMain            Ventana principal: menú lateral, barra superior y pie. Muestra los demás formularios dentro del panel.
-  FrmInicio          Dashboard: 4 tarjetas y 4 gráficos (gráficos propios, sin librerías externas).
-  Un formulario por apartado, con pestañas Consultar / Gestionar / Resumen:
-    FrmUsuarios          Usuarios
-    FrmClientes          Clientes
-    FrmCotizaciones      Cotizaciones
-    FrmTipoServicio      Tipo de Servicio
-    FrmMateriales        Materiales
-    FrmDisenos           Diseños
-    FrmDisenadores       Diseñadores
-    FrmOrdenesTrabajo    Órdenes de Trabajo
-    FrmFacturaciones     Facturaciones  (incluye detalle de la factura)
-    FrmSucursales        Sucursales
-    FrmProveedores       Proveedores
-    FrmInventarios       Inventarios
-    FrmCompras           Compras  (incluye detalle de la compra)
-
-DETALLES
-  - Facturaciones y Compras incluyen su detalle (DetalleFactura, DetalleCompra) en el mismo formulario.
-  - Los campos y las entidades salen de las tablas del script SQL (Db_PublicidadMultisucursal). En Tbl_Proveedores la llave está escrita
-    CodgioProveedor; la entidad la usa tal cual (CodgioProveedor).
-  - Los campos Activo / Inactivo (Estado, tipo BIT) son botones de opción (RadioButton).
-  - Las tablas (DataGridView) no tienen columnas ni títulos: se generan solas al asignar el DataSource con los datos de la base.
-  - Cada formulario usa un TabControl: en el diseñador haga clic en las pestañas Consultar / Gestionar / Resumen para editar cada página.
-    Al ejecutar, las pestañas del TabControl no se ven; se cambia con los botones de arriba.
-  - El espacio inferior de la pestaña Gestionar lleva un fondo decorativo (BannerDegradado), sin texto ni animación; se puede cambiar su Glyph y sus colores.
-  - La pestaña Resumen y el dashboard se llenan solos cuando los métodos Listar() de la capa Datos devuelvan registros.
-
-PENDIENTE (a cargo suyo)
-  - Conexión y consultas en el proyecto Datos.
-  - Cargar las tablas y programar los botones: en cada formulario hay métodos vacíos con TODO.
-
-ICONOS: fuente "Segoe MDL2 Assets" (incluida en Windows 10 y 11). Lema: fuente "Segoe Script".
+No incluir contraseñas ni respaldos en GitHub.

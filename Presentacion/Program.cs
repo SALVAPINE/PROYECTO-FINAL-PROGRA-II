@@ -26,6 +26,7 @@ namespace SistemaPublicidad
                         principal.FormClosed += (s, e) => cerrarSesion = principal.CerrarSesionSolicitado;
                         Application.Run(principal);
                     }
+                    Negocio.SesionActual.Cerrar();
                 }
             }
             while (cerrarSesion);

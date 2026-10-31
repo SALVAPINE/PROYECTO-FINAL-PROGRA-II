@@ -67,6 +67,7 @@ namespace SistemaPublicidad.Formularios
         {
             switch (modulo)
             {
+                case "Roles": return new RolNegocio().Listar().Cast<object>().ToList();
                 case "Usuarios": return new UsuarioNegocio().Listar().Cast<object>().ToList();
                 case "Clientes": return new ClienteNegocio().Buscar(string.Empty, "Todos").Cast<object>().ToList();
                 case "Cotizaciones": return new CotizacionNegocio().Listar().Cast<object>().ToList();
@@ -126,6 +127,7 @@ namespace SistemaPublicidad.Formularios
             {
                 switch (modulo)
                 {
+                    case "Roles": tabla = "Tbl_RolAccesos"; break;
                     case "Usuarios": tabla = "Tbl_Usuarios"; break;
                     case "Clientes": tabla = "Tbl_Clientes"; break;
                     case "Cotizaciones": tabla = "Tbl_Cotizaciones"; break;
@@ -154,6 +156,7 @@ namespace SistemaPublicidad.Formularios
         {
             switch (modulo)
             {
+                case "Roles": return typeof(RolAcceso);
                 case "Usuarios": return typeof(Usuario);
                 case "Clientes": return typeof(Cliente);
                 case "Cotizaciones": return typeof(Cotizacion);
@@ -176,6 +179,7 @@ namespace SistemaPublicidad.Formularios
             InvalidarOpciones();
             switch (modulo)
             {
+                case "Roles": if (editar) new RolNegocio().Actualizar((RolAcceso)entidad); else new RolNegocio().Insertar((RolAcceso)entidad); break;
                 case "Usuarios": if (editar) new UsuarioNegocio().Actualizar((Usuario)entidad); else new UsuarioNegocio().Insertar((Usuario)entidad); break;
                 case "Clientes": if (editar) new ClienteNegocio().Editar((Cliente)entidad); else new ClienteNegocio().Agregar((Cliente)entidad); break;
                 case "Cotizaciones": if (editar) new CotizacionNegocio().Actualizar((Cotizacion)entidad); else new CotizacionNegocio().Insertar((Cotizacion)entidad); break;
@@ -294,6 +298,7 @@ namespace SistemaPublicidad.Formularios
             InvalidarOpciones();
             switch (modulo)
             {
+                case "Roles": new RolNegocio().Eliminar(codigo); break;
                 case "Usuarios": new UsuarioNegocio().Eliminar(codigo); break;
                 case "Clientes": new ClienteNegocio().Eliminar(codigo); break;
                 case "Cotizaciones": new CotizacionNegocio().Eliminar(codigo); break;

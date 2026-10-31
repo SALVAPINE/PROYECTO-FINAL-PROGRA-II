@@ -67,6 +67,7 @@ namespace Login.Formularios
             var max = new WinBtn { Kind = 1, Bounds = U.R(1514, 22, 44, 40) };
             var cls = new WinBtn { Kind = 2, Bounds = U.R(1572, 22, 44, 40) };
             min.Click += (s, e) => WindowState = FormWindowState.Minimized;
+            max.Click += (s, e) => WindowState = WindowState == FormWindowState.Maximized ? FormWindowState.Normal : FormWindowState.Maximized;
             cls.Click += (s, e) => Close();
             Controls.AddRange(new Control[] { min, max, cls });
 
@@ -91,7 +92,12 @@ namespace Login.Formularios
                 lblOjo.Text = verClave ? "\uE7B3" : "\uED1A";
             };
 
-            chkRecordar = new NeonCheck { Text = "Recordar usuario", Bounds = U.R(1047, 538, 260, 34) };
+            chkRecordar = new NeonCheck { Text = "Recordar usuario", Checked = false, Bounds = U.R(1047, 538, 260, 34) };
+            chkRecordar.Click += (s, e) =>
+            {
+                if (!chkRecordar.Checked && !PreferenciasLogin.Guardar(false, "", ""))
+                    AppDialog.Warning(this, "Preferencias", "No se pudo borrar el usuario recordado en este equipo.");
+            };
             lnkOlvido = new Label
             {
                 AutoSize = false, Bounds = U.R(1320, 540, 247, 30), Text = "¿Olvidó su contraseña?", Font = U.F(17),
@@ -111,10 +117,13 @@ namespace Login.Formularios
             {
                 new RoleCard { Title = "Administrador", Sub = "Acceso completo", Glyph = "\uE77B", Accent = Color.FromArgb(40, 150, 255), Selected = true },
                 new RoleCard { Title = "Diseñador", Sub = "Diseño y creatividad", Glyph = "\uE70F", Accent = Color.FromArgb(235, 55, 205) },
-                new RoleCard { Title = "Operador", Sub = "Gestión y soporte", Glyph = "\uE713", Accent = Color.FromArgb(255, 200, 30) }
+                new RoleCard { Title = "Operador", Sub = "Gestión y soporte", Glyph = "\uE713", Accent = Color.FromArgb(255, 200, 30) },
+                new RoleCard { Title = "Gerente", Sub = "Gestión general", Glyph = "\uE716", Accent = Color.FromArgb(0, 210, 180) },
+                new RoleCard { Title = "Vendedor", Sub = "Ventas y clientes", Glyph = "\uE719", Accent = Color.FromArgb(120, 170, 255) }
             };
-            var rb = new[] { U.R(1045, 721, 176, 108), U.R(1238, 721, 160, 108), U.R(1414, 721, 160, 108) };
-            for (int i = 0; i < 3; i++)
+            var rb = new[] { U.R(1045, 710, 176, 100), U.R(1238, 710, 160, 100), U.R(1414, 710, 160, 100),
+                U.R(1045, 825, 176, 100), U.R(1238, 825, 160, 100) };
+            for (int i = 0; i < roles.Length; i++)
             {
                 var rc = roles[i];
                 rc.Bounds = Rectangle.Inflate(rb[i], rc.Pad, rc.Pad);
@@ -125,6 +134,13 @@ namespace Login.Formularios
             Controls.AddRange(roles);
             txtUsuario.KeyDown += EnterKey;
             txtClave.KeyDown += EnterKey;
+            string[] recordado = PreferenciasLogin.Leer();
+            if (recordado.Length == 2)
+            {
+                txtUsuario.Text = recordado[0];
+                chkRecordar.Checked = true;
+                foreach (var tarjeta in roles) tarjeta.Selected = tarjeta.Title == recordado[1];
+            }
 
             Opacity = 0;
             fade.Tick += (s, e) => { Opacity = Math.Min(1, Opacity + 0.08); if (Opacity >= 1) fade.Stop(); };
@@ -208,6 +224,7 @@ namespace Login.Formularios
 
                 if (!rolCoincide)
                 {
+                    SesionActual.Cerrar();
                     AppDialog.Warning(this, "Perfil no coincide",
                         "La cuenta '" + usuario + "' pertenece al perfil '" + cuenta.TipoUsuario + "'. Selecciona la tarjeta correspondiente.");
                     return;
@@ -215,6 +232,8 @@ namespace Login.Formularios
 
                 UsuarioAutenticado = cuenta.NombreUsuario;
                 RolAutenticado = cuenta.TipoUsuario;
+                if (!PreferenciasLogin.Guardar(chkRecordar.Checked, cuenta.NombreUsuario, rol))
+                    AppDialog.Warning(this, "Preferencias", "Tu acceso es válido, pero no se pudo guardar la preferencia de usuario en este equipo.");
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -489,7 +508,7 @@ namespace Login.Formularios
 
         void Tarjeta(Graphics g)
         {
-            var card = U.R(1012, 118, 590, 785);
+            var card = U.R(1012, 118, 590, 835);
             using (var path = U.Round(card, U.P(40)))
             {
                 U.GlowPath(g, path, Color.FromArgb(90, 110, 255), 0.9f, 22, 14, 8, 4);
@@ -524,8 +543,8 @@ namespace Login.Formularios
                 g.DrawLine(p, U.P(1388), U.P(691), U.P(1540), U.P(691));
             }
             U.TC(g, "o ingresa como", U.F(17), Color.FromArgb(160, 185, 235), new RectangleF(1228, 676, 160, 30), StringAlignment.Center, StringAlignment.Center);
-            U.TC(g, "© 2026 Publicidad Multisucursal - Todos los derechos reservados.", U.F(14), Color.FromArgb(150, 170, 220),
-                new RectangleF(1030, 852, 555, 32), StringAlignment.Center, StringAlignment.Center);
+            U.TC(g, "© 2026 Publicidad Multisucursal - Todos los derechos reservados.", U.F(12), Color.FromArgb(150, 170, 220),
+                new RectangleF(1030, 930, 555, 22), StringAlignment.Center, StringAlignment.Center);
         }
 
         void Campo_(Graphics g, float y, string glyph, string label)

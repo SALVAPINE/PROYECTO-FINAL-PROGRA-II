@@ -11,20 +11,13 @@ namespace Negocio
     {
         private readonly UsuarioDatos datos = new UsuarioDatos();
 
-        public static string ObtenerClavePorDefecto(string tipoUsuario)
-        {
-            if (string.IsNullOrWhiteSpace(tipoUsuario)) return string.Empty;
-            if (tipoUsuario.Equals("Administrador", StringComparison.OrdinalIgnoreCase)) return "Admin123";
-            if (tipoUsuario.Equals("Operador", StringComparison.OrdinalIgnoreCase)) return "Operador123";
-            if (tipoUsuario.Equals("Diseñador", StringComparison.OrdinalIgnoreCase) ||
-                tipoUsuario.Equals("Disenador", StringComparison.OrdinalIgnoreCase)) return "Disenador123";
-            return string.Empty;
-        }
-
         public Usuario Autenticar(string nombreUsuario, string clave)
         {
+            SesionActual.Cerrar();
             if (string.IsNullOrWhiteSpace(nombreUsuario) || string.IsNullOrEmpty(clave)) return null;
-            return datos.Autenticar(nombreUsuario.Trim(), clave);
+            Usuario cuenta = datos.Autenticar(nombreUsuario.Trim(), clave);
+            if (cuenta != null) SesionActual.Iniciar(cuenta.TipoUsuario);
+            return cuenta;
         }
 
         public List<Usuario> Listar() { return datos.Listar(); }
@@ -38,13 +31,13 @@ namespace Negocio
 
         public int Insertar(Usuario usuario)
         {
-            Validar(usuario);
+            Validar(usuario, false);
             return datos.Insertar(usuario);
         }
 
         public int Actualizar(Usuario usuario)
         {
-            Validar(usuario);
+            Validar(usuario, true);
             if (usuario.CodigoUsuario <= 0)
                 throw new ArgumentException("Selecciona un usuario valido para editar.");
             return datos.Actualizar(usuario);
@@ -57,7 +50,7 @@ namespace Negocio
             return datos.Eliminar(codigo);
         }
 
-        private void Validar(Usuario usuario)
+        private void Validar(Usuario usuario, bool editar)
         {
             if (usuario == null)
                 throw new ArgumentException("No se recibieron los datos del usuario.");
@@ -65,10 +58,15 @@ namespace Negocio
                 throw new ArgumentException("Selecciona una sucursal.");
             if (string.IsNullOrWhiteSpace(usuario.NombreUsuario) || usuario.NombreUsuario.Length > 45)
                 throw new ArgumentException("El nombre de usuario es obligatorio y admite hasta 45 caracteres.");
-            if (string.IsNullOrWhiteSpace(usuario.Clave) || usuario.Clave.Length > 255)
-                throw new ArgumentException("La clave es obligatoria y admite hasta 255 caracteres.");
-            if (string.IsNullOrWhiteSpace(usuario.TipoUsuario) || usuario.TipoUsuario.Length > 45)
+            if ((!editar || !string.IsNullOrEmpty(usuario.Clave)) &&
+                (string.IsNullOrWhiteSpace(usuario.Clave) || usuario.Clave.Length < 8 || usuario.Clave.Length > 255))
+                throw new ArgumentException("Escribe una contraseña de 8 a 255 caracteres. Al editar, déjala vacía para conservarla.");
+            if (!RolNegocio.TiposUsuario.Contains(usuario.TipoUsuario))
                 throw new ArgumentException("Selecciona un tipo de usuario valido.");
+            if (datos.Listar().Any(x => x.CodigoUsuario != usuario.CodigoUsuario &&
+                string.Equals(x.NombreUsuario, usuario.NombreUsuario.Trim(), StringComparison.OrdinalIgnoreCase)))
+                throw new ArgumentException("Ya existe una cuenta con ese nombre de usuario.");
+            usuario.NombreUsuario = usuario.NombreUsuario.Trim();
         }
 
         /// <summary>El resumen usa todos los usuarios, no solo la pagina visible.</summary>
