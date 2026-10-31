@@ -31,7 +31,18 @@ Correcciones autorizadas después de la revisión inicial. La solución de `src`
 ### Límites y pendientes
 
 - La compilación del proyecto de pruebas mostró NU1900: no pudo consultar la información de vulnerabilidades de NuGet, incluso al reintentar fuera del entorno restringido. La compilación completó sin errores; no se afirma que la auditoría de dependencias esté completada.
-- Faltan pruebas manuales de navegación, altas/ediciones/eliminaciones de todos los módulos, detalles, impresión/PDF y ejecución en otro Windows. Las pruebas automáticas de escritura se concentraron en Usuarios, Clientes y Roles.
+- Las confirmaciones posteriores de navegación se detallan abajo. Siguen pendientes las altas/ediciones/eliminaciones manuales de todos los módulos, detalles, impresión/PDF y ejecución en otro Windows. Las pruebas automáticas de escritura se concentraron en Usuarios, Clientes y Roles.
 - La matriz de permisos inicial de Gerente y Vendedor está descrita en database/CONEXION_DATABASE.md; el grupo debe confirmar su política final. Los permisos son por módulo completo, sin distinguir operaciones.
 - No se considera cerrado el Documento 09 hasta la validación integrada del grupo. No hay asignación individual confirmada de los módulos.
 - La publicación de estas correcciones se solicitó el 2026-10-31 para master y JuanDaniel. Verificar su sincronización con las referencias remotas de Git; este documento no sustituye esa comprobación.
+
+## Confirmaciones y revisión posterior (2026-10-31)
+
+- El usuario respondió expresamente «confirmo» a las pruebas de apertura y carga desde el Panel para Tipo de Servicio, Materiales, Diseños, Diseñadores, Órdenes de Trabajo, Facturaciones > Consultar, Sucursales, Proveedores, Inventarios, Compras > Consultar y Usuarios, así como al Dashboard en Inicio.
+- Estas confirmaciones son reportes del usuario en este chat; no son observaciones directas de Codex ni confirman operaciones de escritura, impresión o permisos de otros perfiles.
+- Para Login > Panel, Clientes y Cotizaciones se recibieron indicaciones de continuar, sin una confirmación expresa del resultado de cada prueba. No se registran como pruebas manuales confirmadas.
+- Revisión posterior de las capas: check_refs.bat correcto y compilación con 0 errores y 0 advertencias. La búsqueda en Presentación y sus referencias no encontró acceso directo a Datos ni a SQL Server.
+- Comprobado en memoria: CalcularSubtotalDetalle(2, 50, 150) devuelve 0 y oculta un descuento superior al importe bruto; InventarioNegocio.Validar acepta PrecioCompra=100000000, superior al límite de decimal(10,2). No se escribieron registros para estas comprobaciones.
+- Hallazgos por inspección del código: eliminación del detalle y recálculo del total se realizan en operaciones separadas en Compras y Facturaciones; FormularioDetalleCrud marca listaCargada=true incluso después de fallar la consulta. No se simularon esos fallos en ejecución. Se propusieron correcciones mínimas; no se aplicaron.
+- Documento 09 permanece EN VALIDACIÓN. No se han recibido tres confirmaciones individuales identificadas de los integrantes. Solo se marcará COMPLETADO tras las tres confirmaciones expresas de pruebas.
+- Por instrucción del usuario: no iniciar Documento 10 ni publicar el sistema. Esperar autorización expresa del grupo. Las publicaciones anteriores del código en GitHub no equivalen a autorización para publicar el sistema.
